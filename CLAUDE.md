@@ -10,7 +10,7 @@ Query + Form · Better Auth · i18next · @librestock/types
 ## Directory Structure
 
 ```
-modules/web/src/
+src/
 ├── routes/                  # TanStack Router file-based routes
 │   ├── __root.tsx           # Root layout + providers
 │   ├── index.tsx            # Home (/)

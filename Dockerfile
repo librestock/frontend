@@ -15,10 +15,10 @@ COPY packages/types/package.json ./packages/types/
 COPY packages/types/tsconfig.build.json packages/types/tsconfig.build.cjs.json ./packages/types/
 COPY packages/types/scripts/ ./packages/types/scripts/
 COPY packages/types/src/ ./packages/types/src/
-COPY modules/web/package.json ./modules/web/
+COPY frontend/package.json ./frontend/
 RUN pnpm install --frozen-lockfile
-COPY modules/web/ ./modules/web/
-WORKDIR /app/modules/web
+COPY frontend/ ./frontend/
+WORKDIR /app/frontend
 EXPOSE 3000
 CMD ["pnpm", "dev", "--host", "0.0.0.0"]
 
@@ -31,9 +31,9 @@ COPY packages/types/package.json ./packages/types/
 COPY packages/types/tsconfig.build.json packages/types/tsconfig.build.cjs.json ./packages/types/
 COPY packages/types/scripts/ ./packages/types/scripts/
 COPY packages/types/src/ ./packages/types/src/
-COPY modules/web/package.json ./modules/web/
+COPY frontend/package.json ./frontend/
 RUN pnpm install --frozen-lockfile
-COPY modules/web/ ./modules/web/
+COPY frontend/ ./frontend/
 RUN pnpm --filter @librestock/web build
 
 # Production stage
@@ -44,7 +44,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 tanstack
 
-COPY --from=builder --chown=tanstack:nodejs /app/modules/web/.output ./.output
+COPY --from=builder --chown=tanstack:nodejs /app/frontend/.output ./.output
 
 USER tanstack
 EXPOSE 3000
