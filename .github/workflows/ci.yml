@@ -11,34 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: frontend
-
-      - uses: actions/checkout@v4
-        with:
-          repository: librestock/packages
-          path: packages
-
-      - name: Create workspace root
-        run: |
-          cat > package.json << 'EOF'
-          {
-            "private": true,
-            "name": "librestock-workspace",
-            "devDependencies": {
-              "@types/node": "^20.19.27",
-              "eslint": "^9.39.1",
-              "globals": "^15.15.0",
-              "typescript": "^5.9.3",
-              "typescript-eslint": "^8.50.1"
-            }
-          }
-          EOF
-          cat > pnpm-workspace.yaml << 'EOF'
-          packages:
-            - 'packages/*'
-            - 'frontend'
-          EOF
 
       - uses: pnpm/action-setup@v4
         with:
@@ -48,48 +20,18 @@ jobs:
         with:
           node-version: 20
 
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
       - name: Lint
-        working-directory: frontend
         run: pnpm lint
 
       - name: Type check
-        working-directory: frontend
         run: pnpm type-check
 
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: frontend
-
-      - uses: actions/checkout@v4
-        with:
-          repository: librestock/packages
-          path: packages
-
-      - name: Create workspace root
-        run: |
-          cat > package.json << 'EOF'
-          {
-            "private": true,
-            "name": "librestock-workspace",
-            "devDependencies": {
-              "@types/node": "^20.19.27",
-              "eslint": "^9.39.1",
-              "globals": "^15.15.0",
-              "typescript": "^5.9.3",
-              "typescript-eslint": "^8.50.1"
-            }
-          }
-          EOF
-          cat > pnpm-workspace.yaml << 'EOF'
-          packages:
-            - 'packages/*'
-            - 'frontend'
-          EOF
 
       - uses: pnpm/action-setup@v4
         with:
@@ -99,8 +41,7 @@ jobs:
         with:
           node-version: 20
 
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
       - name: Build
-        working-directory: frontend
         run: pnpm build

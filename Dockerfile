@@ -1,5 +1,4 @@
 # Dockerfile for @librestock/web (TanStack Start)
-# Based on: https://github.com/olegkorol/docker-tanstack-start
 
 # Base stage with pnpm
 FROM node:24-alpine AS base
@@ -8,33 +7,18 @@ WORKDIR /app
 
 # Development stage - for local dev with HMR
 FROM base AS development
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY packages/tsconfig/ ./packages/tsconfig/
-COPY packages/eslint-config/ ./packages/eslint-config/
-COPY packages/types/package.json ./packages/types/
-COPY packages/types/tsconfig.build.json packages/types/tsconfig.build.cjs.json ./packages/types/
-COPY packages/types/scripts/ ./packages/types/scripts/
-COPY packages/types/src/ ./packages/types/src/
-COPY frontend/package.json ./frontend/
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
-COPY frontend/ ./frontend/
-WORKDIR /app/frontend
+COPY . .
 EXPOSE 3000
 CMD ["pnpm", "dev", "--host", "0.0.0.0"]
 
 # Build stage
 FROM base AS builder
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY packages/tsconfig/ ./packages/tsconfig/
-COPY packages/eslint-config/ ./packages/eslint-config/
-COPY packages/types/package.json ./packages/types/
-COPY packages/types/tsconfig.build.json packages/types/tsconfig.build.cjs.json ./packages/types/
-COPY packages/types/scripts/ ./packages/types/scripts/
-COPY packages/types/src/ ./packages/types/src/
-COPY frontend/package.json ./frontend/
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
-COPY frontend/ ./frontend/
-RUN pnpm --filter @librestock/web build
+COPY . .
+RUN pnpm build
 
 # Production stage
 FROM node:24-alpine AS production
@@ -44,7 +28,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 tanstack
 
-COPY --from=builder --chown=tanstack:nodejs /app/frontend/.output ./.output
+COPY --from=builder --chown=tanstack:nodejs /app/.output ./.output
 
 USER tanstack
 EXPOSE 3000
