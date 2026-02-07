@@ -6,6 +6,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { MoreHorizontal } from 'lucide-react'
 
+import { RoleBadges } from './RoleBadges'
+import { UpdateRolesDialog } from './UpdateRolesDialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -28,8 +30,6 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ErrorState } from '@/components/common/ErrorState'
 import { PaginationControls } from '@/components/common/PaginationControls'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
-import { RoleBadges } from './RoleBadges'
-import { UpdateRolesDialog } from './UpdateRolesDialog'
 import {
   useListUsers,
   useBanUser,

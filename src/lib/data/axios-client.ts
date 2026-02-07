@@ -13,14 +13,14 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       // Redirect to login on unauthorized responses, unless already on login page
       if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
         window.location.href = '/login'
       }
     }
-    return Promise.reject(error)
+    return Promise.reject(error instanceof Error ? error : new Error(String(error)))
   },
 )
 

@@ -1,11 +1,10 @@
 import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { z } from 'zod'
 import { UserRole } from '@librestock/types'
 
-import { redirect } from '@tanstack/react-router'
 import { getSession } from '@/lib/auth-client'
 import { Button } from '@/components/ui/button'
 import {
@@ -33,6 +32,7 @@ export const Route = createFileRoute('/users')({
   beforeLoad: async () => {
     const { data: session } = await getSession()
     if (!session) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/login' })
     }
   },

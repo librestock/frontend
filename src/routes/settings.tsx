@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { getSession } from '@/lib/auth-client'
 import { useTranslation } from 'react-i18next'
+import { getSession } from '@/lib/auth-client'
 
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
@@ -17,6 +17,7 @@ export const Route = createFileRoute('/settings')({
   beforeLoad: async () => {
     const { data: session } = await getSession()
     if (!session) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/login' })
     }
   },
