@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { FormErrorBanner } from '@/components/common/FormErrorBanner'
@@ -9,6 +10,7 @@ export const Route = createFileRoute('/login')({
 })
 
 function LoginRoute(): React.JSX.Element {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const form = useLoginForm(async () => navigate({ to: '/' }))
 
@@ -22,9 +24,11 @@ function LoginRoute(): React.JSX.Element {
         }}
       >
         <div>
-          <h1 className="text-xl font-semibold">Sign In</h1>
+          <h1 className="text-xl font-semibold">
+            {t('auth.signIn')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Use your account email and password.
+            {t('auth.signInDescription')}
           </p>
         </div>
 
@@ -33,7 +37,9 @@ function LoginRoute(): React.JSX.Element {
         <form.Field name="email">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t('auth.email')}
+              </FieldLabel>
               <FieldContent>
                 <Input
                   aria-invalid={field.state.meta.errors.length > 0}
@@ -54,7 +60,9 @@ function LoginRoute(): React.JSX.Element {
         <form.Field name="password">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t('auth.password')}
+              </FieldLabel>
               <FieldContent>
                 <Input
                   aria-invalid={field.state.meta.errors.length > 0}
@@ -77,12 +85,12 @@ function LoginRoute(): React.JSX.Element {
           disabled={form.state.isSubmitting}
           type="submit"
         >
-          {form.state.isSubmitting ? 'Signing in…' : 'Sign In'}
+          {form.state.isSubmitting ? t('auth.signingIn') : t('auth.signIn')}
         </button>
         <p className="text-muted-foreground text-center text-sm">
-          Don&apos;t have an account?{' '}
+          {t('auth.noAccount')}{' '}
           <Link className="text-primary hover:underline" to="/signup">
-            Sign Up
+            {t('auth.signUp')}
           </Link>
         </p>
       </form>

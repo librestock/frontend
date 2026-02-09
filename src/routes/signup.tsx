@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { FormErrorBanner } from '@/components/common/FormErrorBanner'
@@ -9,6 +10,7 @@ export const Route = createFileRoute('/signup')({
 })
 
 function SignupRoute(): React.JSX.Element {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const form = useSignupForm(async () => navigate({ to: '/login' }))
 
@@ -22,9 +24,11 @@ function SignupRoute(): React.JSX.Element {
         }}
       >
         <div>
-          <h1 className="text-xl font-semibold">Create Account</h1>
+          <h1 className="text-xl font-semibold">
+            {t('auth.createAccount')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Enter your details to create a new account.
+            {t('auth.createAccountDescription')}
           </p>
         </div>
 
@@ -33,7 +37,9 @@ function SignupRoute(): React.JSX.Element {
         <form.Field name="name">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t('auth.name')}
+              </FieldLabel>
               <FieldContent>
                 <Input
                   aria-invalid={field.state.meta.errors.length > 0}
@@ -54,7 +60,9 @@ function SignupRoute(): React.JSX.Element {
         <form.Field name="email">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t('auth.email')}
+              </FieldLabel>
               <FieldContent>
                 <Input
                   aria-invalid={field.state.meta.errors.length > 0}
@@ -75,7 +83,9 @@ function SignupRoute(): React.JSX.Element {
         <form.Field name="password">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t('auth.password')}
+              </FieldLabel>
               <FieldContent>
                 <Input
                   aria-invalid={field.state.meta.errors.length > 0}
@@ -96,7 +106,9 @@ function SignupRoute(): React.JSX.Element {
         <form.Field name="confirmPassword">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t('auth.confirmPassword')}
+              </FieldLabel>
               <FieldContent>
                 <Input
                   aria-invalid={field.state.meta.errors.length > 0}
@@ -119,12 +131,14 @@ function SignupRoute(): React.JSX.Element {
           disabled={form.state.isSubmitting}
           type="submit"
         >
-          {form.state.isSubmitting ? 'Creating account…' : 'Create Account'}
+          {form.state.isSubmitting
+            ? t('auth.creatingAccount')
+            : t('auth.createAccount')}
         </button>
         <p className="text-muted-foreground text-center text-sm">
-          Already have an account?{' '}
+          {t('auth.hasAccount')}{' '}
           <Link className="text-primary hover:underline" to="/login">
-            Sign In
+            {t('auth.signIn')}
           </Link>
         </p>
       </form>

@@ -136,7 +136,7 @@ export default function AppSidebar(): React.JSX.Element {
         </SidebarMenu>
         {!session ? (
           <Link className="px-2 py-1 text-sm" to="/login">
-            Sign In
+            {t('auth.signIn')}
           </Link>
         ) : null}
         <PoweredBy />
