@@ -42,14 +42,14 @@ function SettingsPage(): React.JSX.Element {
   }
 
   return (
-    <div className="page-container space-y-6">
+    <div className="page-content">
       <div className="page-header">
         <h1 className="text-xl font-semibold">
           {t('navigation.settings')}
         </h1>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-6 overflow-auto p-6">
         <BrandingForm />
 
         <Card>
