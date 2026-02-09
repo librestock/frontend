@@ -99,8 +99,8 @@ function UsersPage(): React.JSX.Element {
 
       <div className="flex items-center gap-4 border-b px-6 py-3">
         <SearchBar
-          value={searchQuery ?? ''}
           placeholder={t('users.searchPlaceholder', { defaultValue: 'Search users...' })}
+          value={searchQuery ?? ''}
           onChange={(value) => {
             void navigate({
               search: (prev: UsersSearch) => ({

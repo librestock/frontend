@@ -1,4 +1,5 @@
 import baseConfig from '@librestock/eslint-config'
+import pluginImportX from 'eslint-plugin-import-x'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
@@ -73,8 +74,11 @@ export default tseslint.config(
 
   // Import resolver settings for TypeScript
   {
+    plugins: {
+      'import-x': pluginImportX,
+    },
     settings: {
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: {
           alwaysTryTypes: true,
           project: './tsconfig.json',
@@ -83,14 +87,14 @@ export default tseslint.config(
           extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
-      'import/parsers': {
+      'import-x/parsers': {
         '@typescript-eslint/parser': ['.ts', '.tsx'],
       },
     },
     rules: {
-      'import/no-unused-modules': 'warn',
-      'import/no-deprecated': 'warn',
-      'import/no-anonymous-default-export': 'warn',
+      'import-x/no-unused-modules': 'warn',
+      'import-x/no-deprecated': 'warn',
+      'import-x/no-anonymous-default-export': 'warn',
     },
   },
 
@@ -228,8 +232,8 @@ export default tseslint.config(
   {
     files: ['**/app/**/*.{ts,tsx}'],
     rules: {
-      'import/no-default-export': 'off',
-      'import/prefer-default-export': 'off',
+      'import-x/no-default-export': 'off',
+      'import-x/prefer-default-export': 'off',
     },
   },
 

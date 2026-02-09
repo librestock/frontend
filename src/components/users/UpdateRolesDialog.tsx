@@ -87,8 +87,8 @@ export function UpdateRolesDialog({
           {Object.values(UserRole).map((role) => (
             <div key={role} className="flex items-center gap-2">
               <Checkbox
-                id={`role-${role}`}
                 checked={selectedRoles.includes(role)}
+                id={`role-${role}`}
                 onCheckedChange={() => handleToggle(role)}
               />
               <Label htmlFor={`role-${role}`}>

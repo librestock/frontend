@@ -105,7 +105,7 @@ function UserRow({
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-8">
+            <Button className="size-8" size="icon" variant="ghost">
               <MoreHorizontal className="size-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -258,11 +258,11 @@ export function UsersTable({
                 <UserRow
                   key={user.id}
                   user={user}
-                  onEditRoles={setRolesDialogUser}
                   onBan={(u) => banMutation.mutate({ id: u.id, data: {} })}
-                  onUnban={(u) => unbanMutation.mutate({ id: u.id })}
                   onDelete={setDeleteDialogUser}
+                  onEditRoles={setRolesDialogUser}
                   onRevokeSessions={(u) => revokeSessionsMutation.mutate({ id: u.id })}
+                  onUnban={(u) => unbanMutation.mutate({ id: u.id })}
                 />
               ))}
             </TableBody>
@@ -280,28 +280,28 @@ export function UsersTable({
       </div>
 
       <UpdateRolesDialog
-        user={rolesDialogUser}
         open={rolesDialogUser !== null}
+        user={rolesDialogUser}
         onOpenChange={(open) => {
           if (!open) setRolesDialogUser(null)
         }}
       />
 
       <DeleteConfirmationDialog
+        isLoading={deleteMutation.isPending}
         open={deleteDialogUser !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteDialogUser(null)
-        }}
+        title={t('users.deleteTitle', { defaultValue: 'Delete User' })}
+        description={t('users.deleteDescription', {
+          defaultValue: 'Are you sure you want to delete this user? This action cannot be undone.',
+        })}
         onConfirm={() => {
           if (deleteDialogUser) {
             deleteMutation.mutate({ id: deleteDialogUser.id })
           }
         }}
-        title={t('users.deleteTitle', { defaultValue: 'Delete User' })}
-        description={t('users.deleteDescription', {
-          defaultValue: 'Are you sure you want to delete this user? This action cannot be undone.',
-        })}
-        isLoading={deleteMutation.isPending}
+        onOpenChange={(open) => {
+          if (!open) setDeleteDialogUser(null)
+        }}
       />
     </>
   )
