@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import { signUp } from '@/lib/auth-client'
+import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { FormErrorBanner } from '@/components/common/FormErrorBanner'
+import { useSignupForm } from '@/hooks/forms/use-signup-form'
 
 export const Route = createFileRoute('/signup')({
   component: SignupRoute,
@@ -8,46 +10,16 @@ export const Route = createFileRoute('/signup')({
 
 function SignupRoute(): React.JSX.Element {
   const navigate = useNavigate()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setError(null)
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.')
-      return
-    }
-
-    setIsSubmitting(true)
-    try {
-      const { error: signUpError } = await signUp.email({
-        email,
-        password,
-        name,
-      })
-      if (signUpError) {
-        setError('Unable to create account. Please try again.')
-        return
-      }
-      await navigate({ to: '/login' })
-    } catch {
-      setError('Unable to create account. Please try again.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const form = useSignupForm(async () => navigate({ to: '/login' }))
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="bg-background flex min-h-screen items-center justify-center px-4">
       <form
-        className="w-full max-w-sm space-y-4 rounded-lg border bg-white p-6 shadow-sm"
-        onSubmit={handleSubmit}
+        className="bg-card text-card-foreground w-full max-w-sm space-y-4 rounded-lg border p-6 shadow-sm"
+        onSubmit={async (e) => {
+          e.preventDefault()
+          await form.handleSubmit()
+        }}
       >
         <div>
           <h1 className="text-xl font-semibold">Create Account</h1>
@@ -55,63 +27,99 @@ function SignupRoute(): React.JSX.Element {
             Enter your details to create a new account.
           </p>
         </div>
-        <label className="block space-y-1 text-sm">
-          <span>Name</span>
-          <input
-            required
-            autoComplete="name"
-            className="w-full rounded-md border px-3 py-2"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </label>
-        <label className="block space-y-1 text-sm">
-          <span>Email</span>
-          <input
-            required
-            autoComplete="email"
-            className="w-full rounded-md border px-3 py-2"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </label>
-        <label className="block space-y-1 text-sm">
-          <span>Password</span>
-          <input
-            required
-            autoComplete="new-password"
-            className="w-full rounded-md border px-3 py-2"
-            minLength={8}
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-        <label className="block space-y-1 text-sm">
-          <span>Confirm Password</span>
-          <input
-            required
-            autoComplete="new-password"
-            className="w-full rounded-md border px-3 py-2"
-            minLength={8}
-            type="password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-          />
-        </label>
-        {error ? (
-          <div className="text-sm text-red-600" role="alert">
-            {error}
-          </div>
-        ) : null}
+
+        <FormErrorBanner errors={form.state.errors} />
+
+        <form.Field name="name">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+              <FieldContent>
+                <Input
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  autoComplete="name"
+                  id={field.name}
+                  name={field.name}
+                  type="text"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </FieldContent>
+            </Field>
+          )}
+        </form.Field>
+
+        <form.Field name="email">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <FieldContent>
+                <Input
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  autoComplete="email"
+                  id={field.name}
+                  name={field.name}
+                  type="email"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </FieldContent>
+            </Field>
+          )}
+        </form.Field>
+
+        <form.Field name="password">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <FieldContent>
+                <Input
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  autoComplete="new-password"
+                  id={field.name}
+                  name={field.name}
+                  type="password"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </FieldContent>
+            </Field>
+          )}
+        </form.Field>
+
+        <form.Field name="confirmPassword">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
+              <FieldContent>
+                <Input
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  autoComplete="new-password"
+                  id={field.name}
+                  name={field.name}
+                  type="password"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </FieldContent>
+            </Field>
+          )}
+        </form.Field>
+
         <button
           className="bg-primary text-primary-foreground hover:bg-primary/90 w-full rounded-md px-3 py-2 disabled:opacity-60"
-          disabled={isSubmitting}
+          disabled={form.state.isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Creating account…' : 'Create Account'}
+          {form.state.isSubmitting ? 'Creating account…' : 'Create Account'}
         </button>
         <p className="text-muted-foreground text-center text-sm">
           Already have an account?{' '}
