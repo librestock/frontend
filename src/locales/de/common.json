@@ -11,7 +11,8 @@
     "settings": "Einstellungen",
     "stock": "Bestand",
     "products": "Produkte",
-    "users": "Benutzer"
+    "users": "Benutzer",
+    "roles": "Rollen"
   },
   "search": {
     "placeholder": "Suchen...",
@@ -141,6 +142,32 @@
   "products": {
     "errorLoading": "Fehler beim Laden von Produkten:",
     "noProducts": "Keine Produkte gefunden"
+  },
+  "roles": {
+    "title": "Rollenverwaltung",
+    "subtitle": "Rollen und deren Berechtigungen verwalten",
+    "create": "Rolle erstellen",
+    "name": "Name",
+    "description": "Beschreibung",
+    "permissions": "Berechtigungen",
+    "permissionCount": "{{count}} Berechtigungen",
+    "system": "System",
+    "custom": "Benutzerdefiniert",
+    "noRoles": "Keine Rollen gefunden",
+    "errorLoading": "Fehler beim Laden der Rollen",
+    "created": "Rolle erfolgreich erstellt",
+    "createError": "Rolle konnte nicht erstellt werden",
+    "updated": "Rolle erfolgreich aktualisiert",
+    "updateError": "Rolle konnte nicht aktualisiert werden",
+    "deleted": "Rolle erfolgreich gelöscht",
+    "deleteError": "Rolle konnte nicht gelöscht werden",
+    "deleteTitle": "Rolle löschen",
+    "deleteDescription": "Sind Sie sicher, dass Sie diese Rolle löschen möchten? Benutzer mit dieser Rolle verlieren diese Berechtigungen.",
+    "systemDeleteError": "Systemrollen können nicht gelöscht werden",
+    "editTitle": "Rolle bearbeiten",
+    "editDescription": "Name, Beschreibung und Berechtigungen der Rolle ändern.",
+    "createTitle": "Rolle erstellen",
+    "createDescription": "Eine neue Rolle mit bestimmten Berechtigungen definieren."
   },
   "auth": {
     "signIn": "Anmelden",

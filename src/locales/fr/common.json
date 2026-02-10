@@ -11,7 +11,8 @@
     "settings": "Paramètres",
     "stock": "Stock",
     "products": "Produits",
-    "users": "Utilisateurs"
+    "users": "Utilisateurs",
+    "roles": "Rôles"
   },
   "search": {
     "placeholder": "Rechercher...",
@@ -141,6 +142,32 @@
   "products": {
     "errorLoading": "Erreur lors du chargement des produits:",
     "noProducts": "Aucun produit trouvé"
+  },
+  "roles": {
+    "title": "Gestion des rôles",
+    "subtitle": "Gérer les rôles et leurs permissions",
+    "create": "Créer un rôle",
+    "name": "Nom",
+    "description": "Description",
+    "permissions": "Permissions",
+    "permissionCount": "{{count}} permissions",
+    "system": "Système",
+    "custom": "Personnalisé",
+    "noRoles": "Aucun rôle trouvé",
+    "errorLoading": "Erreur lors du chargement des rôles",
+    "created": "Rôle créé avec succès",
+    "createError": "Échec de la création du rôle",
+    "updated": "Rôle mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du rôle",
+    "deleted": "Rôle supprimé avec succès",
+    "deleteError": "Échec de la suppression du rôle",
+    "deleteTitle": "Supprimer le rôle",
+    "deleteDescription": "Êtes-vous sûr de vouloir supprimer ce rôle ? Les utilisateurs ayant ce rôle perdront ces permissions.",
+    "systemDeleteError": "Les rôles système ne peuvent pas être supprimés",
+    "editTitle": "Modifier le rôle",
+    "editDescription": "Modifier le nom, la description et les permissions du rôle.",
+    "createTitle": "Créer un rôle",
+    "createDescription": "Définir un nouveau rôle avec des permissions spécifiques."
   },
   "auth": {
     "signIn": "Se connecter",
