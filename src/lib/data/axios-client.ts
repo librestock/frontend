@@ -1,9 +1,8 @@
 import axios, { type AxiosRequestConfig } from 'axios'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+import { apiBaseUrl } from '@/lib/url-config'
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: apiBaseUrl,
   timeout: 30000,
   withCredentials: true,
   headers: {

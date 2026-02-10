@@ -34,8 +34,10 @@ src/
 ├── lib/
 │   ├── data/
 │   │   ├── axios-client.ts  # Axios instance + auth
+│   │   ├── auth.ts          # useCurrentUser hook (GET /auth/me)
 │   │   ├── products.ts      # Handwritten API hooks
 │   │   └── locations.ts     # Handwritten API hooks
+│   ├── permissions.ts       # RBAC: role→resource→action mapping + usePermissions hook
 │   ├── utils.ts             # cn(), sanitizeUrl()
 │   └── env.ts               # Environment validation
 ├── router.tsx               # Router configuration
@@ -58,21 +60,28 @@ function ProductPage(): React.JSX.Element {
 }
 ```
 
-### Route Guards (Admin Pages)
+### Route Guards & Role-Based Access
 
-Admin-only routes use `beforeLoad` to check auth session and redirect unauthenticated users:
+Routes use `beforeLoad` to check auth session and role-based permissions:
 
 ```typescript
 export const Route = createFileRoute('/users')({
   beforeLoad: async () => {
-    const session = await getSession()
+    const { data: session } = await getSession()
     if (!session) throw redirect({ to: '/login' })
+    // Role check: fetch current user, resolve permissions, redirect if no access
+    const user = await apiGet<CurrentUserResponseDto>('/auth/me')
+    const permissions = resolvePermissions(user.roles)
+    if (!canAccess(permissions, 'read', 'users')) throw redirect({ to: '/' })
   },
   component: UsersPage,
 })
 ```
 
-Currently guarded routes: `/users`, `/audit-logs`, `/settings`. Admin-only nav links in `Header.tsx` are hidden when the user has no session (via `adminOnly: true` flag).
+**Auth-only routes:** `/settings` — any authenticated user can access.
+**Role-guarded routes:** `/users` (requires `users` read), `/audit-logs` (requires `auditLogs` read).
+
+Note: `beforeLoad` can't use React hooks, so it calls `apiGet('/auth/me')` directly and uses the pure functions `resolvePermissions()` + `canAccess()` from `lib/permissions.ts` instead of the `usePermissions()` hook.
 
 ### Dynamic Routes
 
@@ -144,6 +153,32 @@ await mutation.mutateAsync(formData)
 | UI state     | useState            | `selectedCategoryId`, `expandedIds`             |
 | Global UI    | Context             | Sidebar state                                   |
 | Auth         | Better Auth         | `useAuthSession()`                             |
+| Permissions  | Custom hook         | `usePermissions()` from `lib/permissions.ts`    |
+
+## Role-Based Access Control (RBAC)
+
+**Files:** `lib/permissions.ts` (config + hooks), `lib/data/auth.ts` (data fetching)
+
+The frontend enforces role-based visibility using enums from `@librestock/types`:
+
+- **`Resource` enum:** `DASHBOARD`, `STOCK`, `PRODUCTS`, `LOCATIONS`, `INVENTORY`, `AUDIT_LOGS`, `USERS`, `SETTINGS`
+- **`Permission` enum:** `READ`, `WRITE`
+
+**Key exports from `lib/permissions.ts`:**
+
+| Export | Type | Usage |
+| ------ | ---- | ----- |
+| `usePermissions()` | Hook | Returns `{ can(permission, resource), roles, isLoading }`. Used in components (e.g., `Header.tsx` sidebar filtering). |
+| `resolvePermissions(roles)` | Pure function | Computes merged permissions from roles array. Used in `beforeLoad` route guards (can't use hooks). |
+| `canAccess(permissions, permission, resource)` | Pure function | Checks a single permission. Used in `beforeLoad` route guards. |
+
+**Permission matrix:** See backend `CLAUDE.md` for the full table. Users with no roles default to Dashboard (read) + Settings (read/write).
+
+**Sidebar filtering (`Header.tsx`):** Each route item has a `resource: Resource` field. Routes are filtered via `permissions.can(Permission.READ, resource)` — only resources the user can read appear in the sidebar.
+
+**Write-gating:** Components that create/edit/delete should check `can(Permission.WRITE, resource)` to hide or disable action buttons for read-only users.
+
+**Data fetching (`lib/data/auth.ts`):** `useCurrentUser()` hook fetches `GET /auth/me` returning `CurrentUserResponseDto` (id, name, email, image, roles). Also exports `getCurrentUserQueryKey` and `getCurrentUserQueryOptions` for use outside React components.
 
 ## Forms (TanStack Form + Zod)
 

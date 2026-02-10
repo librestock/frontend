@@ -5,22 +5,15 @@ import { Plus } from 'lucide-react'
 
 import { Permission, Resource } from '@librestock/types'
 
-import { getSession } from '@/lib/auth-client'
-import type { CurrentUserResponseDto } from '@/lib/data/auth'
-import { apiGet } from '@/lib/data/axios-client'
+import { getCurrentUserQueryOptions } from '@/lib/data/auth'
 import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import { RolesTable } from '@/components/roles/RolesTable'
 
 export const Route = createFileRoute('/roles')({
-  beforeLoad: async () => {
-    const { data: session } = await getSession()
-    if (!session) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect({ to: '/login' })
-    }
+  beforeLoad: async ({ context }) => {
     try {
-      const user = await apiGet<CurrentUserResponseDto>('/auth/me')
+      const user = await context.queryClient.ensureQueryData(getCurrentUserQueryOptions())
       const permissions = user.permissions ?? {}
       if (!canAccess(permissions, Permission.READ, Resource.ROLES)) {
         // eslint-disable-next-line @typescript-eslint/only-throw-error
@@ -29,7 +22,7 @@ export const Route = createFileRoute('/roles')({
     } catch (error) {
       if (error && typeof error === 'object' && 'to' in error) throw error
       // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect({ to: '/' })
+      throw redirect({ to: '/login' })
     }
   },
   component: RolesPage,

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { getSession, signOut } from '@/lib/auth-client'
+import { signOut } from '@/lib/auth-client'
+import { getCurrentUserQueryOptions } from '@/lib/data/auth'
 
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
@@ -16,9 +17,10 @@ import {
 } from '@/components/ui/card'
 
 export const Route = createFileRoute('/settings')({
-  beforeLoad: async () => {
-    const { data: session } = await getSession()
-    if (!session) {
+  beforeLoad: async ({ context }) => {
+    try {
+      await context.queryClient.ensureQueryData(getCurrentUserQueryOptions())
+    } catch {
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/login' })
     }
