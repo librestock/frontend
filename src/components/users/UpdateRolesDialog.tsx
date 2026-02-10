@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { UserRole } from '@librestock/types'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -23,6 +22,7 @@ import {
   getListUsersQueryKey,
   type UserResponseDto,
 } from '@/lib/data/users'
+import { useListRoles } from '@/lib/data/roles'
 
 interface UpdateRolesDialogProps {
   user: UserResponseDto | null
@@ -37,13 +37,17 @@ export function UpdateRolesDialog({
 }: UpdateRolesDialogProps): React.JSX.Element {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const [selectedRoles, setSelectedRoles] = React.useState<UserRole[]>([])
+  const { data: availableRoles } = useListRoles()
+  const [selectedRoleIds, setSelectedRoleIds] = React.useState<string[]>([])
 
   React.useEffect(() => {
-    if (user) {
-      setSelectedRoles([...user.roles])
+    if (user && availableRoles) {
+      const ids = availableRoles
+        .filter((role) => user.roles.includes(role.name))
+        .map((role) => role.id)
+      setSelectedRoleIds(ids)
     }
-  }, [user])
+  }, [user, availableRoles])
 
   const mutation = useUpdateUserRoles({
     mutation: {
@@ -58,15 +62,15 @@ export function UpdateRolesDialog({
     },
   })
 
-  const handleToggle = (role: UserRole): void => {
-    setSelectedRoles((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role],
+  const handleToggle = (roleId: string): void => {
+    setSelectedRoleIds((prev) =>
+      prev.includes(roleId) ? prev.filter((r) => r !== roleId) : [...prev, roleId],
     )
   }
 
   const handleSubmit = (): void => {
     if (!user) return
-    mutation.mutate({ id: user.id, data: { roles: selectedRoles } })
+    mutation.mutate({ id: user.id, data: { roles: selectedRoleIds } })
   }
 
   return (
@@ -84,15 +88,15 @@ export function UpdateRolesDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-3 py-4">
-          {Object.values(UserRole).map((role) => (
-            <div key={role} className="flex items-center gap-2">
+          {(availableRoles ?? []).map((role) => (
+            <div key={role.id} className="flex items-center gap-2">
               <Checkbox
-                checked={selectedRoles.includes(role)}
-                id={`role-${role}`}
-                onCheckedChange={() => handleToggle(role)}
+                checked={selectedRoleIds.includes(role.id)}
+                id={`role-${role.id}`}
+                onCheckedChange={() => handleToggle(role.id)}
               />
-              <Label htmlFor={`role-${role}`}>
-                {t(`users.roles.${role}`, { defaultValue: role })}
+              <Label htmlFor={`role-${role.id}`}>
+                {role.name}
               </Label>
             </div>
           ))}

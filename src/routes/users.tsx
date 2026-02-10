@@ -3,9 +3,13 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { z } from 'zod'
-import { UserRole } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types'
 
 import { getSession } from '@/lib/auth-client'
+import type { CurrentUserResponseDto } from '@/lib/data/auth'
+import { apiGet } from '@/lib/data/axios-client'
+import { useListRoles } from '@/lib/data/roles'
+import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -35,6 +39,18 @@ export const Route = createFileRoute('/users')({
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/login' })
     }
+    try {
+      const user = await apiGet<CurrentUserResponseDto>('/auth/me')
+      const permissions = user.permissions ?? {}
+      if (!canAccess(permissions, Permission.READ, Resource.USERS)) {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        throw redirect({ to: '/' })
+      }
+    } catch (error) {
+      if (error && typeof error === 'object' && 'to' in error) throw error
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect({ to: '/' })
+    }
   },
   component: UsersPage,
 })
@@ -45,10 +61,11 @@ function UsersPage(): React.JSX.Element {
   const { t } = useTranslation()
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
+  const { data: roles } = useListRoles()
 
   const page = search.page ?? 1
   const searchQuery = search.search
-  const role = search.role as UserRole | undefined
+  const { role } = search
 
   const filters = React.useMemo(() => {
     const f: Partial<UserQueryDto> = {}
@@ -140,9 +157,9 @@ function UsersPage(): React.JSX.Element {
             <SelectValue placeholder={t('users.allRoles', { defaultValue: 'All Roles' })} />
           </SelectTrigger>
           <SelectContent>
-            {Object.values(UserRole).map((r) => (
-              <SelectItem key={r} value={r}>
-                {t(`users.roles.${r}`, { defaultValue: r })}
+            {(roles ?? []).map((r) => (
+              <SelectItem key={r.id} value={r.name}>
+                {r.name}
               </SelectItem>
             ))}
           </SelectContent>

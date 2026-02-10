@@ -4,7 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { z } from 'zod'
 
+import { Permission, Resource } from '@librestock/types'
+
 import { getSession } from '@/lib/auth-client'
+import type { CurrentUserResponseDto } from '@/lib/data/auth'
+import { apiGet } from '@/lib/data/axios-client'
+import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -36,6 +41,18 @@ export const Route = createFileRoute('/audit-logs')({
     if (!session) {
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/login' })
+    }
+    try {
+      const user = await apiGet<CurrentUserResponseDto>('/auth/me')
+      const permissions = user.permissions ?? {}
+      if (!canAccess(permissions, Permission.READ, Resource.AUDIT_LOGS)) {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        throw redirect({ to: '/' })
+      }
+    } catch (error) {
+      if (error && typeof error === 'object' && 'to' in error) throw error
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect({ to: '/' })
     }
   },
   component: AuditPage,
