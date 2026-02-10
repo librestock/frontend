@@ -1,6 +1,8 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes, Users } from 'lucide-react'
+import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes, Users, Shield } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
+import { Permission, Resource } from '@librestock/types'
 
 import { PoweredBy } from '@/components/common/PoweredBy'
 import {
@@ -14,15 +16,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { useSession } from '@/lib/auth-client'
 import { useBranding } from '@/hooks/providers/BrandingProvider'
+import { useSession } from '@/lib/auth-client'
+import { usePermissions } from '@/lib/permissions'
 import { sanitizeUrl } from '@/lib/utils'
 
 interface RouteItem {
   name: string
   route: string
   icon: React.ComponentType
-  adminOnly?: boolean
+  resource: Resource
 }
 
 function useRoutes(): RouteItem[] {
@@ -33,38 +36,49 @@ function useRoutes(): RouteItem[] {
       name: t('navigation.dashboard'),
       route: '/',
       icon: LayoutDashboard,
+      resource: Resource.DASHBOARD,
     },
     {
       name: t('navigation.stock'),
       route: '/stock',
       icon: Package,
+      resource: Resource.STOCK,
     },
     {
       name: t('navigation.products'),
       route: '/products',
       icon: Package,
+      resource: Resource.PRODUCTS,
     },
     {
       name: t('navigation.locations'),
       route: '/locations',
       icon: MapPin,
+      resource: Resource.LOCATIONS,
     },
     {
       name: t('navigation.inventory'),
       route: '/inventory',
       icon: Boxes,
+      resource: Resource.INVENTORY,
     },
     {
       name: t('navigation.auditLogs'),
       route: '/audit-logs',
       icon: Logs,
-      adminOnly: true,
+      resource: Resource.AUDIT_LOGS,
     },
     {
       name: t('navigation.users'),
       route: '/users',
       icon: Users,
-      adminOnly: true,
+      resource: Resource.USERS,
+    },
+    {
+      name: t('navigation.roles'),
+      route: '/roles',
+      icon: Shield,
+      resource: Resource.ROLES,
     },
   ]
 }
@@ -76,11 +90,9 @@ export default function AppSidebar(): React.JSX.Element {
   const allRoutes = useRoutes()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
+  const permissions = usePermissions()
 
-  // Hide admin-only links when user is not authenticated
-  const routes = session
-    ? allRoutes
-    : allRoutes.filter((r) => !r.adminOnly)
+  const routes = allRoutes.filter((r) => permissions.can(Permission.READ, r.resource))
 
   return (
     <Sidebar>
