@@ -19,16 +19,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
-  TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { EmptyState } from '@/components/common/EmptyState'
-import { ErrorState } from '@/components/common/ErrorState'
-import { PaginationControls } from '@/components/common/PaginationControls'
+import { TableFactory } from '@/components/common/TableFactory'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   useListUsers,
@@ -213,71 +209,59 @@ export function UsersTable({
 
   const users = data?.data ?? []
   const meta = data?.meta
+  const hasError = Boolean(error)
+  const isEmpty = !isLoading && users.length === 0
+  const table = (
+    <TableFactory
+      errorMessage={t('users.errorLoading', { defaultValue: 'Error loading users' })}
+      hasError={hasError}
+      isEmpty={users.length === 0}
+      isLoading={isLoading}
+      page={page}
+      renderSkeleton={() => <TableSkeleton />}
+      totalItems={meta?.total}
+      totalPages={meta?.total_pages ?? 1}
+      emptyMessage={
+        hasActiveFilters
+          ? t('users.noUsersFiltered', { defaultValue: 'No results for these filters' })
+          : t('users.noUsers', { defaultValue: 'No users found' })
+      }
+      renderBody={() => (
+        <TableBody>
+          {users.map((user) => (
+            <UserRow
+              key={user.id}
+              user={user}
+              onBan={(u) => banMutation.mutate({ id: u.id, data: {} })}
+              onDelete={setDeleteDialogUser}
+              onEditRoles={setRolesDialogUser}
+              onRevokeSessions={(u) => revokeSessionsMutation.mutate({ id: u.id })}
+              onUnban={(u) => unbanMutation.mutate({ id: u.id })}
+            />
+          ))}
+        </TableBody>
+      )}
+      renderHeader={() => (
+        <TableRow>
+          <TableHead>{t('users.name', { defaultValue: 'Name' })}</TableHead>
+          <TableHead>{t('users.email', { defaultValue: 'Email' })}</TableHead>
+          <TableHead>{t('users.rolesColumn', { defaultValue: 'Roles' })}</TableHead>
+          <TableHead>{t('users.status', { defaultValue: 'Status' })}</TableHead>
+          <TableHead>{t('users.created', { defaultValue: 'Created' })}</TableHead>
+          <TableHead className="w-12" />
+        </TableRow>
+      )}
+      onPageChange={onPageChange}
+    />
+  )
 
-  if (error) {
-    return (
-      <ErrorState
-        message={t('users.errorLoading', { defaultValue: 'Error loading users' })}
-        variant="bordered"
-      />
-    )
-  }
-
-  if (!isLoading && users.length === 0) {
-    return (
-      <EmptyState
-        variant="bordered"
-        message={
-          hasActiveFilters
-            ? t('users.noUsersFiltered', { defaultValue: 'No results for these filters' })
-            : t('users.noUsers', { defaultValue: 'No users found' })
-        }
-      />
-    )
+  if (hasError || isEmpty) {
+    return table
   }
 
   return (
     <>
-      <div className="rounded-lg border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{t('users.name', { defaultValue: 'Name' })}</TableHead>
-              <TableHead>{t('users.email', { defaultValue: 'Email' })}</TableHead>
-              <TableHead>{t('users.rolesColumn', { defaultValue: 'Roles' })}</TableHead>
-              <TableHead>{t('users.status', { defaultValue: 'Status' })}</TableHead>
-              <TableHead>{t('users.created', { defaultValue: 'Created' })}</TableHead>
-              <TableHead className="w-12" />
-            </TableRow>
-          </TableHeader>
-          {isLoading ? (
-            <TableSkeleton />
-          ) : (
-            <TableBody>
-              {users.map((user) => (
-                <UserRow
-                  key={user.id}
-                  user={user}
-                  onBan={(u) => banMutation.mutate({ id: u.id, data: {} })}
-                  onDelete={setDeleteDialogUser}
-                  onEditRoles={setRolesDialogUser}
-                  onRevokeSessions={(u) => revokeSessionsMutation.mutate({ id: u.id })}
-                  onUnban={(u) => unbanMutation.mutate({ id: u.id })}
-                />
-              ))}
-            </TableBody>
-          )}
-        </Table>
-        <div className="px-4 pb-4">
-          <PaginationControls
-            isLoading={isLoading}
-            page={page}
-            totalItems={meta?.total}
-            totalPages={meta?.total_pages ?? 1}
-            onPageChange={onPageChange}
-          />
-        </div>
-      </div>
+      {table}
 
       <UpdateRolesDialog
         open={rolesDialogUser !== null}

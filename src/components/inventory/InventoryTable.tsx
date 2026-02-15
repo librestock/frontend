@@ -11,19 +11,15 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
-  TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { TableFactory } from '@/components/common/TableFactory'
 import { FormDialog } from '@/components/common/FormDialog'
 import { CrudDropdownMenu } from '@/components/common/CrudDropdownMenu'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
-import { EmptyState } from '@/components/common/EmptyState'
-import { ErrorState } from '@/components/common/ErrorState'
-import { PaginationControls } from '@/components/common/PaginationControls'
 import {
   useListInventory,
   useDeleteInventoryItem,
@@ -269,66 +265,45 @@ export function InventoryTable({
   const meta = data?.meta
   const showLocation = !filters?.location_id && !filters?.area_id
 
-  if (error) {
-    return (
-      <ErrorState
-        message={t('inventory.errorLoading') || 'Error loading inventory'}
-        variant="bordered"
-      />
-    )
-  }
-
-  if (!isLoading && inventoryItems.length === 0) {
-    return (
-      <EmptyState
-        variant="bordered"
-        message={
-          hasActiveFilters
-            ? (t('inventory.noInventoryFiltered') || 'No results for these filters')
-            : (t('inventory.noInventory') || 'No inventory found')
-        }
-      />
-    )
-  }
-
   return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t('inventory.product') || 'Product'}</TableHead>
-            {showLocation && (
-              <TableHead>{t('inventory.location') || 'Location'}</TableHead>
-            )}
-            <TableHead>{t('inventory.quantity') || 'Qty'}</TableHead>
-            <TableHead>{t('inventory.batchNumber') || 'Batch Number'}</TableHead>
-            <TableHead>{t('inventory.expiryDate') || 'Expiry Date'}</TableHead>
-            <TableHead className="w-24" />
-          </TableRow>
-        </TableHeader>
-        {isLoading ? (
-          <TableSkeleton showLocation={showLocation} />
-        ) : (
-          <TableBody>
-            {inventoryItems.map((inventory) => (
-              <InventoryRow
-                key={inventory.id}
-                inventory={inventory}
-                showLocation={showLocation}
-              />
-            ))}
-          </TableBody>
-        )}
-      </Table>
-      <div className="px-4 pb-4">
-        <PaginationControls
-          isLoading={isLoading}
-          page={page}
-          totalItems={meta?.total}
-          totalPages={meta?.total_pages ?? 1}
-          onPageChange={onPageChange}
-        />
-      </div>
-    </div>
+    <TableFactory
+      errorMessage={t('inventory.errorLoading') || 'Error loading inventory'}
+      hasError={Boolean(error)}
+      isEmpty={inventoryItems.length === 0}
+      isLoading={isLoading}
+      page={page}
+      renderSkeleton={() => <TableSkeleton showLocation={showLocation} />}
+      totalItems={meta?.total}
+      totalPages={meta?.total_pages ?? 1}
+      emptyMessage={
+        hasActiveFilters
+          ? (t('inventory.noInventoryFiltered') || 'No results for these filters')
+          : (t('inventory.noInventory') || 'No inventory found')
+      }
+      renderBody={() => (
+        <TableBody>
+          {inventoryItems.map((inventory) => (
+            <InventoryRow
+              key={inventory.id}
+              inventory={inventory}
+              showLocation={showLocation}
+            />
+          ))}
+        </TableBody>
+      )}
+      renderHeader={() => (
+        <TableRow>
+          <TableHead>{t('inventory.product') || 'Product'}</TableHead>
+          {showLocation && (
+            <TableHead>{t('inventory.location') || 'Location'}</TableHead>
+          )}
+          <TableHead>{t('inventory.quantity') || 'Qty'}</TableHead>
+          <TableHead>{t('inventory.batchNumber') || 'Batch Number'}</TableHead>
+          <TableHead>{t('inventory.expiryDate') || 'Expiry Date'}</TableHead>
+          <TableHead className="w-24" />
+        </TableRow>
+      )}
+      onPageChange={onPageChange}
+    />
   )
 }
