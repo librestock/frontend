@@ -58,3 +58,10 @@ export async function apiDelete<T>(url: string, data?: unknown): Promise<T> {
   const response = await axiosInstance.delete<T>(url, { data })
   return response.data
 }
+
+export async function apiPostFormData<T>(url: string, formData: FormData): Promise<T> {
+  const response = await axiosInstance.post<T>(url, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return response.data
+}

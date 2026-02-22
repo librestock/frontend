@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes, Users, Shield } from 'lucide-react'
+import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes, Users, Shield, ArrowLeftRight, Building2, ClipboardList, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Permission, Resource } from '@librestock/types'
@@ -61,6 +61,30 @@ function useRoutes(): RouteItem[] {
       route: '/inventory',
       icon: Boxes,
       resource: Resource.INVENTORY,
+    },
+    {
+      name: t('navigation.clients'),
+      route: '/clients',
+      icon: Building2,
+      resource: Resource.STOCK,
+    },
+    {
+      name: t('navigation.suppliers'),
+      route: '/suppliers',
+      icon: Truck,
+      resource: Resource.STOCK,
+    },
+    {
+      name: t('navigation.orders'),
+      route: '/orders',
+      icon: ClipboardList,
+      resource: Resource.STOCK,
+    },
+    {
+      name: t('navigation.stockMovements'),
+      route: '/stock-movements',
+      icon: ArrowLeftRight,
+      resource: Resource.STOCK,
     },
     {
       name: t('navigation.auditLogs'),

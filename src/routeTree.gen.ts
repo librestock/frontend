@@ -10,21 +10,36 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteImport } from './routes/users'
+import { Route as SuppliersRouteImport } from './routes/suppliers'
+import { Route as StockMovementsRouteImport } from './routes/stock-movements'
 import { Route as StockRouteImport } from './routes/stock'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RolesRouteImport } from './routes/roles'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as AuditLogsRouteImport } from './routes/audit-logs'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
 
 const UsersRoute = UsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuppliersRoute = SuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StockMovementsRoute = StockMovementsRouteImport.update({
+  id: '/stock-movements',
+  path: '/stock-movements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StockRoute = StockRouteImport.update({
@@ -52,6 +67,11 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -67,6 +87,11 @@ const InventoryRoute = InventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientsRoute = ClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuditLogsRoute = AuditLogsRouteImport.update({
   id: '/audit-logs',
   path: '/audit-logs',
@@ -77,6 +102,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIdRoute = ProductsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ProductsRoute,
+} as any)
 const LocationsIdRoute = LocationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -86,102 +116,136 @@ const LocationsIdRoute = LocationsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit-logs': typeof AuditLogsRoute
+  '/clients': typeof ClientsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRoute
+  '/orders': typeof OrdersRoute
+  '/products': typeof ProductsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/stock': typeof StockRoute
+  '/stock-movements': typeof StockMovementsRoute
+  '/suppliers': typeof SuppliersRoute
   '/users': typeof UsersRoute
   '/locations/$id': typeof LocationsIdRoute
+  '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit-logs': typeof AuditLogsRoute
+  '/clients': typeof ClientsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRoute
+  '/orders': typeof OrdersRoute
+  '/products': typeof ProductsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/stock': typeof StockRoute
+  '/stock-movements': typeof StockMovementsRoute
+  '/suppliers': typeof SuppliersRoute
   '/users': typeof UsersRoute
   '/locations/$id': typeof LocationsIdRoute
+  '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/audit-logs': typeof AuditLogsRoute
+  '/clients': typeof ClientsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRoute
+  '/orders': typeof OrdersRoute
+  '/products': typeof ProductsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/stock': typeof StockRoute
+  '/stock-movements': typeof StockMovementsRoute
+  '/suppliers': typeof SuppliersRoute
   '/users': typeof UsersRoute
   '/locations/$id': typeof LocationsIdRoute
+  '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/audit-logs'
+    | '/clients'
     | '/inventory'
     | '/locations'
     | '/login'
+    | '/orders'
     | '/products'
     | '/roles'
     | '/settings'
     | '/signup'
     | '/stock'
+    | '/stock-movements'
+    | '/suppliers'
     | '/users'
     | '/locations/$id'
+    | '/products/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/audit-logs'
+    | '/clients'
     | '/inventory'
     | '/locations'
     | '/login'
+    | '/orders'
     | '/products'
     | '/roles'
     | '/settings'
     | '/signup'
     | '/stock'
+    | '/stock-movements'
+    | '/suppliers'
     | '/users'
     | '/locations/$id'
+    | '/products/$id'
   id:
     | '__root__'
     | '/'
     | '/audit-logs'
+    | '/clients'
     | '/inventory'
     | '/locations'
     | '/login'
+    | '/orders'
     | '/products'
     | '/roles'
     | '/settings'
     | '/signup'
     | '/stock'
+    | '/stock-movements'
+    | '/suppliers'
     | '/users'
     | '/locations/$id'
+    | '/products/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditLogsRoute: typeof AuditLogsRoute
+  ClientsRoute: typeof ClientsRoute
   InventoryRoute: typeof InventoryRoute
   LocationsRoute: typeof LocationsRouteWithChildren
   LoginRoute: typeof LoginRoute
-  ProductsRoute: typeof ProductsRoute
+  OrdersRoute: typeof OrdersRoute
+  ProductsRoute: typeof ProductsRouteWithChildren
   RolesRoute: typeof RolesRoute
   SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   StockRoute: typeof StockRoute
+  StockMovementsRoute: typeof StockMovementsRoute
+  SuppliersRoute: typeof SuppliersRoute
   UsersRoute: typeof UsersRoute
 }
 
@@ -192,6 +256,20 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof UsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/suppliers': {
+      id: '/suppliers'
+      path: '/suppliers'
+      fullPath: '/suppliers'
+      preLoaderRoute: typeof SuppliersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stock-movements': {
+      id: '/stock-movements'
+      path: '/stock-movements'
+      fullPath: '/stock-movements'
+      preLoaderRoute: typeof StockMovementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/stock': {
@@ -229,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -250,6 +335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clients': {
+      id: '/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof ClientsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/audit-logs': {
       id: '/audit-logs'
       path: '/audit-logs'
@@ -263,6 +355,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/products/$id': {
+      id: '/products/$id'
+      path: '/$id'
+      fullPath: '/products/$id'
+      preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof ProductsRoute
     }
     '/locations/$id': {
       id: '/locations/$id'
@@ -286,17 +385,33 @@ const LocationsRouteWithChildren = LocationsRoute._addFileChildren(
   LocationsRouteChildren,
 )
 
+interface ProductsRouteChildren {
+  ProductsIdRoute: typeof ProductsIdRoute
+}
+
+const ProductsRouteChildren: ProductsRouteChildren = {
+  ProductsIdRoute: ProductsIdRoute,
+}
+
+const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
+  ProductsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditLogsRoute: AuditLogsRoute,
+  ClientsRoute: ClientsRoute,
   InventoryRoute: InventoryRoute,
   LocationsRoute: LocationsRouteWithChildren,
   LoginRoute: LoginRoute,
-  ProductsRoute: ProductsRoute,
+  OrdersRoute: OrdersRoute,
+  ProductsRoute: ProductsRouteWithChildren,
   RolesRoute: RolesRoute,
   SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   StockRoute: StockRoute,
+  StockMovementsRoute: StockMovementsRoute,
+  SuppliersRoute: SuppliersRoute,
   UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport
