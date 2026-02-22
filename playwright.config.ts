@@ -29,7 +29,7 @@ export default defineConfig({
         storageState: 'e2e/.auth/user.json',
       },
       dependencies: ['setup'],
-      testMatch: /(?:navigation|audit-logs)\.spec\.ts/,
+      testMatch: /(?:navigation|audit-logs|products|inventory|settings|dashboard)\.spec\.ts/,
     },
     {
       name: 'unauthenticated',
