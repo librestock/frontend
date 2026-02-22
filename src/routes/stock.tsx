@@ -82,6 +82,12 @@ function ItemsPage(): React.JSX.Element {
     const sorted = [...items]
     if (sortBy === SortField.NAME) {
       sorted.sort((a, b) => a.name.localeCompare(b.name))
+    } else if (sortBy === SortField.QUANTITY) {
+      sorted.sort((a, b) => a.reorder_point - b.reorder_point)
+    } else if (sortBy === SortField.VALUE) {
+      sorted.sort(
+        (a, b) => (a.standard_price ?? 0) - (b.standard_price ?? 0),
+      )
     }
     return sorted
   }, [productsResponse?.data, sortBy])
