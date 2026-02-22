@@ -45,6 +45,8 @@ const crud = makeCrudHooks<
 
 export const getListProductsQueryKey = crud.getListQueryKey
 export const getListProductsQueryOptions = crud.getListQueryOptions
+export const getGetProductQueryKey = crud.getGetQueryKey
+export const getGetProductQueryOptions = crud.getGetQueryOptions
 export const useListProducts = crud.useList
 export const useGetProduct = crud.useGet
 export const useCreateProduct = crud.useCreate

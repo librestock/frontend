@@ -6,9 +6,16 @@ import z from 'zod'
 import { isValidCategoryId } from '@/lib/utils'
 import {
   getGetProductsByCategoryQueryKey,
+  getGetProductQueryKey,
   getListProductsQueryKey,
   useCreateProduct,
+  useUpdateProduct,
+  type ProductResponseDto,
 } from '@/lib/data/products'
+import {
+  useUploadProductPhoto,
+  getListProductPhotosQueryKey,
+} from '@/lib/data/photos'
 import type { CategoryWithChildrenResponseDto } from '@/lib/data/categories'
 
 const formSchema = z.object({
@@ -35,29 +42,50 @@ const formSchema = z.object({
   is_perishable: z.boolean(),
 })
 
+interface UseProductFormOptions {
+  product?: ProductResponseDto
+  categories?: CategoryWithChildrenResponseDto[]
+  defaultCategoryId?: string
+  pendingFile?: File | null
+  onSuccess?: () => void
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useProductForm(
-  categories: CategoryWithChildrenResponseDto[] | undefined,
-  defaultCategoryId: string | undefined,
-  onSuccess?: () => void,
-) {
+export function useProductForm({
+  product,
+  categories,
+  defaultCategoryId,
+  pendingFile,
+  onSuccess,
+}: UseProductFormOptions) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
-  const mutation = useCreateProduct({
+  const uploadMutation = useUploadProductPhoto()
+
+  const createMutation = useCreateProduct({
     mutation: {
-      onSuccess: async (_data, variables) => {
-        toast.success(
-          t('form.productCreated') || 'Product created successfully',
-        )
-        await queryClient.invalidateQueries({
-          queryKey: getListProductsQueryKey(),
-        })
-        await queryClient.invalidateQueries({
-          queryKey: getGetProductsByCategoryQueryKey(
-            variables.data.category_id,
-          ),
-        })
+      onSuccess: async (data, variables) => {
+        toast.success(t('form.productCreated') || 'Product created successfully')
+
+        // Upload pending photo for the newly created product
+        if (pendingFile) {
+          try {
+            await uploadMutation.mutateAsync({
+              productId: data.id,
+              file: pendingFile,
+            })
+            toast.success(t('form.photoUploaded') || 'Photo uploaded')
+          } catch {
+            toast.error(t('form.uploadError') || 'Failed to upload image')
+          }
+        }
+
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() }),
+          queryClient.invalidateQueries({ queryKey: getGetProductsByCategoryQueryKey(variables.data.category_id) }),
+          queryClient.invalidateQueries({ queryKey: getListProductPhotosQueryKey(data.id) }),
+        ])
         onSuccess?.()
       },
       onError: (error) => {
@@ -67,14 +95,32 @@ export function useProductForm(
     },
   })
 
+  const updateMutation = useUpdateProduct({
+    mutation: {
+      onSuccess: async (_data, variables) => {
+        toast.success(t('products.updated') || 'Product updated successfully')
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() }),
+          queryClient.invalidateQueries({ queryKey: getGetProductQueryKey(variables.id) }),
+          queryClient.invalidateQueries({ queryKey: getGetProductsByCategoryQueryKey(variables.data.category_id ?? '') }),
+        ])
+        onSuccess?.()
+      },
+      onError: (error) => {
+        toast.error(t('products.updateError') || 'Failed to update product')
+        console.error('Product update error:', error)
+      },
+    },
+  })
+
   return useForm({
     defaultValues: {
-      sku: '',
-      name: '',
-      category_id: defaultCategoryId ?? '',
-      reorder_point: '0',
-      is_active: true,
-      is_perishable: false,
+      sku: product?.sku ?? '',
+      name: product?.name ?? '',
+      category_id: product?.category_id ?? defaultCategoryId ?? '',
+      reorder_point: String(product?.reorder_point ?? 0),
+      is_active: product?.is_active ?? true,
+      is_perishable: product?.is_perishable ?? false,
     },
     validators: {
       onSubmit: ({ value }) => {
@@ -104,7 +150,14 @@ export function useProductForm(
         is_perishable: value.is_perishable,
       }
 
-      await mutation.mutateAsync({ data: payload })
+      await (product
+        ? updateMutation.mutateAsync({
+            id: product.id,
+            data: payload,
+          })
+        : createMutation.mutateAsync({
+            data: payload,
+          }))
     },
   })
 }
