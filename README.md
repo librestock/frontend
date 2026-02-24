@@ -38,23 +38,68 @@ src/
 │   ├── __root.tsx           # Root layout + providers
 │   ├── index.tsx            # Home (/)
 │   ├── products.tsx         # Products (/products)
+│   ├── products.$id.tsx     # Product detail (/products/:id)
 │   ├── locations.tsx        # Locations (/locations)
 │   ├── locations.$id.tsx    # Location detail (/locations/:id)
 │   ├── inventory.tsx        # Inventory (/inventory)
 │   ├── stock.tsx            # Stock (/stock)
-│   ├── settings.tsx         # Settings (/settings)
+│   ├── stock-movements.tsx  # Stock Movements (/stock-movements)
+│   ├── orders.tsx           # Orders (/orders)
+│   ├── clients.tsx          # Clients (/clients)
+│   ├── suppliers.tsx        # Suppliers (/suppliers)
 │   ├── audit-logs.tsx       # Audit logs (/audit-logs, admin)
 │   ├── users.tsx            # Users (/users, admin)
+│   ├── roles.tsx            # Roles (/roles, admin)
+│   ├── settings.tsx         # Settings (/settings)
 │   ├── login.tsx            # Login
 │   └── signup.tsx           # Signup
 ├── components/
 │   ├── ui/                  # Base components (Radix/shadcn)
 │   ├── common/              # Header, PaginationControls, EmptyState
-│   └── <feature>/           # Feature-specific components
+│   ├── areas/               # Area components
+│   ├── audit-logs/          # Audit log components
+│   ├── category/            # Category components
+│   ├── clients/             # Client components
+│   ├── inventory/           # Inventory components
+│   ├── items/               # Item components
+│   ├── locations/           # Location components
+│   ├── orders/              # Order components
+│   ├── products/            # Product components
+│   ├── roles/               # Role components
+│   ├── settings/            # Settings components
+│   ├── stock-movements/     # Stock movement components
+│   ├── suppliers/           # Supplier components
+│   ├── users/               # User components
+│   ├── DefaultCatchBoundary.tsx
+│   └── NotFound.tsx
 ├── lib/
 │   ├── data/                # API hooks (React Query)
-│   ├── utils.ts             # cn(), sanitizeUrl()
-│   └── env.ts               # Environment validation
+│   │   ├── areas            # Area data hooks
+│   │   ├── audit-logs       # Audit log data hooks
+│   │   ├── auth             # Auth data hooks
+│   │   ├── axios-client     # Axios client config
+│   │   ├── branding         # Branding data hooks
+│   │   ├── categories       # Category data hooks
+│   │   ├── clients          # Client data hooks
+│   │   ├── inventory        # Inventory data hooks
+│   │   ├── locations        # Location data hooks
+│   │   ├── make-crud-hooks  # Generic CRUD hook factory
+│   │   ├── orders           # Order data hooks
+│   │   ├── photos           # Photo data hooks
+│   │   ├── products         # Product data hooks
+│   │   ├── query-cache      # Query cache utilities
+│   │   ├── roles            # Role data hooks
+│   │   ├── stock-movements  # Stock movement data hooks
+│   │   ├── suppliers        # Supplier data hooks
+│   │   └── users            # User data hooks
+│   ├── auth-client.ts       # Better Auth client
+│   ├── enums/               # Shared enums
+│   ├── env.ts               # Environment validation
+│   ├── location-type.utils.ts # Location type helpers
+│   ├── order-state-machine.ts # Order state machine
+│   ├── permissions.ts       # Permission utilities
+│   ├── url-config.ts        # URL configuration
+│   └── utils.ts             # cn(), sanitizeUrl()
 ├── router.tsx               # Router config
 ├── routeTree.gen.ts         # Auto-generated route tree
 └── locales/                 # i18n (en, de, fr)
