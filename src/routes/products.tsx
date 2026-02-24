@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { CheckSquare, X } from 'lucide-react'
 
@@ -136,80 +136,83 @@ function ProductPage(): React.JSX.Element {
     currentProducts.some((p) => selectedIds.has(p.id)) && !allSelected
 
   return (
-    <div className="flex h-full w-full">
-      <CategorySidebar
-        selectedCategoryId={selectedCategoryId}
-        onSelectCategory={setSelectedCategoryId}
-      />
-      <div className="flex-1 overflow-auto p-4">
-        <div className="flex items-center justify-between gap-2 pb-4">
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant={selectMode ? 'default' : 'outline'}
-              onClick={handleToggleSelectMode}
-            >
-              {selectMode ? (
-                <>
-                  <X className="size-4" data-icon="inline-start" />
-                  {t('bulk.exitSelect') || 'Exit Select'}
-                </>
-              ) : (
-                <>
-                  <CheckSquare className="size-4" data-icon="inline-start" />
-                  {t('bulk.select') || 'Select'}
-                </>
-              )}
-            </Button>
-            {selectMode && currentProducts.length > 0 && (
-              <div className="flex items-center gap-2">
-                <button
-                  className="flex items-center gap-1.5 text-sm hover:underline"
-                  type="button"
-                  onClick={handleSelectAll}
-                >
-                  <Checkbox
-                    checked={allSelected ? true : someSelected ? 'indeterminate' : false}
-                    onCheckedChange={handleSelectAll}
-                  />
-                  <span>
-                    {allSelected
-                      ? (t('bulk.deselectAll') || 'Deselect All')
-                      : (t('bulk.selectAll') || 'Select All')}
-                  </span>
-                </button>
-                {selectedIds.size > 0 && (
-                  <span className="text-muted-foreground text-sm">
-                    {t('bulk.selectedCount', { count: selectedIds.size }) ||
-                      `${selectedIds.size} selected`}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <BulkCsvImportDialog />
-            <CreateProductButton defaultCategoryId={selectedCategoryId} />
-          </div>
-        </div>
-        <ProductList
-          categoryId={selectedCategoryId}
-          selectMode={selectMode}
-          selectedIds={selectedIds}
-          subcategories={subcategories}
+    <>
+      <div className="flex h-full w-full">
+        <CategorySidebar
+          selectedCategoryId={selectedCategoryId}
           onSelectCategory={setSelectedCategoryId}
-          onToggleSelect={handleToggleSelect}
         />
-        {selectMode && selectedIds.size > 0 && (
-          <div className="h-16" />
+        <div className="flex-1 overflow-auto p-4">
+          <div className="flex items-center justify-between gap-2 pb-4">
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant={selectMode ? 'default' : 'outline'}
+                onClick={handleToggleSelectMode}
+              >
+                {selectMode ? (
+                  <>
+                    <X className="size-4" data-icon="inline-start" />
+                    {t('bulk.exitSelect') || 'Exit Select'}
+                  </>
+                ) : (
+                  <>
+                    <CheckSquare className="size-4" data-icon="inline-start" />
+                    {t('bulk.select') || 'Select'}
+                  </>
+                )}
+              </Button>
+              {selectMode && currentProducts.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    className="flex items-center gap-1.5 text-sm hover:underline"
+                    type="button"
+                    onClick={handleSelectAll}
+                  >
+                    <Checkbox
+                      checked={allSelected ? true : someSelected ? 'indeterminate' : false}
+                      onCheckedChange={handleSelectAll}
+                    />
+                    <span>
+                      {allSelected
+                        ? (t('bulk.deselectAll') || 'Deselect All')
+                        : (t('bulk.selectAll') || 'Select All')}
+                    </span>
+                  </button>
+                  {selectedIds.size > 0 && (
+                    <span className="text-muted-foreground text-sm">
+                      {t('bulk.selectedCount', { count: selectedIds.size }) ||
+                        `${selectedIds.size} selected`}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <BulkCsvImportDialog />
+              <CreateProductButton defaultCategoryId={selectedCategoryId} />
+            </div>
+          </div>
+          <ProductList
+            categoryId={selectedCategoryId}
+            selectMode={selectMode}
+            selectedIds={selectedIds}
+            subcategories={subcategories}
+            onSelectCategory={setSelectedCategoryId}
+            onToggleSelect={handleToggleSelect}
+          />
+          {selectMode && selectedIds.size > 0 && (
+            <div className="h-16" />
+          )}
+        </div>
+        {selectMode && (
+          <BulkActionBar
+            selectedIds={Array.from(selectedIds)}
+            onClearSelection={handleClearSelection}
+          />
         )}
       </div>
-      {selectMode && (
-        <BulkActionBar
-          selectedIds={Array.from(selectedIds)}
-          onClearSelection={handleClearSelection}
-        />
-      )}
-    </div>
+      <Outlet />
+    </>
   )
 }

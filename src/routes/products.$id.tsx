@@ -13,6 +13,12 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
 import { ProductThumbnail } from '@/components/products/ProductThumbnail'
 import {
   useListProductPhotos,
@@ -382,87 +388,91 @@ function ProductDetailPage(): React.JSX.Element {
     void navigate({ to: PRODUCTS_ROUTE })
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <Spinner />
-      </div>
-    )
-  }
-
-  if (error || !product) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-        <p className="text-destructive">
-          {t('products.errorLoadingDetail') || 'Error loading product'}
-        </p>
-        <Button variant="outline" onClick={handleBack}>
-          <ArrowLeft className="mr-2 size-4" />
-          {t('navigation.products') || 'Back to Products'}
-        </Button>
-      </div>
-    )
-  }
-
   const editFormId = `edit-product-form-${productId}`
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <ProductHeader
-        product={product}
-        onBack={handleBack}
-        onDelete={() => setDeleteOpen(true)}
-        onEdit={() => setEditOpen(true)}
-      />
-
-      <div className="flex-1 overflow-auto p-6 space-y-6">
-        <ProductPhotosCard productId={productId} />
-        <ProductDetailsCard product={product} />
-      </div>
-
-      <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
-        contentClassName="sm:max-w-[900px]"
-        description={t('products.editDescription') || 'Update product details.'}
-        formId={editFormId}
-        open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('products.editTitle') || 'Edit Product'}
-        onOpenChange={setEditOpen}
-      >
-        {categoriesLoading === true && (
-          <div className="flex justify-center py-6">
-            <Spinner className="size-6" />
+    <Dialog open onOpenChange={(open) => { if (!open) handleBack() }}>
+      <DialogContent className="sm:max-w-[900px] max-h-[85vh] overflow-hidden flex flex-col p-0" showCloseButton={false}>
+        <DialogTitle className="sr-only">
+          {product?.name ?? (t('products.details') || 'Product Details')}
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          {t('products.detailsSubtitle') || 'Product specifications and attributes'}
+        </DialogDescription>
+        {isLoading ? (
+          <div className="flex min-h-[200px] items-center justify-center">
+            <Spinner />
           </div>
-        )}
+        ) : error || !product ? (
+          <div className="flex min-h-[200px] flex-col items-center justify-center gap-4">
+            <p className="text-destructive">
+              {t('products.errorLoadingDetail') || 'Error loading product'}
+            </p>
+            <Button variant="outline" onClick={handleBack}>
+              <ArrowLeft className="mr-2 size-4" />
+              {t('navigation.products') || 'Back to Products'}
+            </Button>
+          </div>
+        ) : (
+          <>
+            <ProductHeader
+              product={product}
+              onBack={handleBack}
+              onDelete={() => setDeleteOpen(true)}
+              onEdit={() => setEditOpen(true)}
+            />
 
-        {categoriesError != null && (
-          <p className="text-destructive text-sm">
-            {t('form.loadCategoriesError') || 'Failed to load categories'}
-          </p>
-        )}
+            <div className="flex-1 overflow-auto px-6 pb-6 space-y-6">
+              <ProductPhotosCard productId={productId} />
+              <ProductDetailsCard product={product} />
+            </div>
 
-        {categoriesLoading !== true && categoriesError == null && (
-          <ProductForm
-            categories={categories}
-            formId={editFormId}
-            product={product}
-            onSuccess={() => setEditOpen(false)}
-          />
-        )}
-      </FormDialog>
+            <FormDialog
+              cancelLabel={t('form.cancel') || 'Cancel'}
+              contentClassName="sm:max-w-[900px]"
+              description={t('products.editDescription') || 'Update product details.'}
+              formId={editFormId}
+              open={editOpen}
+              submitLabel={t('actions.save') || 'Save'}
+              title={t('products.editTitle') || 'Edit Product'}
+              onOpenChange={setEditOpen}
+            >
+              {categoriesLoading === true && (
+                <div className="flex justify-center py-6">
+                  <Spinner className="size-6" />
+                </div>
+              )}
 
-      <DeleteConfirmationDialog
-        isLoading={deleteMutation.isPending}
-        open={deleteOpen}
-        title={t('products.deleteTitle') || 'Delete Product'}
-        description={
-          t('products.deleteDescription') ||
-          'Are you sure you want to delete this product? This action cannot be undone.'
-        }
-        onConfirm={handleDelete}
-        onOpenChange={setDeleteOpen}
-      />
-    </div>
+              {categoriesError != null && (
+                <p className="text-destructive text-sm">
+                  {t('form.loadCategoriesError') || 'Failed to load categories'}
+                </p>
+              )}
+
+              {categoriesLoading !== true && categoriesError == null && (
+                <ProductForm
+                  categories={categories}
+                  formId={editFormId}
+                  product={product}
+                  onSuccess={() => setEditOpen(false)}
+                />
+              )}
+            </FormDialog>
+
+            <DeleteConfirmationDialog
+              isLoading={deleteMutation.isPending}
+              open={deleteOpen}
+              title={t('products.deleteTitle') || 'Delete Product'}
+              description={
+                t('products.deleteDescription') ||
+                'Are you sure you want to delete this product? This action cannot be undone.'
+              }
+              onConfirm={handleDelete}
+              onOpenChange={setDeleteOpen}
+            />
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   )
 }
