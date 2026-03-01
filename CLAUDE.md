@@ -12,6 +12,10 @@
 - **Playwright `testMatch`:** New authenticated test files must be added to the `chromium` project's `testMatch` regex in `playwright.config.ts`, or they will silently not run.
 - **`better-auth`** is pinned to a specific version (not `"latest"`).
 
+## Issue tracking
+
+Before starting work on any issue, ensure it is added to the **[LibreStock Improvements Tracker](https://github.com/orgs/librestock/projects/2)** GitHub Project. Move the issue to "In Progress" when starting and "Done" when complete.
+
 ## Adding a new page
 
 Create the route file and components following existing patterns, but don't forget:
