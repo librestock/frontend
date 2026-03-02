@@ -9,8 +9,18 @@ on:
 jobs:
   lint:
     runs-on: blacksmith-2vcpu-ubuntu-2404
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: frontend
+
+      - uses: actions/checkout@v4
+        with:
+          repository: librestock/packages
+          path: packages
 
       - uses: pnpm/action-setup@v4
         with:
@@ -21,6 +31,12 @@ jobs:
           node-version: 20
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Build shared types package
+        run: |
+          pnpm exec tsc -p ../packages/types/tsconfig.build.json
+          pnpm exec tsc -p ../packages/types/tsconfig.build.cjs.json
+          echo '{"type":"commonjs"}' > ../packages/types/dist/cjs/package.json
 
       - name: Lint
         run: pnpm lint
@@ -30,8 +46,18 @@ jobs:
 
   build:
     runs-on: blacksmith-2vcpu-ubuntu-2404
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: frontend
+
+      - uses: actions/checkout@v4
+        with:
+          repository: librestock/packages
+          path: packages
 
       - uses: pnpm/action-setup@v4
         with:
@@ -42,6 +68,12 @@ jobs:
           node-version: 20
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Build shared types package
+        run: |
+          pnpm exec tsc -p ../packages/types/tsconfig.build.json
+          pnpm exec tsc -p ../packages/types/tsconfig.build.cjs.json
+          echo '{"type":"commonjs"}' > ../packages/types/dist/cjs/package.json
 
       - name: Build
         run: pnpm build
