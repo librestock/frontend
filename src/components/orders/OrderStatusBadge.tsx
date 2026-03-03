@@ -4,17 +4,15 @@ import { OrderStatus } from '@librestock/types'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
+const BLUE_STATUS_STYLE = 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+
 const STATUS_STYLES: Record<OrderStatus, string> = {
   [OrderStatus.DRAFT]:
     'bg-muted text-muted-foreground border-border',
-  [OrderStatus.CONFIRMED]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-  [OrderStatus.SOURCING]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-  [OrderStatus.PICKING]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-  [OrderStatus.PACKED]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+  [OrderStatus.CONFIRMED]: BLUE_STATUS_STYLE,
+  [OrderStatus.SOURCING]: BLUE_STATUS_STYLE,
+  [OrderStatus.PICKING]: BLUE_STATUS_STYLE,
+  [OrderStatus.PACKED]: BLUE_STATUS_STYLE,
   [OrderStatus.SHIPPED]:
     'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300',
   [OrderStatus.DELIVERED]:

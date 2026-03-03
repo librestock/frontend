@@ -37,8 +37,13 @@ interface UseSupplierFormOptions {
   onSuccess?: () => void
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useSupplierForm({ supplier, onSuccess }: UseSupplierFormOptions = {}) {
+function toOptionalString(value: string): string | undefined {
+  return value === '' ? undefined : value
+}
+
+export function useSupplierForm(
+  { supplier, onSuccess }: UseSupplierFormOptions = {},
+): ReturnType<typeof useForm> {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
@@ -97,12 +102,12 @@ export function useSupplierForm({ supplier, onSuccess }: UseSupplierFormOptions 
     onSubmit: async ({ value }) => {
       const payload = {
         name: value.name,
-        contact_person: value.contact_person || undefined,
-        email: value.email || undefined,
-        phone: value.phone || undefined,
-        address: value.address || undefined,
-        website: value.website || undefined,
-        notes: value.notes || undefined,
+        contact_person: toOptionalString(value.contact_person),
+        email: toOptionalString(value.email),
+        phone: toOptionalString(value.phone),
+        address: toOptionalString(value.address),
+        website: toOptionalString(value.website),
+        notes: toOptionalString(value.notes),
         is_active: value.is_active,
       }
 

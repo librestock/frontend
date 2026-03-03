@@ -1,7 +1,7 @@
 import type { PhotoResponseDto } from '@librestock/types'
-import { apiBaseUrl } from '@/lib/url-config'
 import { apiDelete, apiGet, apiPostFormData } from './axios-client'
 import { makeParamQueryHook, makeMutationHook } from './make-crud-hooks'
+import { apiBaseUrl } from '@/lib/url-config'
 
 export type { PhotoResponseDto }
 

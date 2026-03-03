@@ -132,7 +132,7 @@ function StockMovementRow({
         <ReasonBadge reason={movement.reason} />
       </TableCell>
       <TableCell className="text-muted-foreground">
-        {movement.reference_number || '---'}
+        {movement.reference_number ?? '---'}
       </TableCell>
     </TableRow>
   )

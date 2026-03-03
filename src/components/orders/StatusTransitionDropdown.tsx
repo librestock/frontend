@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { ChevronDown } from 'lucide-react'
-import { OrderStatus } from '@librestock/types'
+import type { OrderStatus } from '@librestock/types'
 
 import { Button } from '@/components/ui/button'
 import {

@@ -235,7 +235,7 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
           {order.order_number}
         </TableCell>
         <TableCell>
-          {order.client_name || (
+          {order.client_name ?? (
             <span className="text-muted-foreground">
               {t('orders.unknownClient') || 'Unknown'}
             </span>

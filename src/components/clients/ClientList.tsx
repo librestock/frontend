@@ -8,7 +8,7 @@ import { PaginationControls } from '@/components/common/PaginationControls'
 import {
   useListClients,
   type ClientQueryDto,
-  ClientStatus,
+  type ClientStatus,
 } from '@/lib/data/clients'
 
 interface ClientListProps {

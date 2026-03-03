@@ -1,10 +1,10 @@
 import {
   StockMovementReason,
   type CreateStockMovementDto,
+  type PaginationMeta,
   type StockMovementQueryDto,
   type StockMovementResponseDto,
 } from '@librestock/types'
-import type { PaginationMeta } from '@librestock/types'
 import { makeCrudHooks } from './make-crud-hooks'
 
 export type { CreateStockMovementDto, StockMovementQueryDto, StockMovementResponseDto }

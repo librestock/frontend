@@ -210,7 +210,9 @@ export function OrderForm({
                       products={products ?? []}
                       onRemove={
                         field.state.value.length > 1
-                          ? () => form.removeFieldValue('items', index)
+                          ? async () => {
+                              await form.removeFieldValue('items', index)
+                            }
                           : undefined
                       }
                     />
@@ -227,11 +229,12 @@ export function OrderForm({
 }
 
 interface OrderItemFieldsProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any
+  form: {
+    setFieldValue: (field: string, value: number) => void
+  }
   index: number
-  products: Array<{ id: string; name: string; sku: string | null; standard_price?: number | null }>
-  onRemove?: () => void
+  products: { id: string; name: string; sku: string | null; standard_price?: number | null }[]
+  onRemove?: () => Promise<void>
 }
 
 function OrderItemFields({
@@ -263,7 +266,7 @@ function OrderItemFields({
       </div>
 
       <form.Field name={`items[${index}].product_id`}>
-        {(field: { state: { value: string; meta: { errors: Array<{ message?: string }> } }; handleChange: (value: string) => void }) => (
+        {(field: { state: { value: string; meta: { errors: { message?: string }[] } }; handleChange: (value: string) => void }) => (
           <Field>
             <FieldLabel htmlFor={`item-product-${index}`}>
               {t('orders.product') || 'Product'}
@@ -306,7 +309,7 @@ function OrderItemFields({
 
       <div className="grid grid-cols-2 gap-3">
         <form.Field name={`items[${index}].quantity`}>
-          {(field: { state: { value: number; meta: { errors: Array<{ message?: string }> } }; handleBlur: () => void; handleChange: (value: number) => void }) => (
+          {(field: { state: { value: number; meta: { errors: { message?: string }[] } }; handleBlur: () => void; handleChange: (value: number) => void }) => (
             <Field>
               <FieldLabel htmlFor={`item-qty-${index}`}>
                 {t('orders.quantity') || 'Quantity'}
@@ -331,7 +334,7 @@ function OrderItemFields({
         </form.Field>
 
         <form.Field name={`items[${index}].unit_price`}>
-          {(field: { state: { value: number; meta: { errors: Array<{ message?: string }> } }; handleBlur: () => void; handleChange: (value: number) => void }) => (
+          {(field: { state: { value: number; meta: { errors: { message?: string }[] } }; handleBlur: () => void; handleChange: (value: number) => void }) => (
             <Field>
               <FieldLabel htmlFor={`item-price-${index}`}>
                 {t('orders.unitPrice') || 'Unit Price'}
@@ -358,7 +361,7 @@ function OrderItemFields({
       </div>
 
       <form.Field name={`items[${index}].notes`}>
-        {(field: { state: { value: string; meta: { errors: Array<{ message?: string }> } }; handleBlur: () => void; handleChange: (value: string) => void }) => (
+        {(field: { state: { value: string; meta: { errors: { message?: string }[] } }; handleBlur: () => void; handleChange: (value: string) => void }) => (
           <Field>
             <FieldLabel htmlFor={`item-notes-${index}`}>
               {t('orders.itemNotes') || 'Notes'}
