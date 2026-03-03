@@ -80,7 +80,7 @@ export function useOrderForm({ order, onSuccess }: UseOrderFormOptions = {}) {
     defaultValues: isEditing
       ? {
           client_id: order.client_id,
-          delivery_address: order.delivery_address ?? '',
+          delivery_address: order.delivery_address,
           delivery_deadline: order.delivery_deadline
             ? new Date(order.delivery_deadline).toISOString().split('T')[0]
             : '',

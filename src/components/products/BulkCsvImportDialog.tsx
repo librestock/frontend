@@ -115,15 +115,15 @@ function parseCsv(text: string): ParseResult {
       }
     }
 
-    const reorderPoint = Number.parseInt(record.reorder_point ?? '0', 10)
+    const reorderPoint = Number.parseInt(record.reorder_point, 10)
     if (record.reorder_point && Number.isNaN(reorderPoint)) {
       errors.push('reorder_point must be a number')
     }
 
     const data: CreateProductDto = {
-      sku: record.sku ?? '',
-      name: record.name ?? '',
-      category_id: record.category_id ?? '',
+      sku: record.sku,
+      name: record.name,
+      category_id: record.category_id,
       reorder_point: Number.isNaN(reorderPoint) ? 0 : reorderPoint,
       description: record.description || null,
       is_active: parseBoolean(record.is_active, true),

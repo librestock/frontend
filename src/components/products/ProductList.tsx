@@ -153,12 +153,12 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
   return (
     <>
       <div
+        role="button"
+        tabIndex={0}
         className={cn(
           'group cursor-pointer rounded-lg border p-4 transition-colors hover:bg-accent/50',
           selectMode === true && isSelected === true && 'border-primary bg-primary/5',
         )}
-        role="button"
-        tabIndex={0}
         onClick={handleCardClick}
         onKeyDown={handleCardKeyDown}
       >
@@ -168,8 +168,8 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
               <Checkbox
                 checked={isSelected === true}
                 className="mt-1 shrink-0"
-                onClick={(e) => e.stopPropagation()}
                 onCheckedChange={() => onToggleSelect?.()}
+                onClick={(e) => e.stopPropagation()}
               />
             )}
             <div className="bg-muted size-10 shrink-0 overflow-hidden rounded-md border">
@@ -352,13 +352,13 @@ export function ProductList({
               isSelected={selectedIds?.has(product.id)}
               product={product}
               selectMode={selectMode}
+              onToggleSelect={() => onToggleSelect?.(product.id)}
               onClick={() => {
                 void navigate({
                   to: '/products/$id',
                   params: { id: product.id },
                 })
               }}
-              onToggleSelect={() => onToggleSelect?.(product.id)}
             />
           ))}
         </div>

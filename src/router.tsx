@@ -17,16 +17,8 @@ export function getRouter(): AnyRouter {
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         retry: (failureCount, error) => {
-          const status =
-            typeof error === 'object' &&
-            error !== null &&
-            'response' in error &&
-            (error as { response?: { status?: number } }).response?.status
-              ? Number(
-                  (error as { response?: { status?: number } }).response
-                    ?.status,
-                )
-              : undefined
+          const status = (error as { response?: { status?: number } }).response
+            ?.status
           if (status && status >= 400 && status < 500) {
             return false
           }
@@ -50,10 +42,7 @@ export function getRouter(): AnyRouter {
       }
     },
     hydrate: (dehydrated) => {
-      if (
-        dehydrated?.queryClientState &&
-        isDehydratedState(dehydrated.queryClientState)
-      ) {
+      if (isDehydratedState(dehydrated.queryClientState)) {
         hydrate(queryClient, dehydrated.queryClientState)
       }
     },

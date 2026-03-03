@@ -33,15 +33,15 @@ const auditLogsSearchSchema = z.object({
 const AUDIT_LOG_PAGE_SIZE = 50
 
 export const Route = createFileRoute('/audit-logs')({
-  validateSearch: (search) => auditLogsSearchSchema.parse(search),
-  beforeLoad: async ({ context }) => {
+      validateSearch: (search) => auditLogsSearchSchema.parse(search),
+      beforeLoad: async ({ context }) => {
     try {
       const user = await context.queryClient.ensureQueryData(getCurrentUserQueryOptions())
-      const permissions = user.permissions ?? {}
+      const { permissions } = user
       if (!canAccess(permissions, Permission.READ, Resource.AUDIT_LOGS)) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
-        throw redirect({ to: '/' })
-      }
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
+            throw redirect({ to: '/' })
+          }
     } catch (error) {
       if (error && typeof error === 'object' && 'to' in error) throw error
       // eslint-disable-next-line @typescript-eslint/only-throw-error

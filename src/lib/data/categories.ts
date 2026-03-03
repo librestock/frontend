@@ -31,7 +31,7 @@ export const getListCategoriesQueryKey = crud.getListQueryKey
 
 export function getListCategoriesQueryOptions(
   options?: QueryOptionsArg<CategoryWithChildrenResponseDto[]>,
-) {
+): ReturnType<typeof crud.getListQueryOptions> {
   return crud.getListQueryOptions(undefined, options)
 }
 

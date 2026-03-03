@@ -51,12 +51,8 @@ export function ThemeProvider({
       setSystemTheme(media.matches ? Theme.DARK : Theme.LIGHT)
     }
     updateSystemTheme()
-    if (media.addEventListener) {
-      media.addEventListener('change', updateSystemTheme)
-      return () => media.removeEventListener('change', updateSystemTheme)
-    }
-    media.addListener(updateSystemTheme)
-    return () => media.removeListener(updateSystemTheme)
+    media.addEventListener('change', updateSystemTheme)
+    return () => media.removeEventListener('change', updateSystemTheme)
   }, [enableSystem])
 
   const resolvedTheme = theme === Theme.SYSTEM ? systemTheme : theme

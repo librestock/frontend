@@ -14,7 +14,7 @@ export const Route = createFileRoute('/roles')({
   beforeLoad: async ({ context }) => {
     try {
       const user = await context.queryClient.ensureQueryData(getCurrentUserQueryOptions())
-      const permissions = user.permissions ?? {}
+      const { permissions } = user
       if (!canAccess(permissions, Permission.READ, Resource.ROLES)) {
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw redirect({ to: '/' })

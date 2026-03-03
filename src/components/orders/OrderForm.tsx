@@ -202,9 +202,9 @@ export function OrderForm({
             <form.Field mode="array" name="items">
               {(field) => (
                 <div className="space-y-4">
-                  {field.state.value.map((_, index) => (
+                  {field.state.value.map((item, index) => (
                     <OrderItemFields
-                      key={index}
+                      key={`${item.product_id}-${item.quantity}-${item.unit_price}-${item.notes}`}
                       form={form}
                       index={index}
                       products={products ?? []}
@@ -254,10 +254,10 @@ function OrderItemFields({
         </span>
         {onRemove && (
           <Button
+            className="size-7"
             size="icon"
             type="button"
             variant="ghost"
-            className="size-7"
             onClick={onRemove}
           >
             <Trash2 className="size-3.5" />

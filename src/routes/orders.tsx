@@ -139,10 +139,10 @@ function OrdersPage(): React.JSX.Element {
         <div className="flex items-center gap-4">
           <SearchBar
             className="max-w-sm"
+            value={searchQuery}
             placeholder={
               t('orders.searchPlaceholder') || 'Search orders...'
             }
-            value={searchQuery}
             onChange={(value) => {
               void navigate({
                 search: (prev: OrdersSearch) => ({

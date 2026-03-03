@@ -39,5 +39,5 @@ export const ORDER_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]> = {
 }
 
 export function getValidTransitions(status: OrderStatus): readonly OrderStatus[] {
-  return ORDER_TRANSITIONS[status] ?? []
+  return ORDER_TRANSITIONS[status]
 }

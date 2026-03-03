@@ -45,14 +45,14 @@ export function CreateOrderButton({
     <FormDialog
       cancelLabel={t('form.cancel') || 'Cancel'}
       contentClassName="sm:max-w-[600px] max-h-[90vh] overflow-y-auto"
-      description={
-        t('orders.createDescription') || 'Create a new order with items.'
-      }
       formId="create-order-form"
       open={open}
       submitLabel={t('form.create') || 'Create'}
       title={t('orders.createTitle') || 'Create Order'}
       trigger={trigger ?? defaultTrigger}
+      description={
+        t('orders.createDescription') || 'Create a new order with items.'
+      }
       onOpenChange={handleOpenChange}
     >
       <OrderForm

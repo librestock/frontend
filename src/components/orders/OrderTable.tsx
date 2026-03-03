@@ -129,19 +129,26 @@ export function OrderTable({
 
   return (
     <TableFactory
-      emptyMessage={
-        hasActiveFilters
-          ? (t('orders.noOrdersFiltered') || 'No results for these filters')
-          : (t('orders.noOrders') || 'No orders found')
-      }
       errorMessage={t('orders.errorLoading') || 'Error loading orders'}
       hasError={!!error}
       isEmpty={orders.length === 0}
       isLoading={isLoading}
       page={page}
+      renderSkeleton={() => <TableSkeleton />}
       totalItems={meta?.total}
       totalPages={meta?.total_pages ?? 1}
-      onPageChange={onPageChange}
+      emptyMessage={
+        hasActiveFilters
+          ? (t('orders.noOrdersFiltered') || 'No results for these filters')
+          : (t('orders.noOrders') || 'No orders found')
+      }
+      renderBody={() => (
+        <TableBody>
+          {orders.map((order) => (
+            <OrderRow key={order.id} order={order} />
+          ))}
+        </TableBody>
+      )}
       renderHeader={() => (
         <TableRow>
           <TableHead>{t('orders.orderNumber') || 'Order #'}</TableHead>
@@ -153,14 +160,7 @@ export function OrderTable({
           <TableHead className="w-[100px]" />
         </TableRow>
       )}
-      renderSkeleton={() => <TableSkeleton />}
-      renderBody={() => (
-        <TableBody>
-          {orders.map((order) => (
-            <OrderRow key={order.id} order={order} />
-          ))}
-        </TableBody>
-      )}
+      onPageChange={onPageChange}
     />
   )
 }
@@ -244,7 +244,7 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
         <TableCell>
           <OrderStatusBadge status={order.status} />
         </TableCell>
-        <TableCell>{order.items?.length ?? 0}</TableCell>
+        <TableCell>{order.items.length}</TableCell>
         <TableCell>{formatCurrency(Number(order.total_amount))}</TableCell>
         <TableCell>{formatDate(order.created_at)}</TableCell>
         <TableCell>
@@ -289,13 +289,13 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
       <FormDialog
         cancelLabel={t('form.cancel') || 'Cancel'}
         contentClassName="sm:max-w-[600px] max-h-[90vh] overflow-y-auto"
-        description={
-          t('orders.editDescription') || 'Update order details.'
-        }
         formId="edit-order-form"
         open={editOpen}
         submitLabel={t('actions.save') || 'Save'}
         title={t('orders.editTitle') || 'Edit Order'}
+        description={
+          t('orders.editDescription') || 'Update order details.'
+        }
         onOpenChange={setEditOpen}
       >
         <OrderForm
@@ -306,13 +306,13 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
       </FormDialog>
 
       <DeleteConfirmationDialog
+        isLoading={deleteMutation.isPending}
+        open={deleteOpen}
+        title={t('orders.deleteTitle') || 'Delete Order'}
         description={
           t('orders.deleteDescription') ||
           'Are you sure you want to delete this order? This action cannot be undone.'
         }
-        isLoading={deleteMutation.isPending}
-        open={deleteOpen}
-        title={t('orders.deleteTitle') || 'Delete Order'}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

@@ -59,7 +59,7 @@ export function StockMovementForm({
               </FieldLabel>
               <FieldContent>
                 <Select
-                  value={field.state.value || 'none'}
+                  value={field.state.value}
                   onValueChange={(value) =>
                     field.handleChange(value === 'none' ? '' : value)
                   }
@@ -94,7 +94,7 @@ export function StockMovementForm({
               </FieldLabel>
               <FieldContent>
                 <Select
-                  value={field.state.value || 'none'}
+                  value={field.state.value}
                   onValueChange={(value) =>
                     field.handleChange(value === 'none' ? ('' as StockMovementReason) : (value as StockMovementReason))
                   }

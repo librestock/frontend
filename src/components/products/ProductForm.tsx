@@ -127,7 +127,7 @@ export function ProductForm({
     if (!file) return
     if (pendingPreview) URL.revokeObjectURL(pendingPreview)
 
-    if (isEditMode && product) {
+    if (product) {
       // In edit mode, upload immediately
       setPendingFile(null)
       setPendingPreview(null)
