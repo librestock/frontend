@@ -1,5 +1,3 @@
-'use client'
-
 import { Folder } from 'lucide-react'
 import type { CategoryWithChildrenResponseDto } from '@/lib/data/categories'
 

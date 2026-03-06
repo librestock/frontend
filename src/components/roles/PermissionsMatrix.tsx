@@ -1,5 +1,3 @@
-'use client'
-
 import { useTranslation } from 'react-i18next'
 import { Permission, Resource, type RolePermissionDto } from '@librestock/types'
 

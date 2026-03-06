@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 import { CategorySelector } from './CategorySelector'
 import type { CategoryWithChildrenResponseDto } from '@/lib/data/categories'

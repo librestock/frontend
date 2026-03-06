@@ -1,5 +1,3 @@
-'use client'
-
 import { useTranslation } from 'react-i18next'
 import { InventoryCard } from './InventoryCard'
 import { Spinner } from '@/components/ui/spinner'

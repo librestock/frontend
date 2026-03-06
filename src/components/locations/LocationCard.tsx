@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { MapPin, Phone, User } from 'lucide-react'

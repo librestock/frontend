@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Package, MapPin, AlertTriangle, Clock } from 'lucide-react'

@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Building2, Mail, Phone, Ship, CreditCard, MoreHorizontal, Pencil, Trash2, ToggleRight } from 'lucide-react'
