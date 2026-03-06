@@ -9,29 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UsersRouteImport } from './routes/users'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as StockMovementsRouteImport } from './routes/stock-movements'
 import { Route as StockRouteImport } from './routes/stock'
 import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as RolesRouteImport } from './routes/roles'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as ClientsRouteImport } from './routes/clients'
-import { Route as AuditLogsRouteImport } from './routes/audit-logs'
+import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
+import { Route as AuthedUsersRouteImport } from './routes/_authed/users'
+import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
+import { Route as AuthedRolesRouteImport } from './routes/_authed/roles'
+import { Route as AuthedAuditLogsRouteImport } from './routes/_authed/audit-logs'
 
-const UsersRoute = UsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SuppliersRoute = SuppliersRouteImport.update({
   id: '/suppliers',
   path: '/suppliers',
@@ -50,16 +46,6 @@ const StockRoute = StockRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RolesRoute = RolesRouteImport.update({
-  id: '/roles',
-  path: '/roles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -92,9 +78,8 @@ const ClientsRoute = ClientsRouteImport.update({
   path: '/clients',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuditLogsRoute = AuditLogsRouteImport.update({
-  id: '/audit-logs',
-  path: '/audit-logs',
+const AuthedRoute = AuthedRouteImport.update({
+  id: '/_authed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -112,62 +97,83 @@ const LocationsIdRoute = LocationsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => LocationsRoute,
 } as any)
+const AuthedUsersRoute = AuthedUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedSettingsRoute = AuthedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedRolesRoute = AuthedRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedAuditLogsRoute = AuthedAuditLogsRouteImport.update({
+  id: '/audit-logs',
+  path: '/audit-logs',
+  getParentRoute: () => AuthedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/audit-logs': typeof AuditLogsRoute
   '/clients': typeof ClientsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
   '/login': typeof LoginRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRouteWithChildren
-  '/roles': typeof RolesRoute
-  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/stock': typeof StockRoute
   '/stock-movements': typeof StockMovementsRoute
   '/suppliers': typeof SuppliersRoute
-  '/users': typeof UsersRoute
+  '/audit-logs': typeof AuthedAuditLogsRoute
+  '/roles': typeof AuthedRolesRoute
+  '/settings': typeof AuthedSettingsRoute
+  '/users': typeof AuthedUsersRoute
   '/locations/$id': typeof LocationsIdRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/audit-logs': typeof AuditLogsRoute
   '/clients': typeof ClientsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
   '/login': typeof LoginRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRouteWithChildren
-  '/roles': typeof RolesRoute
-  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/stock': typeof StockRoute
   '/stock-movements': typeof StockMovementsRoute
   '/suppliers': typeof SuppliersRoute
-  '/users': typeof UsersRoute
+  '/audit-logs': typeof AuthedAuditLogsRoute
+  '/roles': typeof AuthedRolesRoute
+  '/settings': typeof AuthedSettingsRoute
+  '/users': typeof AuthedUsersRoute
   '/locations/$id': typeof LocationsIdRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/audit-logs': typeof AuditLogsRoute
+  '/_authed': typeof AuthedRouteWithChildren
   '/clients': typeof ClientsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
   '/login': typeof LoginRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRouteWithChildren
-  '/roles': typeof RolesRoute
-  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/stock': typeof StockRoute
   '/stock-movements': typeof StockMovementsRoute
   '/suppliers': typeof SuppliersRoute
-  '/users': typeof UsersRoute
+  '/_authed/audit-logs': typeof AuthedAuditLogsRoute
+  '/_authed/roles': typeof AuthedRolesRoute
+  '/_authed/settings': typeof AuthedSettingsRoute
+  '/_authed/users': typeof AuthedUsersRoute
   '/locations/$id': typeof LocationsIdRoute
   '/products/$id': typeof ProductsIdRoute
 }
@@ -175,89 +181,80 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/audit-logs'
     | '/clients'
     | '/inventory'
     | '/locations'
     | '/login'
     | '/orders'
     | '/products'
-    | '/roles'
-    | '/settings'
     | '/signup'
     | '/stock'
     | '/stock-movements'
     | '/suppliers'
+    | '/audit-logs'
+    | '/roles'
+    | '/settings'
     | '/users'
     | '/locations/$id'
     | '/products/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/audit-logs'
     | '/clients'
     | '/inventory'
     | '/locations'
     | '/login'
     | '/orders'
     | '/products'
-    | '/roles'
-    | '/settings'
     | '/signup'
     | '/stock'
     | '/stock-movements'
     | '/suppliers'
+    | '/audit-logs'
+    | '/roles'
+    | '/settings'
     | '/users'
     | '/locations/$id'
     | '/products/$id'
   id:
     | '__root__'
     | '/'
-    | '/audit-logs'
+    | '/_authed'
     | '/clients'
     | '/inventory'
     | '/locations'
     | '/login'
     | '/orders'
     | '/products'
-    | '/roles'
-    | '/settings'
     | '/signup'
     | '/stock'
     | '/stock-movements'
     | '/suppliers'
-    | '/users'
+    | '/_authed/audit-logs'
+    | '/_authed/roles'
+    | '/_authed/settings'
+    | '/_authed/users'
     | '/locations/$id'
     | '/products/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuditLogsRoute: typeof AuditLogsRoute
+  AuthedRoute: typeof AuthedRouteWithChildren
   ClientsRoute: typeof ClientsRoute
   InventoryRoute: typeof InventoryRoute
   LocationsRoute: typeof LocationsRouteWithChildren
   LoginRoute: typeof LoginRoute
   OrdersRoute: typeof OrdersRoute
   ProductsRoute: typeof ProductsRouteWithChildren
-  RolesRoute: typeof RolesRoute
-  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   StockRoute: typeof StockRoute
   StockMovementsRoute: typeof StockMovementsRoute
   SuppliersRoute: typeof SuppliersRoute
-  UsersRoute: typeof UsersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/users': {
-      id: '/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof UsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/suppliers': {
       id: '/suppliers'
       path: '/suppliers'
@@ -284,20 +281,6 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/roles': {
-      id: '/roles'
-      path: '/roles'
-      fullPath: '/roles'
-      preLoaderRoute: typeof RolesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -342,11 +325,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/audit-logs': {
-      id: '/audit-logs'
-      path: '/audit-logs'
-      fullPath: '/audit-logs'
-      preLoaderRoute: typeof AuditLogsRouteImport
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -370,8 +353,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsIdRouteImport
       parentRoute: typeof LocationsRoute
     }
+    '/_authed/users': {
+      id: '/_authed/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthedUsersRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/settings': {
+      id: '/_authed/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthedSettingsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/roles': {
+      id: '/_authed/roles'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof AuthedRolesRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/audit-logs': {
+      id: '/_authed/audit-logs'
+      path: '/audit-logs'
+      fullPath: '/audit-logs'
+      preLoaderRoute: typeof AuthedAuditLogsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
+
+interface AuthedRouteChildren {
+  AuthedAuditLogsRoute: typeof AuthedAuditLogsRoute
+  AuthedRolesRoute: typeof AuthedRolesRoute
+  AuthedSettingsRoute: typeof AuthedSettingsRoute
+  AuthedUsersRoute: typeof AuthedUsersRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedAuditLogsRoute: AuthedAuditLogsRoute,
+  AuthedRolesRoute: AuthedRolesRoute,
+  AuthedSettingsRoute: AuthedSettingsRoute,
+  AuthedUsersRoute: AuthedUsersRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
 
 interface LocationsRouteChildren {
   LocationsIdRoute: typeof LocationsIdRoute
@@ -399,20 +427,17 @@ const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuditLogsRoute: AuditLogsRoute,
+  AuthedRoute: AuthedRouteWithChildren,
   ClientsRoute: ClientsRoute,
   InventoryRoute: InventoryRoute,
   LocationsRoute: LocationsRouteWithChildren,
   LoginRoute: LoginRoute,
   OrdersRoute: OrdersRoute,
   ProductsRoute: ProductsRouteWithChildren,
-  RolesRoute: RolesRoute,
-  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   StockRoute: StockRoute,
   StockMovementsRoute: StockMovementsRoute,
   SuppliersRoute: SuppliersRoute,
-  UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

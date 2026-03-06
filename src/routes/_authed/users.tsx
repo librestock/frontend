@@ -5,7 +5,6 @@ import { X } from 'lucide-react'
 import { z } from 'zod'
 import { Permission, Resource } from '@librestock/types'
 
-import { getCurrentUserQueryOptions } from '@/lib/data/auth'
 import { useListRoles } from '@/lib/data/roles'
 import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
@@ -29,20 +28,13 @@ const usersSearchSchema = z.object({
 
 const USERS_PAGE_SIZE = 20
 
-export const Route = createFileRoute('/users')({
+export const Route = createFileRoute('/_authed/users')({
   validateSearch: (search) => usersSearchSchema.parse(search),
-  beforeLoad: async ({ context }) => {
-    try {
-      const user = await context.queryClient.ensureQueryData(getCurrentUserQueryOptions())
-      const { permissions } = user
-      if (!canAccess(permissions, Permission.READ, Resource.USERS)) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
-        throw redirect({ to: '/' })
-      }
-    } catch (error) {
-      if (error && typeof error === 'object' && 'to' in error) throw error
+  beforeLoad: ({ context }) => {
+    const { permissions } = context.currentUser
+    if (!canAccess(permissions, Permission.READ, Resource.USERS)) {
       // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect({ to: '/login' })
+      throw redirect({ to: '/' })
     }
   },
   component: UsersPage,

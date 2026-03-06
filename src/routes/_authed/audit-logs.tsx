@@ -6,7 +6,6 @@ import { z } from 'zod'
 
 import { Permission, Resource } from '@librestock/types'
 
-import { getCurrentUserQueryOptions } from '@/lib/data/auth'
 import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import {
@@ -32,20 +31,13 @@ const auditLogsSearchSchema = z.object({
 
 const AUDIT_LOG_PAGE_SIZE = 50
 
-export const Route = createFileRoute('/audit-logs')({
-      validateSearch: (search) => auditLogsSearchSchema.parse(search),
-      beforeLoad: async ({ context }) => {
-    try {
-      const user = await context.queryClient.ensureQueryData(getCurrentUserQueryOptions())
-      const { permissions } = user
-      if (!canAccess(permissions, Permission.READ, Resource.AUDIT_LOGS)) {
-            // eslint-disable-next-line @typescript-eslint/only-throw-error
-            throw redirect({ to: '/' })
-          }
-    } catch (error) {
-      if (error && typeof error === 'object' && 'to' in error) throw error
+export const Route = createFileRoute('/_authed/audit-logs')({
+  validateSearch: (search) => auditLogsSearchSchema.parse(search),
+  beforeLoad: ({ context }) => {
+    const { permissions } = context.currentUser
+    if (!canAccess(permissions, Permission.READ, Resource.AUDIT_LOGS)) {
       // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect({ to: '/login' })
+      throw redirect({ to: '/' })
     }
   },
   component: AuditPage,
