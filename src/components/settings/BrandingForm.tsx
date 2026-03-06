@@ -53,19 +53,71 @@ const brandingSchema = z.object({
     .regex(/^#[\dA-Fa-f]{6}$/, 'Must be a valid hex color (e.g., #3b82f6)'),
 })
 
+interface BrandingFormValues {
+  app_name: string
+  tagline: string
+  logo_url: string
+  favicon_url: string
+  primary_color: string
+}
+
+function getInitialValues(
+  branding:
+    | {
+        app_name?: string
+        tagline?: string | null
+        logo_url?: string | null
+        favicon_url?: string | null
+        primary_color?: string
+      }
+    | null
+    | undefined,
+): BrandingFormValues {
+  return {
+    app_name: branding?.app_name ?? 'LibreStock',
+    tagline: branding?.tagline ?? '',
+    logo_url: String(branding?.logo_url ?? ''),
+    favicon_url: String(branding?.favicon_url ?? ''),
+    primary_color: branding?.primary_color ?? '#3b82f6',
+  }
+}
+
+function getFormKey(values: BrandingFormValues): string {
+  return [
+    values.app_name,
+    values.tagline,
+    values.logo_url,
+    values.favicon_url,
+    values.primary_color,
+  ].join('|')
+}
+
 export function BrandingForm(): React.JSX.Element {
-  const { t } = useTranslation()
   const { data: branding, isLoading } = useBrandingControllerGet()
+  const initialValues = getInitialValues(branding)
+
+  if (isLoading) {
+    return <div className="bg-muted h-64 animate-pulse rounded-lg" />
+  }
+
+  return (
+    <BrandingFormContent
+      key={getFormKey(initialValues)}
+      initialValues={initialValues}
+    />
+  )
+}
+
+function BrandingFormContent({
+  initialValues,
+}: {
+  initialValues: BrandingFormValues
+}): React.JSX.Element {
+  const { t } = useTranslation()
   const { mutation: updateMutation, submitBranding } = useBrandingMutation()
 
   const form = useForm({
-    defaultValues: {
-      app_name: branding?.app_name ?? 'LibreStock',
-      tagline: branding?.tagline ?? '',
-      logo_url: String(branding?.logo_url ?? ''),
-      favicon_url: String(branding?.favicon_url ?? ''),
-      primary_color: branding?.primary_color ?? '#3b82f6',
-    },
+    defaultValues: initialValues,
     validators: {
       onSubmit: ({ value }) => {
         const result = brandingSchema.safeParse(value)
@@ -87,20 +139,6 @@ export function BrandingForm(): React.JSX.Element {
       })
     },
   })
-
-  React.useEffect(() => {
-    if (branding) {
-      form.setFieldValue('app_name', branding.app_name)
-      form.setFieldValue('tagline', branding.tagline)
-      form.setFieldValue('logo_url', String(branding.logo_url ?? ''))
-      form.setFieldValue('favicon_url', String(branding.favicon_url ?? ''))
-      form.setFieldValue('primary_color', branding.primary_color)
-    }
-  }, [branding, form])
-
-  if (isLoading) {
-    return <div className="bg-muted h-64 animate-pulse rounded-lg" />
-  }
 
   return (
     <Card>
