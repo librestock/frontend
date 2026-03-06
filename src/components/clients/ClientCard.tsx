@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Building2, Mail, Phone, Ship, CreditCard, MoreHorizontal, Pencil, Trash2, ToggleRight } from 'lucide-react'
 
 import { ClientForm } from './ClientForm'
@@ -27,17 +25,9 @@ import { FormDialog } from '@/components/common/FormDialog'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   type ClientResponseDto,
-  type PaginatedClientsResponseDto,
   ClientStatus,
-  useDeleteClient,
-  useUpdateClient,
-  getListClientsQueryKey,
 } from '@/lib/data/clients'
-import {
-  removeItemFromPaginated,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { useDeleteClientOptimistic, useToggleClientStatus } from '@/hooks/clients'
 
 interface ClientCardProps {
   client: ClientResponseDto
@@ -63,86 +53,19 @@ function formatCreditLimit(value: number | null): string | null {
 
 export function ClientCard({ client }: ClientCardProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
-  const deleteMutation = useDeleteClient({
-    mutation: {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: getListClientsQueryKey(),
-        })
-      },
-      onError: (error) => {
-        toast.error(t('clients.deleteError') || 'Failed to delete client')
-        console.error('Client deletion error:', error)
-      },
-    },
-  })
-
-  const updateMutation = useUpdateClient({
-    mutation: {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: getListClientsQueryKey(),
-        })
-      },
-      onError: (error) => {
-        toast.error(t('clients.updateError') || 'Failed to update client')
-        console.error('Client status update error:', error)
-      },
-    },
-  })
+  const { deleteMutation, performDelete } = useDeleteClientOptimistic()
+  const { toggleStatus } = useToggleClientStatus()
 
   const handleDelete = (): void => {
-    const listQueryKey = getListClientsQueryKey()
-    const snapshot = snapshotQueryData<PaginatedClientsResponseDto>(
-      queryClient,
-      listQueryKey,
-    )
-    queryClient.setQueriesData<PaginatedClientsResponseDto>(
-      { queryKey: listQueryKey },
-      (old) => removeItemFromPaginated(old, client.id),
-    )
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id: client.id }).catch(() => {
-        restoreQueryData(queryClient, snapshot)
-      })
-    }, 5000)
-
-    toast(t('clients.deleted') || 'Client deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, snapshot)
-        },
-      },
-    })
+    performDelete(client.id)
   }
 
   const handleStatusToggle = (): void => {
-    const nextStatus =
-      client.account_status === ClientStatus.ACTIVE
-        ? ClientStatus.SUSPENDED
-        : ClientStatus.ACTIVE
-
-    updateMutation.mutate({
-      id: client.id,
-      data: { account_status: nextStatus },
-    })
-
-    toast.success(
-      t('clients.statusUpdated') || 'Client status updated',
-    )
+    toggleStatus(client)
   }
 
   const statusLabel = t(`clients.statuses.${client.account_status}`) || client.account_status

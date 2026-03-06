@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Truck, Mail, Phone, User, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 
 import { SupplierForm } from './SupplierForm'
@@ -27,15 +25,8 @@ import { FormDialog } from '@/components/common/FormDialog'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   type SupplierResponseDto,
-  type PaginatedSuppliersResponseDto,
-  useDeleteSupplier,
-  getListSuppliersQueryKey,
 } from '@/lib/data/suppliers'
-import {
-  removeItemFromPaginated,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { useDeleteSupplierOptimistic } from '@/hooks/suppliers'
 
 interface SupplierCardProps {
   supplier: SupplierResponseDto
@@ -43,56 +34,13 @@ interface SupplierCardProps {
 
 export function SupplierCard({ supplier }: SupplierCardProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
-  const deleteMutation = useDeleteSupplier({
-    mutation: {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: getListSuppliersQueryKey(),
-        })
-      },
-      onError: (error) => {
-        toast.error(t('suppliers.deleteError') || 'Failed to delete supplier')
-        console.error('Supplier deletion error:', error)
-      },
-    },
-  })
-
+  const { deleteMutation, performDelete } = useDeleteSupplierOptimistic()
   const handleDelete = (): void => {
-    const listQueryKey = getListSuppliersQueryKey()
-    const snapshot = snapshotQueryData<PaginatedSuppliersResponseDto>(
-      queryClient,
-      listQueryKey,
-    )
-    queryClient.setQueriesData<PaginatedSuppliersResponseDto>(
-      { queryKey: listQueryKey },
-      (old) => removeItemFromPaginated(old, supplier.id),
-    )
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id: supplier.id }).catch(() => {
-        restoreQueryData(queryClient, snapshot)
-      })
-    }, 5000)
-
-    toast(t('suppliers.deleted') || 'Supplier deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, snapshot)
-        },
-      },
-    })
+    performDelete(supplier.id)
   }
 
   return (

@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Package, MapPin, AlertTriangle, Clock } from 'lucide-react'
 import { type TFunction } from 'i18next'
 import { InventoryForm } from './InventoryForm'
@@ -19,17 +17,8 @@ import { Badge } from '@/components/ui/badge'
 import { FormDialog } from '@/components/common/FormDialog'
 import { CrudDropdownMenu } from '@/components/common/CrudDropdownMenu'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
-import {
-  type InventoryResponseDto,
-  useDeleteInventoryItem,
-  getListInventoryQueryKey,
-  type PaginatedInventoryResponseDto,
-} from '@/lib/data/inventory'
-import {
-  removeItemFromPaginated,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { type InventoryResponseDto } from '@/lib/data/inventory'
+import { useDeleteInventoryOptimistic } from '@/hooks/inventory'
 import { useExpiryDateStatus } from '@/hooks/useExpiryDateStatus'
 import { useLowStockStatus } from '@/hooks/useLowStockStatus'
 
@@ -51,58 +40,15 @@ interface InventoryCardProps {
 
 export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
   const { product, location, area, quantity, batchNumber, id, expiry_date: expiryDateRaw } = inventory
 
-  const deleteMutation = useDeleteInventoryItem({
-    mutation: {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: getListInventoryQueryKey(),
-        })
-      },
-      onError: (error) => {
-        toast.error(t('inventory.deleteError') || 'Failed to delete inventory')
-        console.error('Inventory deletion error:', error)
-      },
-    },
-  })
-
+  const { deleteMutation, performDelete } = useDeleteInventoryOptimistic()
   const handleDelete = (): void => {
-    const listQueryKey = getListInventoryQueryKey()
-    const snapshot = snapshotQueryData<PaginatedInventoryResponseDto>(
-      queryClient,
-      listQueryKey,
-    )
-    queryClient.setQueriesData<PaginatedInventoryResponseDto>(
-      { queryKey: listQueryKey },
-      (old) => removeItemFromPaginated(old, id),
-    )
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id }).catch(() => {
-        restoreQueryData(queryClient, snapshot)
-      })
-    }, 5000)
-
-    toast(t('inventory.deleted') || 'Inventory deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, snapshot)
-        },
-      },
-    })
+    performDelete(id)
   }
 
   const isLowStock = useLowStockStatus(product, quantity)

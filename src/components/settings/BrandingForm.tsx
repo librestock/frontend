@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
-import { toast } from 'sonner'
 
 import { FormErrorBanner } from '@/components/common/FormErrorBanner'
 import { Button } from '@/components/ui/button'
@@ -23,11 +21,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  useBrandingControllerGet,
-  useBrandingControllerUpdate,
-  getBrandingControllerGetQueryKey,
-} from '@/lib/data/branding'
+import { useBrandingControllerGet } from '@/lib/data/branding'
+import { useBrandingMutation } from '@/hooks/branding'
 
 const safeUrlSchema = z
   .string()
@@ -60,9 +55,8 @@ const brandingSchema = z.object({
 
 export function BrandingForm(): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const { data: branding, isLoading } = useBrandingControllerGet()
-  const updateMutation = useBrandingControllerUpdate()
+  const { mutation: updateMutation, submitBranding } = useBrandingMutation()
 
   const form = useForm({
     defaultValues: {
@@ -82,25 +76,15 @@ export function BrandingForm(): React.JSX.Element {
       },
     },
     onSubmit: async ({ value }) => {
-      try {
-        await updateMutation.mutateAsync({
-          data: {
-            app_name: value.app_name,
-            tagline: value.tagline || undefined,
-            logo_url: value.logo_url || undefined,
-            favicon_url: value.favicon_url || undefined,
-            primary_color: value.primary_color || undefined,
-          } as Parameters<typeof updateMutation.mutateAsync>[0]['data'],
-        })
-        await queryClient.invalidateQueries({
-          queryKey: getBrandingControllerGetQueryKey(),
-        })
-        toast.success(t('settings.brandingSaved') || 'Branding settings saved')
-      } catch {
-        toast.error(
-          t('settings.brandingError') || 'Failed to save branding settings',
-        )
-      }
+      await submitBranding({
+        data: {
+          app_name: value.app_name,
+          tagline: value.tagline || undefined,
+          logo_url: value.logo_url || undefined,
+          favicon_url: value.favicon_url || undefined,
+          primary_color: value.primary_color || undefined,
+        } as Parameters<typeof updateMutation.mutateAsync>[0]['data'],
+      })
     },
   })
 

@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { MoreHorizontal } from 'lucide-react'
 
 import { RoleBadges } from './RoleBadges'
@@ -28,14 +26,10 @@ import { TableFactory } from '@/components/common/TableFactory'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   useListUsers,
-  useBanUser,
-  useUnbanUser,
-  useDeleteUser,
-  useRevokeUserSessions,
-  getListUsersQueryKey,
   type UserQueryDto,
   type UserResponseDto,
 } from '@/lib/data/users'
+import { useUserMutations } from '@/hooks/users'
 
 interface UsersTableProps {
   filters?: Partial<UserQueryDto>
@@ -143,7 +137,7 @@ export function UsersTable({
   onPageChange,
 }: UsersTableProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
+  const { banMutation, unbanMutation, deleteMutation, revokeSessionsMutation } = useUserMutations()
 
   const [rolesDialogUser, setRolesDialogUser] = React.useState<UserResponseDto | null>(null)
   const [deleteDialogUser, setDeleteDialogUser] = React.useState<UserResponseDto | null>(null)
@@ -154,58 +148,6 @@ export function UsersTable({
   )
 
   const { data, isLoading, error } = useListUsers(queryParams)
-
-  const invalidateUsers = (): void => {
-    void queryClient.invalidateQueries({ queryKey: getListUsersQueryKey() })
-  }
-
-  const banMutation = useBanUser({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('users.banSuccess', { defaultValue: 'User banned' }))
-        invalidateUsers()
-      },
-      onError: () => {
-        toast.error(t('users.banError', { defaultValue: 'Failed to ban user' }))
-      },
-    },
-  })
-
-  const unbanMutation = useUnbanUser({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('users.unbanSuccess', { defaultValue: 'User unbanned' }))
-        invalidateUsers()
-      },
-      onError: () => {
-        toast.error(t('users.unbanError', { defaultValue: 'Failed to unban user' }))
-      },
-    },
-  })
-
-  const deleteMutation = useDeleteUser({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('users.deleteSuccess', { defaultValue: 'User deleted' }))
-        invalidateUsers()
-        setDeleteDialogUser(null)
-      },
-      onError: () => {
-        toast.error(t('users.deleteError', { defaultValue: 'Failed to delete user' }))
-      },
-    },
-  })
-
-  const revokeSessionsMutation = useRevokeUserSessions({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('users.revokeSessionsSuccess', { defaultValue: 'Sessions revoked' }))
-      },
-      onError: () => {
-        toast.error(t('users.revokeSessionsError', { defaultValue: 'Failed to revoke sessions' }))
-      },
-    },
-  })
 
   const users = data?.data ?? []
   const meta = data?.meta
@@ -280,7 +222,10 @@ export function UsersTable({
         })}
         onConfirm={() => {
           if (deleteDialogUser) {
-            deleteMutation.mutate({ id: deleteDialogUser.id })
+            deleteMutation.mutate(
+              { id: deleteDialogUser.id },
+              { onSuccess: () => setDeleteDialogUser(null) },
+            )
           }
         }}
         onOpenChange={(open) => {

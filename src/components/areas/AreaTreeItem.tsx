@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import {
   ChevronRight,
   ChevronDown,
@@ -21,14 +19,8 @@ import { CrudDropdownMenu } from '@/components/common/CrudDropdownMenu'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   type AreaResponseDto,
-  useAreasControllerDelete,
-  getAreasControllerFindAllQueryKey,
 } from '@/lib/data/areas'
-import {
-  removeItemFromArray,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { useDeleteAreaOptimistic } from '@/hooks/areas'
 import { cn } from '@/lib/utils'
 
 interface AreaTreeItemProps {
@@ -45,7 +37,6 @@ export function AreaTreeItem({
   depth = 0,
 }: AreaTreeItemProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [isExpanded, setIsExpanded] = React.useState(true)
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
@@ -58,48 +49,10 @@ export function AreaTreeItem({
   })
   const hasChildren = children.length > 0
 
-  const deleteMutation = useAreasControllerDelete({
-    mutation: {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: getAreasControllerFindAllQueryKey({ location_id: locationId }),
-        })
-      },
-      onError: (error) => {
-        toast.error(t('areas.deleteError') || 'Failed to delete area')
-        console.error('Area deletion error:', error)
-      },
-    },
-  })
-
+  const { deleteMutation, performDelete } = useDeleteAreaOptimistic(locationId)
   const handleDelete = (): void => {
-    const queryKey = getAreasControllerFindAllQueryKey({ location_id: locationId })
-    const snapshot = snapshotQueryData<AreaResponseDto[]>(queryClient, queryKey)
-    queryClient.setQueriesData<AreaResponseDto[]>({ queryKey }, (old) =>
-      removeItemFromArray(old, area.id),
-    )
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id: area.id }).catch(() => {
-        restoreQueryData(queryClient, snapshot)
-      })
-    }, 5000)
-
-    toast(t('areas.deleted') || 'Area deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, snapshot)
-        },
-      },
-    })
+    performDelete(area.id)
   }
 
   return (

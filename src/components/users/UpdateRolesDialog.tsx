@@ -2,9 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -17,12 +14,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Spinner } from '@/components/ui/spinner'
-import {
-  useUpdateUserRoles,
-  getListUsersQueryKey,
-  type UserResponseDto,
-} from '@/lib/data/users'
+import { type UserResponseDto } from '@/lib/data/users'
 import { useListRoles } from '@/lib/data/roles'
+import { useUpdateUserRolesMutation } from '@/hooks/users'
 
 interface UpdateRolesDialogProps {
   user: UserResponseDto | null
@@ -36,7 +30,6 @@ export function UpdateRolesDialog({
   onOpenChange,
 }: UpdateRolesDialogProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const { data: availableRoles } = useListRoles()
   const [selectedRoleIds, setSelectedRoleIds] = React.useState<string[]>([])
 
@@ -49,18 +42,7 @@ export function UpdateRolesDialog({
     }
   }, [user, availableRoles])
 
-  const mutation = useUpdateUserRoles({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('users.rolesUpdated', { defaultValue: 'Roles updated successfully' }))
-        void queryClient.invalidateQueries({ queryKey: getListUsersQueryKey() })
-        onOpenChange(false)
-      },
-      onError: () => {
-        toast.error(t('users.rolesUpdateError', { defaultValue: 'Failed to update roles' }))
-      },
-    },
-  })
+  const mutation = useUpdateUserRolesMutation(() => onOpenChange(false))
 
   const handleToggle = (roleId: string): void => {
     setSelectedRoleIds((prev) =>

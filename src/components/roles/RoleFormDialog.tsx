@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import type { RolePermissionDto, RoleResponseDto } from '@librestock/types'
 
 import { PermissionsMatrix } from './PermissionsMatrix'
@@ -19,11 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner'
-import {
-  useCreateRole,
-  useUpdateRole,
-  getListRolesQueryKey,
-} from '@/lib/data/roles'
+import { useRoleMutations } from '@/hooks/roles'
 
 interface RoleFormDialogProps {
   editRole: RoleResponseDto | null
@@ -37,7 +31,6 @@ export function RoleFormDialog({
   onOpenChange,
 }: RoleFormDialogProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const isEdit = editRole !== null
 
   const [name, setName] = React.useState('')
@@ -56,37 +49,7 @@ export function RoleFormDialog({
     }
   }, [editRole])
 
-  const invalidateRoles = (): void => {
-    void queryClient.invalidateQueries({ queryKey: getListRolesQueryKey() })
-  }
-
-  const createMutation = useCreateRole({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('roles.created', { defaultValue: 'Role created successfully' }))
-        invalidateRoles()
-        onOpenChange(false)
-      },
-      onError: () => {
-        toast.error(t('roles.createError', { defaultValue: 'Failed to create role' }))
-      },
-    },
-  })
-
-  const updateMutation = useUpdateRole({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('roles.updated', { defaultValue: 'Role updated successfully' }))
-        invalidateRoles()
-        onOpenChange(false)
-      },
-      onError: () => {
-        toast.error(t('roles.updateError', { defaultValue: 'Failed to update role' }))
-      },
-    },
-  })
-
-  const isPending = createMutation.isPending || updateMutation.isPending
+  const { createMutation, updateMutation, isPending } = useRoleMutations(() => onOpenChange(false))
 
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()

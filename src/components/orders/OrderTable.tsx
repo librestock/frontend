@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import {
   MoreHorizontal,
   Pencil,
@@ -34,17 +32,10 @@ import { FormDialog } from '@/components/common/FormDialog'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   useListOrders,
-  useDeleteOrder,
-  getListOrdersQueryKey,
   type OrderQueryDto,
   type OrderResponseDto,
-  type PaginatedOrdersResponseDto,
 } from '@/lib/data/orders'
-import {
-  removeItemFromPaginated,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { useDeleteOrderOptimistic } from '@/hooks/orders'
 
 interface OrderTableProps {
   filters?: Partial<OrderQueryDto>
@@ -171,23 +162,10 @@ interface OrderRowProps {
 
 function OrderRow({ order }: OrderRowProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
-  const deleteMutation = useDeleteOrder({
-    mutation: {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: getListOrdersQueryKey(),
-        })
-      },
-      onError: (error) => {
-        toast.error(t('orders.deleteError') || 'Failed to delete order')
-        console.error('Order deletion error:', error)
-      },
-    },
-  })
+  const { deleteMutation, performDelete } = useDeleteOrderOptimistic()
 
   const canEdit =
     order.status === OrderStatus.DRAFT ||
@@ -195,37 +173,8 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
   const canDelete = order.status === OrderStatus.DRAFT
 
   const handleDelete = (): void => {
-    const listQueryKey = getListOrdersQueryKey()
-    const snapshot = snapshotQueryData<PaginatedOrdersResponseDto>(
-      queryClient,
-      listQueryKey,
-    )
-    queryClient.setQueriesData<PaginatedOrdersResponseDto>(
-      { queryKey: listQueryKey },
-      (old) => removeItemFromPaginated(old, order.id),
-    )
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id: order.id }).catch(() => {
-        restoreQueryData(queryClient, snapshot)
-      })
-    }, 5000)
-
-    toast(t('orders.deleted') || 'Order deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, snapshot)
-        },
-      },
-    })
+    performDelete(order.id)
   }
 
   return (

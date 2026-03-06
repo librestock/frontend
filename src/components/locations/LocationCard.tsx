@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { MapPin, Phone, User } from 'lucide-react'
 
 import { LocationForm } from './LocationForm'
@@ -20,17 +18,8 @@ import { CrudDropdownMenu } from '@/components/common/CrudDropdownMenu'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import {
   type LocationResponseDto,
-  useDeleteLocation,
-  getListLocationsQueryKey,
-  getListAllLocationsQueryKey,
-  type PaginatedLocationsResponseDto,
 } from '@/lib/data/locations'
-import {
-  removeItemFromArray,
-  removeItemFromPaginated,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { useDeleteLocationOptimistic } from '@/hooks/locations'
 import {
   LOCATION_TYPE_ICONS,
   LOCATION_TYPE_COLORS,
@@ -43,75 +32,16 @@ interface LocationCardProps {
 
 export function LocationCard({ location, onClick }: LocationCardProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
   const Icon = LOCATION_TYPE_ICONS[location.type]
   const typeColor = LOCATION_TYPE_COLORS[location.type]
 
-  const deleteMutation = useDeleteLocation({
-    mutation: {
-      onSuccess: async () => {
-        await Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: getListLocationsQueryKey(),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: getListAllLocationsQueryKey(),
-          }),
-        ])
-      },
-      onError: (error) => {
-        toast.error(t('locations.deleteError') || 'Failed to delete location')
-        console.error('Location deletion error:', error)
-      },
-    },
-  })
-
+  const { deleteMutation, performDelete } = useDeleteLocationOptimistic()
   const handleDelete = (): void => {
-    const listQueryKey = getListLocationsQueryKey()
-    const listAllKey = getListAllLocationsQueryKey()
-    const snapshot = snapshotQueryData<PaginatedLocationsResponseDto>(
-      queryClient,
-      listQueryKey,
-    )
-    const allSnapshot = snapshotQueryData<LocationResponseDto[]>(
-      queryClient,
-      listAllKey,
-    )
-    queryClient.setQueriesData<PaginatedLocationsResponseDto>(
-      { queryKey: listQueryKey },
-      (old) => removeItemFromPaginated(old, location.id),
-    )
-    queryClient.setQueriesData<LocationResponseDto[]>(
-      { queryKey: listAllKey },
-      (old) => removeItemFromArray(old, location.id),
-    )
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id: location.id }).catch(() => {
-        restoreQueryData(queryClient, snapshot)
-        restoreQueryData(queryClient, allSnapshot)
-      })
-    }, 5000)
-
-    toast(t('locations.deleted') || 'Location deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, snapshot)
-          restoreQueryData(queryClient, allSnapshot)
-        },
-      },
-    })
+    performDelete(location.id)
   }
 
   return (

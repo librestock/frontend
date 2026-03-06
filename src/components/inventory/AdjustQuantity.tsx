@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Plus, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,11 +15,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import {
-  type InventoryResponseDto,
-  useAdjustInventoryQuantity,
-  getListInventoryQueryKey,
-} from '@/lib/data/inventory'
+import { type InventoryResponseDto } from '@/lib/data/inventory'
+import { useAdjustInventoryMutation } from '@/hooks/inventory'
 
 interface AdjustQuantityProps {
   inventory: InventoryResponseDto
@@ -37,7 +32,6 @@ export function AdjustQuantity({
   onOpenChange,
 }: AdjustQuantityProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false)
   const [adjustment, setAdjustment] = React.useState(0)
 
@@ -56,21 +50,7 @@ export function AdjustQuantity({
     [controlledOpen, onOpenChange],
   )
 
-  const adjustMutation = useAdjustInventoryQuantity({
-    mutation: {
-      onSuccess: async () => {
-        toast.success(t('inventory.adjusted') || 'Quantity adjusted successfully')
-        await queryClient.invalidateQueries({
-          queryKey: getListInventoryQueryKey(),
-        })
-        handleOpenChange(false)
-      },
-      onError: (error) => {
-        toast.error(t('inventory.adjustError') || 'Failed to adjust quantity')
-        console.error('Quantity adjustment error:', error)
-      },
-    },
-  })
+  const adjustMutation = useAdjustInventoryMutation(() => handleOpenChange(false))
 
   const handleSubmit = async (): Promise<void> => {
     if (adjustment === 0) {

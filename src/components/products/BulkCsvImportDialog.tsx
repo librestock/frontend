@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Upload } from 'lucide-react'
 import type { CreateProductDto } from '@librestock/types'
@@ -27,12 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {
-  useBulkCreateProducts,
-  getListProductsQueryKey,
-  getGetProductsByCategoryQueryKey,
-  type BulkOperationResultDto,
-} from '@/lib/data/products'
+import { useBulkCsvImport } from '@/hooks/products'
 
 const REQUIRED_HEADERS = ['sku', 'name', 'category_id', 'reorder_point'] as const
 
@@ -232,7 +226,6 @@ function CsvPreviewTable({
 
 export function BulkCsvImportDialog(): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [open, setOpen] = React.useState(false)
   const [parseResult, setParseResult] = React.useState<ParseResult | null>(
     null,
@@ -240,54 +233,10 @@ export function BulkCsvImportDialog(): React.JSX.Element {
   const [fileName, setFileName] = React.useState<string>('')
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
-  const bulkCreateMutation = useBulkCreateProducts({
-    mutation: {
-      onSuccess: async (result: BulkOperationResultDto) => {
-        await Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: getListProductsQueryKey(),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: getGetProductsByCategoryQueryKey(),
-          }),
-        ])
-
-        if (result.failure_count > 0 && result.success_count > 0) {
-          toast.warning(
-            t('bulk.importPartial') || 'Import partially completed',
-            {
-              description:
-                t('bulk.importResult', {
-                  success: result.success_count,
-                  failure: result.failure_count,
-                }) ||
-                `${result.success_count} created, ${result.failure_count} failed`,
-            },
-          )
-        } else if (result.failure_count > 0) {
-          toast.error(t('bulk.importError') || 'Import failed', {
-            description:
-              result.failures
-                .map((f) => `${f.sku ?? f.id ?? 'Unknown'}: ${f.error}`)
-                .join('; ') || `${result.failure_count} failed`,
-          })
-        } else {
-          toast.success(t('bulk.importSuccess') || 'Products imported', {
-            description:
-              t('bulk.importSuccessCount', {
-                count: result.success_count,
-              }) || `${result.success_count} products created`,
-          })
-        }
-
-        setOpen(false)
-        setParseResult(null)
-        setFileName('')
-      },
-      onError: () => {
-        toast.error(t('bulk.importError') || 'Failed to import products')
-      },
-    },
+  const bulkCreateMutation = useBulkCsvImport(() => {
+    setOpen(false)
+    setParseResult(null)
+    setFileName('')
   })
 
   const handleFileChange = (

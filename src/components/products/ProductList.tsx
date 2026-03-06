@@ -2,9 +2,7 @@
 import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
-import { toast } from 'sonner'
 import type { ErrorResponseDto } from '@librestock/types'
 
 import { CategoryFolderGrid } from '../category/CategoryFolderGrid'
@@ -18,20 +16,11 @@ import { FormDialog } from '@/components/common/FormDialog'
 import {
   useListProducts,
   useGetProductsByCategory,
-  useDeleteProduct,
-  getListProductsQueryKey,
-  getGetProductsByCategoryQueryKey,
   type ProductResponseDto,
-  type PaginatedProductsResponseDto,
 } from '@/lib/data/products'
 import { useListCategories } from '@/lib/data/categories'
 import type { CategoryWithChildrenResponseDto } from '@/lib/data/categories'
-import {
-  removeItemFromPaginated,
-  removeItemFromArray,
-  restoreQueryData,
-  snapshotQueryData,
-} from '@/lib/data/query-cache'
+import { useDeleteProductOptimistic } from '@/hooks/products'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 
@@ -54,7 +43,6 @@ interface ProductCardProps {
 
 function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect }: ProductCardProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
@@ -66,71 +54,11 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
     query: { enabled: editOpen },
   })
 
-  const deleteMutation = useDeleteProduct({
-    mutation: {
-      onSuccess: async () => {
-        await Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: getListProductsQueryKey(),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: getGetProductsByCategoryQueryKey(product.category_id),
-          }),
-        ])
-      },
-      onError: (error) => {
-        toast.error(t('products.deleteError') || 'Failed to delete product')
-        console.error('Product deletion error:', error)
-      },
-    },
-  })
+  const { deleteMutation, performDelete } = useDeleteProductOptimistic()
 
   const handleDelete = (): void => {
-    const listQueryKey = getListProductsQueryKey()
-    const categoryQueryKey = getGetProductsByCategoryQueryKey(product.category_id)
-
-    const listSnapshot = snapshotQueryData<PaginatedProductsResponseDto>(
-      queryClient,
-      listQueryKey,
-    )
-    const categorySnapshot = snapshotQueryData<ProductResponseDto[]>(
-      queryClient,
-      categoryQueryKey,
-    )
-
-    queryClient.setQueriesData<PaginatedProductsResponseDto>(
-      { queryKey: listQueryKey },
-      (old) => removeItemFromPaginated(old, product.id),
-    )
-    queryClient.setQueriesData<ProductResponseDto[]>(
-      { queryKey: categoryQueryKey },
-      (old) => removeItemFromArray(old, product.id),
-    )
-
     setDeleteOpen(false)
-
-    let didUndo = false
-    const timeoutId = window.setTimeout(() => {
-      if (didUndo) {
-        return
-      }
-      deleteMutation.mutateAsync({ id: product.id }).catch(() => {
-        restoreQueryData(queryClient, listSnapshot)
-        restoreQueryData(queryClient, categorySnapshot)
-      })
-    }, 5000)
-
-    toast(t('products.deleted') || 'Product deleted successfully', {
-      action: {
-        label: t('actions.undo') || 'Undo',
-        onClick: () => {
-          didUndo = true
-          window.clearTimeout(timeoutId)
-          restoreQueryData(queryClient, listSnapshot)
-          restoreQueryData(queryClient, categorySnapshot)
-        },
-      },
-    })
+    performDelete(product.id, product.category_id)
   }
 
   const formId = `edit-product-form-${product.id}`

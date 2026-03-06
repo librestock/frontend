@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { MoreHorizontal } from 'lucide-react'
 
@@ -30,10 +29,9 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ErrorState } from '@/components/common/ErrorState'
 import {
   useListRoles,
-  useDeleteRole,
-  getListRolesQueryKey,
   type RoleResponseDto,
 } from '@/lib/data/roles'
+import { useDeleteRoleMutation } from '@/hooks/roles'
 
 interface RolesTableProps {
   createOpen: boolean
@@ -118,25 +116,13 @@ export function RolesTable({
   onCreateOpenChange,
 }: RolesTableProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
 
   const [editRole, setEditRole] = React.useState<RoleResponseDto | null>(null)
   const [deleteRole, setDeleteRole] = React.useState<RoleResponseDto | null>(null)
 
   const { data: roles, isLoading, error } = useListRoles()
 
-  const deleteMutation = useDeleteRole({
-    mutation: {
-      onSuccess: () => {
-        toast.success(t('roles.deleted', { defaultValue: 'Role deleted successfully' }))
-        void queryClient.invalidateQueries({ queryKey: getListRolesQueryKey() })
-        setDeleteRole(null)
-      },
-      onError: () => {
-        toast.error(t('roles.deleteError', { defaultValue: 'Failed to delete role' }))
-      },
-    },
-  })
+  const deleteMutation = useDeleteRoleMutation()
 
   if (error) {
     return (
@@ -219,7 +205,10 @@ export function RolesTable({
               toast.error(t('roles.systemDeleteError', { defaultValue: 'System roles cannot be deleted' }))
               return
             }
-            deleteMutation.mutate({ id: deleteRole.id })
+            deleteMutation.mutate(
+              { id: deleteRole.id },
+              { onSuccess: () => setDeleteRole(null) },
+            )
           }
         }}
         onOpenChange={(open) => {
