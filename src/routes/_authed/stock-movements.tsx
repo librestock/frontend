@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Filter, X } from 'lucide-react'
 import { z } from 'zod'
+import { Permission, Resource } from '@librestock/types/auth'
 
 import { StockMovementReason } from '@librestock/types/stock-movements'
 
@@ -19,6 +20,7 @@ import { StockMovementTable } from '@/components/stock-movements/StockMovementTa
 import { useListAllLocations } from '@/lib/data/locations'
 import { useListAllProducts } from '@/lib/data/products'
 import type { StockMovementQueryDto } from '@/lib/data/stock-movements'
+import { canAccess } from '@/lib/permissions'
 import {
   parseNumberParam,
   parseStringParam,
@@ -40,6 +42,13 @@ const STOCK_MOVEMENTS_PAGE_SIZE = 50
 
 export const Route = createFileRoute('/_authed/stock-movements')({
   validateSearch: (search) => stockMovementsSearchSchema.parse(search),
+  beforeLoad: ({ context }) => {
+    const { permissions } = context.currentUser
+    if (!canAccess(permissions, Permission.READ, Resource.STOCK_MOVEMENTS)) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect({ to: '/' })
+    }
+  },
   component: StockMovementsPage,
 })
 

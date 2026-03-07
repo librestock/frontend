@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Filter, X } from 'lucide-react'
 import { z } from 'zod'
 import { OrderStatus } from '@librestock/types/orders'
+import { Permission, Resource } from '@librestock/types/auth'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +17,7 @@ import {
 import { CreateOrderButton } from '@/components/orders/CreateOrderButton'
 import { OrderTable } from '@/components/orders/OrderTable'
 import { SearchBar } from '@/components/items/SearchBar'
+import { canAccess } from '@/lib/permissions'
 import {
   parseNumberParam,
   parseStringParam,
@@ -34,6 +36,13 @@ const ORDERS_PAGE_SIZE = 20
 
 export const Route = createFileRoute('/_authed/orders')({
   validateSearch: (search) => ordersSearchSchema.parse(search),
+  beforeLoad: ({ context }) => {
+    const { permissions } = context.currentUser
+    if (!canAccess(permissions, Permission.READ, Resource.ORDERS)) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect({ to: '/' })
+    }
+  },
   component: OrdersPage,
 })
 
