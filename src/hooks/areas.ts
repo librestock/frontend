@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
-  useAreasControllerDelete,
-  getAreasControllerFindAllQueryKey,
+  useDeleteArea,
+  getListAreasQueryKey,
   type AreaResponseDto,
 } from '@/lib/data/areas'
 import {
@@ -17,11 +17,11 @@ export function useDeleteAreaOptimistic(locationId: string) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
-  const deleteMutation = useAreasControllerDelete({
+  const deleteMutation = useDeleteArea({
     mutation: {
       onSuccess: async () => {
         await queryClient.invalidateQueries({
-          queryKey: getAreasControllerFindAllQueryKey({
+          queryKey: getListAreasQueryKey({
             location_id: locationId,
           }),
         })
@@ -35,7 +35,7 @@ export function useDeleteAreaOptimistic(locationId: string) {
 
   const performDelete = useCallback(
     (areaId: string) => {
-      const queryKey = getAreasControllerFindAllQueryKey({
+      const queryKey = getListAreasQueryKey({
         location_id: locationId,
       })
       const snapshot = snapshotQueryData<AreaResponseDto[]>(

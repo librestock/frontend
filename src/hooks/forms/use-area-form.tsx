@@ -5,9 +5,9 @@ import { toast } from 'sonner'
 import z from 'zod'
 import {
   type AreaResponseDto,
-  useAreasControllerCreate,
-  useAreasControllerUpdate,
-  getAreasControllerFindAllQueryKey,
+  useCreateArea,
+  useUpdateArea,
+  getListAreasQueryKey,
 } from '@/lib/data/areas'
 
 const formSchema = z.object({
@@ -45,12 +45,12 @@ export function useAreaForm({
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
-  const createMutation = useAreasControllerCreate({
+  const createMutation = useCreateArea({
     mutation: {
       onSuccess: async () => {
         toast.success(t('areas.created', { defaultValue: 'Area created successfully' }))
         await queryClient.invalidateQueries({
-          queryKey: getAreasControllerFindAllQueryKey({ location_id: locationId }),
+          queryKey: getListAreasQueryKey({ location_id: locationId }),
         })
         onSuccess?.()
       },
@@ -61,12 +61,12 @@ export function useAreaForm({
     },
   })
 
-  const updateMutation = useAreasControllerUpdate({
+  const updateMutation = useUpdateArea({
     mutation: {
       onSuccess: async () => {
         toast.success(t('areas.updated', { defaultValue: 'Area updated successfully' }))
         await queryClient.invalidateQueries({
-          queryKey: getAreasControllerFindAllQueryKey({ location_id: locationId }),
+          queryKey: getListAreasQueryKey({ location_id: locationId }),
         })
         onSuccess?.()
       },

@@ -19,7 +19,7 @@ import { FormErrorBanner } from '@/components/common/FormErrorBanner'
 import type { InventoryResponseDto } from '@/lib/data/inventory'
 import { useListAllLocations } from '@/lib/data/locations'
 import { useListAllProducts } from '@/lib/data/products'
-import { useAreasControllerFindAll } from '@/lib/data/areas'
+import { useListAreas } from '@/lib/data/areas'
 import { useInventoryForm } from '@/hooks/forms/use-inventory-form'
 
 interface InventoryFormProps {
@@ -53,7 +53,7 @@ export function InventoryForm({
     inventory?.location?.id ?? defaultLocationId ?? ''
   )
 
-  const { data: areas } = useAreasControllerFindAll(
+  const { data: areas } = useListAreas(
     { location_id: selectedLocationId },
     { query: { enabled: !!selectedLocationId } }
   )

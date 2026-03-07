@@ -11,7 +11,7 @@ import { LocationAreaSidebar } from '@/components/inventory/LocationAreaSidebar'
 import { InventoryTable } from '@/components/inventory/InventoryTable'
 import { SearchBar } from '@/components/items/SearchBar'
 import { useListAllLocations } from '@/lib/data/locations'
-import { useAreasControllerFindAll } from '@/lib/data/areas'
+import { useListAreas } from '@/lib/data/areas'
 import type { InventoryQueryDto } from '@/lib/data/inventory'
 import {
   parseBooleanParam,
@@ -55,7 +55,7 @@ function InventoryPage(): React.JSX.Element {
   const deferredSearchQuery = React.useDeferredValue(searchQuery)
 
   const { data: locations } = useListAllLocations()
-  const { data: areas } = useAreasControllerFindAll(
+  const { data: areas } = useListAreas(
     selectedLocationId ? { location_id: selectedLocationId } : undefined,
     { query: { enabled: !!selectedLocationId } },
   )

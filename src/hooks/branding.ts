@@ -2,14 +2,14 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
-  useBrandingControllerUpdate,
-  getBrandingControllerGetQueryKey,
+  useUpdateBranding,
+  getBrandingQueryKey,
 } from '@/lib/data/branding'
 
 export function useBrandingMutation() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const mutation = useBrandingControllerUpdate()
+  const mutation = useUpdateBranding()
 
   const submitBranding = async (
     data: Parameters<typeof mutation.mutateAsync>[0],
@@ -17,7 +17,7 @@ export function useBrandingMutation() {
     try {
       await mutation.mutateAsync(data)
       await queryClient.invalidateQueries({
-        queryKey: getBrandingControllerGetQueryKey(),
+        queryKey: getBrandingQueryKey(),
       })
       toast.success(
         t('settings.brandingSaved', { defaultValue: 'Branding settings saved' }),

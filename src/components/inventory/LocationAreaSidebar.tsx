@@ -8,7 +8,7 @@ import {
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useListAllLocations, type LocationResponseDto } from '@/lib/data/locations'
-import { useAreasControllerFindAll, type AreaResponseDto } from '@/lib/data/areas'
+import { useListAreas, type AreaResponseDto } from '@/lib/data/areas'
 import { LOCATION_TYPE_ICONS } from '@/lib/location-type.utils'
 
 const SELECTED_ITEM_STYLES = 'bg-accent text-accent-foreground'
@@ -134,7 +134,7 @@ function LocationItem({
     new Set()
   )
 
-  const { data: areas } = useAreasControllerFindAll(
+  const { data: areas } = useListAreas(
     { location_id: location.id },
     { query: { enabled: isExpanded } }
   )

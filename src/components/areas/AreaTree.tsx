@@ -5,7 +5,7 @@ import { CreateArea } from './CreateArea'
 import { Spinner } from '@/components/ui/spinner'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ErrorState } from '@/components/common/ErrorState'
-import { useAreasControllerFindAll } from '@/lib/data/areas'
+import { useListAreas } from '@/lib/data/areas'
 
 interface AreaTreeProps {
   locationId: string
@@ -18,7 +18,7 @@ export function AreaTree({ locationId }: AreaTreeProps): React.JSX.Element {
     data: areas,
     isLoading,
     error,
-  } = useAreasControllerFindAll({
+  } = useListAreas({
     location_id: locationId,
   })
 

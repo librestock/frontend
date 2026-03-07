@@ -21,7 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useBrandingControllerGet } from '@/lib/data/branding'
+import { useGetBranding } from '@/lib/data/branding'
 import { useBrandingMutation } from '@/hooks/branding'
 
 const safeUrlSchema = z
@@ -93,7 +93,7 @@ function getFormKey(values: BrandingFormValues): string {
 }
 
 export function BrandingForm(): React.JSX.Element {
-  const { data: branding, isLoading } = useBrandingControllerGet()
+  const { data: branding, isLoading } = useGetBranding()
   const initialValues = getInitialValues(branding)
 
   if (isLoading) {
