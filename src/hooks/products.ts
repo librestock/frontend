@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import {
   useDeleteProduct,
@@ -15,13 +15,12 @@ import {
   type BulkOperationResultDto,
 } from '@/lib/data/products'
 import {
-  removeItemFromPaginated,
   removeItemFromArray,
-  restoreQueryData,
-  snapshotQueryData,
+  removeItemFromPaginated,
 } from '@/lib/data/query-cache'
+import { makeOptimisticDelete } from '@/lib/data/make-optimistic-delete'
 
-function useInvalidateProducts() {
+function useInvalidateProducts(): () => Promise<void> {
   const queryClient = useQueryClient()
   return useCallback(
     async () => {
@@ -56,80 +55,52 @@ function formatBulkResult(
   return parts.join(', ')
 }
 
-export function useDeleteProductOptimistic() {
-  const { t } = useTranslation()
-  const queryClient = useQueryClient()
-
-  const deleteMutation = useDeleteProduct({
-    mutation: {
-      onSuccess: async () => {
-        await Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: getListProductsQueryKey(),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: getGetProductsByCategoryQueryKey(),
-          }),
-        ])
-      },
-      onError: (error) => {
-        toast.error(t('products.deleteError') || 'Failed to delete product')
-        console.error('Product deletion error:', error)
-      },
+const useDeleteProductOptimisticFactory = makeOptimisticDelete<string | undefined>({
+  useMutationHook: useDeleteProduct,
+  getOptimisticTargets: (productId, categoryId) => [
+    {
+      queryKey: getListProductsQueryKey(),
+      update: (old) =>
+        removeItemFromPaginated(
+          old as PaginatedProductsResponseDto | undefined,
+          productId,
+        ),
     },
-  })
-
-  const performDelete = useCallback(
-    (productId: string, categoryId?: string) => {
-      const listQueryKey = getListProductsQueryKey()
-      const categoryQueryKey = getGetProductsByCategoryQueryKey(categoryId)
-
-      const listSnapshot = snapshotQueryData<PaginatedProductsResponseDto>(
-        queryClient,
-        listQueryKey,
-      )
-      const categorySnapshot = snapshotQueryData<ProductResponseDto[]>(
-        queryClient,
-        categoryQueryKey,
-      )
-
-      queryClient.setQueriesData<PaginatedProductsResponseDto>(
-        { queryKey: listQueryKey },
-        (old) => removeItemFromPaginated(old, productId),
-      )
-      queryClient.setQueriesData<ProductResponseDto[]>(
-        { queryKey: categoryQueryKey },
-        (old) => removeItemFromArray(old, productId),
-      )
-
-      let didUndo = false
-      const timeoutId = window.setTimeout(() => {
-        if (didUndo) return
-        deleteMutation.mutateAsync({ id: productId }).catch(() => {
-          restoreQueryData(queryClient, listSnapshot)
-          restoreQueryData(queryClient, categorySnapshot)
-        })
-      }, 5000)
-
-      toast(t('products.deleted') || 'Product deleted successfully', {
-        action: {
-          label: t('actions.undo') || 'Undo',
-          onClick: () => {
-            didUndo = true
-            window.clearTimeout(timeoutId)
-            restoreQueryData(queryClient, listSnapshot)
-            restoreQueryData(queryClient, categorySnapshot)
-          },
-        },
-      })
+    {
+      queryKey: getGetProductsByCategoryQueryKey(categoryId),
+      update: (old) =>
+        removeItemFromArray(old as ProductResponseDto[] | undefined, productId),
     },
-    [queryClient, deleteMutation, t],
-  )
+  ],
+  getInvalidationKeys: () => [
+    getListProductsQueryKey(),
+    getGetProductsByCategoryQueryKey(),
+  ],
+  i18n: {
+    success: 'products.deleted',
+    error: 'products.deleteError',
+    undo: 'actions.undo',
+  },
+  onMutationError: (error) => {
+    console.error('Product deletion error:', error)
+  },
+})
 
-  return { deleteMutation, performDelete }
+export function useDeleteProductOptimistic(): ReturnType<
+  typeof useDeleteProductOptimisticFactory
+> {
+  return useDeleteProductOptimisticFactory()
 }
 
-export function useBulkProductActions(onClearSelection: () => void) {
+export function useBulkProductActions(onClearSelection: () => void): {
+  bulkDeleteMutation: ReturnType<typeof useBulkDeleteProducts>
+  bulkStatusMutation: ReturnType<typeof useBulkUpdateProductStatus>
+  bulkRestoreMutation: ReturnType<typeof useBulkRestoreProducts>
+  isAnyPending: boolean
+  handleDelete: (ids: string[]) => void
+  handleStatusChange: (ids: string[], isActive: boolean) => void
+  handleRestore: (ids: string[]) => void
+} {
   const { t } = useTranslation()
   const invalidateProducts = useInvalidateProducts()
 
@@ -224,7 +195,9 @@ export function useBulkProductActions(onClearSelection: () => void) {
   }
 }
 
-export function useBulkCsvImport(onSuccess: () => void) {
+export function useBulkCsvImport(
+  onSuccess: () => void,
+): ReturnType<typeof useBulkCreateProducts> {
   const { t } = useTranslation()
   const invalidateProducts = useInvalidateProducts()
 
