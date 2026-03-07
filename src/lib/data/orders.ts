@@ -1,12 +1,12 @@
 import type { PaginationMeta } from '@librestock/types/common'
-import { OrderStatus, type CreateOrderType, type UpdateOrderType, type OrderResponseType, type OrderItemResponseType, type OrderQueryType, type UpdateOrderStatusType } from '@librestock/types/orders'
+import { OrderStatus, type CreateOrderType, type UpdateOrderType, type OrderResponseDto as OrderResponseDtoShape, type OrderItemResponseDto as OrderItemResponseDtoShape, type OrderQueryType, type UpdateOrderStatusType } from '@librestock/types/orders'
 import { apiPatch } from './axios-client'
 import { makeCrudHooks, makeMutationHook } from './make-crud-hooks'
 
 export type CreateOrderDto = CreateOrderType
 export type UpdateOrderDto = UpdateOrderType
-export type OrderResponseDto = OrderResponseType
-export type OrderItemResponseDto = OrderItemResponseType
+export type OrderResponseDto = OrderResponseDtoShape
+export type OrderItemResponseDto = OrderItemResponseDtoShape
 export type OrderQueryDto = OrderQueryType
 export type UpdateOrderStatusDto = UpdateOrderStatusType
 

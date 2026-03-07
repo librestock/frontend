@@ -86,7 +86,7 @@ function UserRow({
 }): React.JSX.Element {
   const { t } = useTranslation()
   const roles = toRoleNames(user.roles as unknown)
-  const createdAtLabel = formatDate(user.createdAt as unknown)
+  const createdAtLabel = formatDate(user.created_at as unknown)
 
   return (
     <TableRow>

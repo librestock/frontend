@@ -19,7 +19,7 @@ import { FormErrorBanner } from '@/components/common/FormErrorBanner'
 import { BooleanSelect } from '@/components/common/BooleanSelect'
 import {
   type AreaResponseDto,
-  useAreasControllerFindAll,
+  useListAreas,
 } from '@/lib/data/areas'
 import { useAreaForm } from '@/hooks/forms/use-area-form'
 
@@ -57,7 +57,7 @@ export function AreaForm({
   const { t } = useTranslation()
   const form = useAreaForm({ locationId, area, parentId, onSuccess })
 
-  const { data: areas } = useAreasControllerFindAll({
+  const { data: areas } = useListAreas({
     location_id: locationId,
   })
 

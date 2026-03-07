@@ -4,7 +4,7 @@ import {
   getListAllLocationsQueryOptions,
   type LocationQueryDto,
 } from '@/lib/data/locations'
-import { getAreasControllerFindAllQueryOptions } from '@/lib/data/areas'
+import { getListAreasQueryOptions } from '@/lib/data/areas'
 import {
   getListInventoryQueryOptions,
   type InventoryQueryDto,
@@ -61,7 +61,7 @@ export async function prefetchInventoryData(
   // If a location is selected, prefetch its areas
   if (search.location) {
     await queryClient.ensureQueryData(
-      getAreasControllerFindAllQueryOptions({
+      getListAreasQueryOptions({
         location_id: search.location,
       }),
     )

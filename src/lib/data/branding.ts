@@ -9,13 +9,19 @@ const branding = makeQueryHook<BrandingResponseDto>(
   async (signal) => await apiGet<BrandingResponseDto>('/branding', undefined, signal),
 )
 
-export const getBrandingControllerGetQueryKey = branding.getQueryKey
-export const getBrandingControllerGetQueryOptions = branding.getQueryOptions
-export const useBrandingControllerGet = branding.useQuery
+export const getBrandingQueryKey = branding.getQueryKey
+export const getBrandingQueryOptions = branding.getQueryOptions
+export const useGetBranding = branding.useQuery
 
-export const useBrandingControllerUpdate = makeMutationHook<
+export const useUpdateBranding = makeMutationHook<
   BrandingResponseDto,
   { data: UpdateBrandingDto }
->('brandingControllerUpdate', async (vars) =>
+>('updateBranding', async (vars) =>
   await apiPut<BrandingResponseDto>('/branding', vars.data),
 )
+
+// Deprecated aliases kept for backward compatibility during migration.
+export const getBrandingControllerGetQueryKey = getBrandingQueryKey
+export const getBrandingControllerGetQueryOptions = getBrandingQueryOptions
+export const useBrandingControllerGet = useGetBranding
+export const useBrandingControllerUpdate = useUpdateBranding
