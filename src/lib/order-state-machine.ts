@@ -1,4 +1,4 @@
-import { OrderStatus } from '@librestock/types'
+import { OrderStatus } from '@librestock/types/orders'
 
 /**
  * Valid state transitions for orders, mirroring the backend state machine.

@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Filter, X } from 'lucide-react'
 import { z } from 'zod'
-import { OrderStatus } from '@librestock/types'
+import { OrderStatus } from '@librestock/types/orders'
 
 import { Button } from '@/components/ui/button'
 import {

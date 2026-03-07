@@ -1,4 +1,4 @@
-import type { CreateRoleDto, RoleResponseDto, UpdateRoleDto } from '@librestock/types'
+import type { CreateRoleDto, RoleResponseDto, UpdateRoleDto } from '@librestock/types/roles'
 import { makeCrudHooks } from './make-crud-hooks'
 
 export type { CreateRoleDto, RoleResponseDto, UpdateRoleDto }

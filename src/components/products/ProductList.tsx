@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { isAxiosError } from 'axios'
-import type { ErrorResponseDto } from '@librestock/types'
+import type { ErrorResponseDto } from '@librestock/types/common'
 
 import { CategoryFolderGrid } from '../category/CategoryFolderGrid'
 import { ProductForm } from './ProductForm'

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Upload } from 'lucide-react'
-import type { CreateProductDto } from '@librestock/types'
+import type { CreateProductDto } from '@librestock/types/products'
 
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'

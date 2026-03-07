@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ChevronDown } from 'lucide-react'
-import type { OrderStatus } from '@librestock/types'
+import type { OrderStatus } from '@librestock/types/orders'
 
 import { Button } from '@/components/ui/button'
 import {

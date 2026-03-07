@@ -42,7 +42,7 @@ import {
 import { ErrorState } from '@/components/common/ErrorState'
 import { useListProducts } from '@/lib/data/products'
 import { useListAllLocations } from '@/lib/data/locations'
-import { useListInventory } from '@/lib/data/inventory'
+import { useGetInventorySummary, useListInventory } from '@/lib/data/inventory'
 
 import type { InventoryResponseDto } from '@/lib/data/inventory'
 
@@ -92,6 +92,7 @@ interface DashboardData {
   totalProducts: number
   totalLocations: number
   totalInventory: number
+  lowStockCount: number
   inventoryItems: InventoryResponseDto[]
   isLoading: boolean
   chartLoading: boolean
@@ -99,16 +100,19 @@ interface DashboardData {
   productsError: Error | null
   locationsError: Error | null
   inventoryError: Error | null
+  summaryError: Error | null
 }
 
 function useDashboardData(): DashboardData {
   const productsQuery = useListProducts({ page: 1, limit: 1 })
   const locationsQuery = useListAllLocations()
   const inventoryQuery = useListInventory({ page: 1, limit: LOW_STOCK_PAGE_SIZE })
+  const summaryQuery = useGetInventorySummary()
 
   const totalProducts = productsQuery.data?.meta.total ?? 0
   const totalLocations = locationsQuery.data?.length ?? 0
   const totalInventory = inventoryQuery.data?.meta.total ?? 0
+  const lowStockCount = summaryQuery.data?.low_stock_count ?? 0
   const inventoryItems = React.useMemo(
     () => inventoryQuery.data?.data ?? [],
     [inventoryQuery.data?.data],
@@ -118,22 +122,28 @@ function useDashboardData(): DashboardData {
     totalProducts,
     totalLocations,
     totalInventory,
+    lowStockCount,
     inventoryItems,
-    isLoading: productsQuery.isLoading || locationsQuery.isLoading || inventoryQuery.isLoading,
+    isLoading:
+      productsQuery.isLoading ||
+      locationsQuery.isLoading ||
+      inventoryQuery.isLoading ||
+      summaryQuery.isLoading,
     chartLoading: inventoryQuery.isLoading || locationsQuery.isLoading,
     inventoryLoading: inventoryQuery.isLoading,
     productsError: productsQuery.error,
     locationsError: locationsQuery.error,
     inventoryError: inventoryQuery.error,
+    summaryError: summaryQuery.error,
   }
 }
 
 function DashboardPage(): React.JSX.Element {
   const { t } = useTranslation()
   const {
-    totalProducts, totalLocations, totalInventory, inventoryItems,
+    totalProducts, totalLocations, totalInventory, lowStockCount, inventoryItems,
     isLoading, chartLoading, inventoryLoading,
-    productsError, locationsError, inventoryError,
+    productsError, locationsError, inventoryError, summaryError,
   } = useDashboardData()
 
   const lowStockItems = React.useMemo(
@@ -158,7 +168,11 @@ function DashboardPage(): React.JSX.Element {
       .slice(0, 8)
   }, [inventoryItems, t])
 
-  const hasError = productsError != null || locationsError != null || inventoryError != null
+  const hasError =
+    productsError != null ||
+    locationsError != null ||
+    inventoryError != null ||
+    summaryError != null
 
   return (
     <div className="page-content">
@@ -170,7 +184,7 @@ function DashboardPage(): React.JSX.Element {
         <div className="mx-auto max-w-7xl space-y-6">
           <SummaryCardsRow
             isLoading={isLoading}
-            lowStockCount={lowStockItems.length}
+            lowStockCount={lowStockCount}
             t={t}
             totalInventory={totalInventory}
             totalLocations={totalLocations}
@@ -181,6 +195,7 @@ function DashboardPage(): React.JSX.Element {
               {productsError && <ErrorState message={t('dashboard.errorLoadingProducts')} variant="simple" />}
               {locationsError && <ErrorState message={t('dashboard.errorLoadingLocations')} variant="simple" />}
               {inventoryError && <ErrorState message={t('dashboard.errorLoadingInventory')} variant="simple" />}
+              {summaryError && <ErrorState message={t('dashboard.errorLoadingInventory')} variant="simple" />}
             </div>
           )}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

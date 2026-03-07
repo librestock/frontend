@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { OrderStatus } from '@librestock/types'
+import { OrderStatus } from '@librestock/types/orders'
 
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'

@@ -1,4 +1,4 @@
-import type { CurrentUserResponseDto } from '@librestock/types'
+import type { CurrentUserResponseDto } from '@librestock/types/auth'
 import { apiGet } from './axios-client'
 import { makeQueryHook } from './make-crud-hooks'
 

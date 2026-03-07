@@ -1,19 +1,13 @@
-import type {
-  AdjustInventoryDto,
-  CreateInventoryDto,
-  InventoryQueryDto,
-  InventoryResponseDto,
-  PaginatedInventoryResponseDto,
-  UpdateInventoryDto,
-} from '@librestock/types'
-import { apiPatch } from './axios-client'
-import { makeCrudHooks, makeMutationHook } from './make-crud-hooks'
+import type { AdjustInventoryDto, CreateInventoryDto, InventoryQueryDto, InventoryResponseDto, InventorySummaryDto, PaginatedInventoryResponseDto, UpdateInventoryDto } from '@librestock/types/inventory'
+import { apiGet, apiPatch } from './axios-client'
+import { makeCrudHooks, makeMutationHook, makeQueryHook } from './make-crud-hooks'
 
 export type {
   AdjustInventoryDto,
   CreateInventoryDto,
   InventoryQueryDto,
   InventoryResponseDto,
+  InventorySummaryDto,
   PaginatedInventoryResponseDto,
   UpdateInventoryDto,
 }
@@ -33,6 +27,16 @@ export const useListInventory = crud.useList
 export const useCreateInventoryItem = crud.useCreate
 export const useUpdateInventoryItem = crud.useUpdate
 export const useDeleteInventoryItem = crud.useDelete
+
+const inventorySummary = makeQueryHook(
+  () => ['/inventory/summary'] as const,
+  async (signal?: AbortSignal) =>
+    await apiGet<InventorySummaryDto>('/inventory/summary', undefined, signal),
+)
+
+export const getInventorySummaryQueryKey = inventorySummary.getQueryKey
+export const getInventorySummaryQueryOptions = inventorySummary.getQueryOptions
+export const useGetInventorySummary = inventorySummary.useQuery
 
 export const useAdjustInventoryQuantity = makeMutationHook<
   InventoryResponseDto,

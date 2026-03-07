@@ -1,9 +1,4 @@
-import type {
-  AreaQueryDto,
-  AreaResponseDto,
-  CreateAreaDto,
-  UpdateAreaDto,
-} from '@librestock/types'
+import type { AreaQueryDto, AreaResponseDto, CreateAreaDto, UpdateAreaDto } from '@librestock/types/areas'
 import { makeCrudHooks } from './make-crud-hooks'
 
 export type { AreaQueryDto, AreaResponseDto, CreateAreaDto, UpdateAreaDto }

@@ -1,4 +1,4 @@
-import type { BrandingResponseDto, UpdateBrandingDto } from '@librestock/types'
+import type { BrandingResponseDto, UpdateBrandingDto } from '@librestock/types/branding'
 import { apiGet, apiPut } from './axios-client'
 import { makeMutationHook, makeQueryHook } from './make-crud-hooks'
 

@@ -1,4 +1,4 @@
-import { Permission, Resource } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types/auth'
 import { useCurrentUser } from '@/lib/data/auth'
 
 const DEFAULT_PERMISSIONS: Partial<Record<Resource, Permission[]>> = {

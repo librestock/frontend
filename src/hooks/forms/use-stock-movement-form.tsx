@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import z from 'zod'
-import { StockMovementReason } from '@librestock/types'
+import { StockMovementReason } from '@librestock/types/stock-movements'
 import {
   useCreateStockMovement,
   getListStockMovementsQueryKey,

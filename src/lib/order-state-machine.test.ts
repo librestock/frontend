@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { OrderStatus } from '@librestock/types'
+import { OrderStatus } from '@librestock/types/orders'
 import { getValidTransitions, ORDER_TRANSITIONS } from './order-state-machine'
 
 describe('order state machine', () => {

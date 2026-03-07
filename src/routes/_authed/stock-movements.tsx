@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Filter, X } from 'lucide-react'
 import { z } from 'zod'
 
-import { StockMovementReason } from '@librestock/types'
+import { StockMovementReason } from '@librestock/types/stock-movements'
 
 import { Button } from '@/components/ui/button'
 import {

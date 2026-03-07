@@ -2,7 +2,7 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes, Users, Shield, ArrowLeftRight, Building2, ClipboardList, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Permission, Resource } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types/auth'
 
 import { PoweredBy } from '@/components/common/PoweredBy'
 import {
