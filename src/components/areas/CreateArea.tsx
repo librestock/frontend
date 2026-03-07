@@ -39,18 +39,18 @@ export function CreateArea({
     controlledOpen === undefined ? (
       <Button>
         <Plus className="size-4" />
-        {t('areas.create') || 'Create Area'}
+        {t('areas.create', { defaultValue: 'Create Area' })}
       </Button>
     ) : undefined
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
-      description={t('areas.createDescription') || 'Add a new area within this location.'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+      description={t('areas.createDescription', { defaultValue: 'Add a new area within this location.' })}
       formId="create-area-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('areas.createTitle') || 'Create Area'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('areas.createTitle', { defaultValue: 'Create Area' })}
       trigger={trigger ?? defaultTrigger}
       onOpenChange={handleOpenChange}
     >

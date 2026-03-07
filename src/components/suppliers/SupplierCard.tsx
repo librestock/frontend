@@ -56,8 +56,8 @@ export function SupplierCard({ supplier }: SupplierCardProps): React.JSX.Element
               <CardDescription className="flex items-center gap-2">
                 <Badge variant={supplier.is_active ? 'default' : 'secondary'}>
                   {supplier.is_active
-                    ? (t('form.active') || 'Active')
-                    : (t('form.inactive') || 'Inactive')}
+                    ? (t('form.active', { defaultValue: 'Active' }))
+                    : (t('form.inactive', { defaultValue: 'Inactive' }))}
                 </Badge>
               </CardDescription>
             </div>
@@ -71,12 +71,12 @@ export function SupplierCard({ supplier }: SupplierCardProps): React.JSX.Element
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setEditOpen(true)}>
                 <Pencil className="mr-2 size-4" />
-                {t('actions.edit') || 'Edit'}
+                {t('actions.edit', { defaultValue: 'Edit' })}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={() => setDeleteOpen(true)}>
                 <Trash2 className="mr-2 size-4" />
-                {t('actions.delete') || 'Delete'}
+                {t('actions.delete', { defaultValue: 'Delete' })}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -104,13 +104,13 @@ export function SupplierCard({ supplier }: SupplierCardProps): React.JSX.Element
       </Card>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
         contentClassName="sm:max-w-[550px]"
-        description={t('suppliers.editDescription') || 'Update supplier details.'}
+        description={t('suppliers.editDescription', { defaultValue: 'Update supplier details.' })}
         formId="edit-supplier-form"
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('suppliers.editTitle') || 'Edit Supplier'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('suppliers.editTitle', { defaultValue: 'Edit Supplier' })}
         onOpenChange={setEditOpen}
       >
         <SupplierForm
@@ -121,10 +121,10 @@ export function SupplierCard({ supplier }: SupplierCardProps): React.JSX.Element
       </FormDialog>
 
       <DeleteConfirmationDialog
-        description={t('suppliers.deleteDescription') || 'Are you sure you want to delete this supplier? This action cannot be undone.'}
+        description={t('suppliers.deleteDescription', { defaultValue: 'Are you sure you want to delete this supplier? This action cannot be undone.' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('suppliers.deleteTitle') || 'Delete Supplier'}
+        title={t('suppliers.deleteTitle', { defaultValue: 'Delete Supplier' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

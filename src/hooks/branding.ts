@@ -20,11 +20,11 @@ export function useBrandingMutation() {
         queryKey: getBrandingControllerGetQueryKey(),
       })
       toast.success(
-        t('settings.brandingSaved') || 'Branding settings saved',
+        t('settings.brandingSaved', { defaultValue: 'Branding settings saved' }),
       )
     } catch {
       toast.error(
-        t('settings.brandingError') || 'Failed to save branding settings',
+        t('settings.brandingError', { defaultValue: 'Failed to save branding settings' }),
       )
     }
   }

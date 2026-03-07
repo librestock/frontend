@@ -92,8 +92,8 @@ function LocationFlow({
   movement: StockMovementResponseDto
 }): React.JSX.Element {
   const { t } = useTranslation()
-  const fromName = movement.from_location?.name ?? (t('stockMovements.noLocation') || '---')
-  const toName = movement.to_location?.name ?? (t('stockMovements.noLocation') || '---')
+  const fromName = movement.from_location?.name ?? (t('stockMovements.noLocation', { defaultValue: '---' }))
+  const toName = movement.to_location?.name ?? (t('stockMovements.noLocation', { defaultValue: '---' }))
 
   return (
     <div className="flex items-center gap-1.5 text-sm">
@@ -161,7 +161,7 @@ export function StockMovementTable({
 
   return (
     <TableFactory
-      errorMessage={t('stockMovements.errorLoading') || 'Error loading stock movements'}
+      errorMessage={t('stockMovements.errorLoading', { defaultValue: 'Error loading stock movements' })}
       hasError={Boolean(error)}
       isEmpty={movements.length === 0}
       isLoading={isLoading}
@@ -171,8 +171,8 @@ export function StockMovementTable({
       totalPages={meta?.total_pages ?? 1}
       emptyMessage={
         hasActiveFilters
-          ? (t('stockMovements.noMovementsFiltered') || 'No results for these filters')
-          : (t('stockMovements.noMovements') || 'No stock movements found')
+          ? (t('stockMovements.noMovementsFiltered', { defaultValue: 'No results for these filters' }))
+          : (t('stockMovements.noMovements', { defaultValue: 'No stock movements found' }))
       }
       renderBody={() => (
         <TableBody>
@@ -186,12 +186,12 @@ export function StockMovementTable({
       )}
       renderHeader={() => (
         <TableRow>
-          <TableHead>{t('stockMovements.date') || 'Date'}</TableHead>
-          <TableHead>{t('stockMovements.product') || 'Product'}</TableHead>
-          <TableHead>{t('stockMovements.locationFlow') || 'From / To'}</TableHead>
-          <TableHead>{t('stockMovements.quantity') || 'Qty'}</TableHead>
-          <TableHead>{t('stockMovements.reason') || 'Reason'}</TableHead>
-          <TableHead>{t('stockMovements.referenceNumber') || 'Reference'}</TableHead>
+          <TableHead>{t('stockMovements.date', { defaultValue: 'Date' })}</TableHead>
+          <TableHead>{t('stockMovements.product', { defaultValue: 'Product' })}</TableHead>
+          <TableHead>{t('stockMovements.locationFlow', { defaultValue: 'From / To' })}</TableHead>
+          <TableHead>{t('stockMovements.quantity', { defaultValue: 'Qty' })}</TableHead>
+          <TableHead>{t('stockMovements.reason', { defaultValue: 'Reason' })}</TableHead>
+          <TableHead>{t('stockMovements.referenceNumber', { defaultValue: 'Reference' })}</TableHead>
         </TableRow>
       )}
       onPageChange={onPageChange}

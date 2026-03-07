@@ -40,7 +40,7 @@ export function StatusTransitionDropdown({
           size="sm"
           variant="outline"
         >
-          {t('orders.changeStatus') || 'Change Status'}
+          {t('orders.changeStatus', { defaultValue: 'Change Status' })}
           <ChevronDown className="ml-1 size-3" />
         </Button>
       </DropdownMenuTrigger>

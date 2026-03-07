@@ -78,7 +78,7 @@ function OrdersPage(): React.JSX.Element {
     if (statusFilter !== 'ALL') {
       chips.push({
         key: 'status',
-        label: `${t('orders.status') || 'Status'}: ${
+        label: `${t('orders.status', { defaultValue: 'Status' })}: ${
           t(`orders.statuses.${statusFilter}`) || statusFilter
         }`,
         onRemove: () => {
@@ -96,7 +96,7 @@ function OrdersPage(): React.JSX.Element {
     if (searchQuery) {
       chips.push({
         key: 'search',
-        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
             search: (prev: OrdersSearch) => ({
@@ -124,11 +124,10 @@ function OrdersPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.orders') || 'Orders'}
+              {t('navigation.orders', { defaultValue: 'Orders' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('orders.subtitle') ||
-                'Manage orders, track fulfillment, and update statuses'}
+              {t('orders.subtitle', { defaultValue: 'Manage orders, track fulfillment, and update statuses' })}
             </p>
           </div>
           <CreateOrderButton />
@@ -141,7 +140,7 @@ function OrdersPage(): React.JSX.Element {
             className="max-w-sm"
             value={searchQuery}
             placeholder={
-              t('orders.searchPlaceholder') || 'Search orders...'
+              t('orders.searchPlaceholder', { defaultValue: 'Search orders...' })
             }
             onChange={(value) => {
               void navigate({
@@ -182,7 +181,7 @@ function OrdersPage(): React.JSX.Element {
               <Filter className="mr-2 size-4" />
               <SelectValue
                 placeholder={
-                  t('orders.filterByStatus') || 'Filter by status'
+                  t('orders.filterByStatus', { defaultValue: 'Filter by status' })
                 }
               />
             </SelectTrigger>
@@ -212,7 +211,7 @@ function OrdersPage(): React.JSX.Element {
             </Button>
           ))}
           <Button size="sm" variant="ghost" onClick={clearAll}>
-            {t('actions.clearAll') || 'Clear all'}
+            {t('actions.clearAll', { defaultValue: 'Clear all' })}
           </Button>
         </div>
       )}

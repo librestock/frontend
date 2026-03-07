@@ -92,7 +92,7 @@ export function AreaTreeItem({
           ) : null}
           {!area.is_active && (
             <Badge className="text-xs" variant="secondary">
-              {t('form.inactive') || 'Inactive'}
+              {t('form.inactive', { defaultValue: 'Inactive' })}
             </Badge>
           )}
         </div>
@@ -102,7 +102,7 @@ export function AreaTreeItem({
           <Button
             className="size-7"
             size="icon"
-            title={t('areas.create') || 'Add child area'}
+            title={t('areas.create', { defaultValue: 'Add child area' })}
             variant="ghost"
             onClick={() => setCreateChildOpen(true)}
           >
@@ -133,12 +133,12 @@ export function AreaTreeItem({
 
       {/* Edit Dialog */}
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
-        description={t('areas.editDescription') || 'Update area details.'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+        description={t('areas.editDescription', { defaultValue: 'Update area details.' })}
         formId={`edit-area-form-${area.id}`}
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('areas.editTitle') || 'Edit Area'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('areas.editTitle', { defaultValue: 'Edit Area' })}
         onOpenChange={setEditOpen}
       >
         <AreaForm
@@ -159,10 +159,10 @@ export function AreaTreeItem({
 
       {/* Delete Confirmation */}
       <DeleteConfirmationDialog
-        description={t('areas.deleteDescription') || 'Are you sure you want to delete this area? All child areas will also be deleted.'}
+        description={t('areas.deleteDescription', { defaultValue: 'Are you sure you want to delete this area? All child areas will also be deleted.' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('areas.deleteTitle') || 'Delete Area'}
+        title={t('areas.deleteTitle', { defaultValue: 'Delete Area' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

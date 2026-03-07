@@ -143,10 +143,9 @@ function BrandingFormContent({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('settings.branding') || 'Branding'}</CardTitle>
+        <CardTitle>{t('settings.branding', { defaultValue: 'Branding' })}</CardTitle>
         <CardDescription>
-          {t('settings.brandingDescription') ||
-            'Customize how your inventory system appears to users'}
+          {t('settings.brandingDescription', { defaultValue: 'Customize how your inventory system appears to users' })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -163,7 +162,7 @@ function BrandingFormContent({
               {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
-                    {t('settings.appName') || 'Application Name'}
+                    {t('settings.appName', { defaultValue: 'Application Name' })}
                   </FieldLabel>
                   <FieldContent>
                     <Input
@@ -175,8 +174,7 @@ function BrandingFormContent({
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
                     <FieldDescription>
-                      {t('settings.appNameDescription') ||
-                        'Displayed in the header, browser tab, and login screen'}
+                      {t('settings.appNameDescription', { defaultValue: 'Displayed in the header, browser tab, and login screen' })}
                     </FieldDescription>
                     <FieldError errors={field.state.meta.errors} />
                   </FieldContent>
@@ -188,7 +186,7 @@ function BrandingFormContent({
               {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
-                    {t('settings.tagline') || 'Tagline'}
+                    {t('settings.tagline', { defaultValue: 'Tagline' })}
                   </FieldLabel>
                   <FieldContent>
                     <Input
@@ -200,8 +198,7 @@ function BrandingFormContent({
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
                     <FieldDescription>
-                      {t('settings.taglineDescription') ||
-                        'A short description shown in the browser meta tags'}
+                      {t('settings.taglineDescription', { defaultValue: 'A short description shown in the browser meta tags' })}
                     </FieldDescription>
                     <FieldError errors={field.state.meta.errors} />
                   </FieldContent>
@@ -213,7 +210,7 @@ function BrandingFormContent({
               {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
-                    {t('settings.logoUrl') || 'Logo URL'}
+                    {t('settings.logoUrl', { defaultValue: 'Logo URL' })}
                   </FieldLabel>
                   <FieldContent>
                     <Input
@@ -226,8 +223,7 @@ function BrandingFormContent({
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
                     <FieldDescription>
-                      {t('settings.logoUrlDescription') ||
-                        'URL to your logo image (displayed in the sidebar)'}
+                      {t('settings.logoUrlDescription', { defaultValue: 'URL to your logo image (displayed in the sidebar)' })}
                     </FieldDescription>
                     <FieldError errors={field.state.meta.errors} />
                   </FieldContent>
@@ -239,7 +235,7 @@ function BrandingFormContent({
               {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
-                    {t('settings.faviconUrl') || 'Favicon URL'}
+                    {t('settings.faviconUrl', { defaultValue: 'Favicon URL' })}
                   </FieldLabel>
                   <FieldContent>
                     <Input
@@ -252,8 +248,7 @@ function BrandingFormContent({
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
                     <FieldDescription>
-                      {t('settings.faviconUrlDescription') ||
-                        'URL to your favicon (browser tab icon)'}
+                      {t('settings.faviconUrlDescription', { defaultValue: 'URL to your favicon (browser tab icon)' })}
                     </FieldDescription>
                     <FieldError errors={field.state.meta.errors} />
                   </FieldContent>
@@ -265,7 +260,7 @@ function BrandingFormContent({
               {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
-                    {t('settings.primaryColor') || 'Primary Color'}
+                    {t('settings.primaryColor', { defaultValue: 'Primary Color' })}
                   </FieldLabel>
                   <FieldContent>
                     <div className="flex items-center gap-2">
@@ -288,8 +283,7 @@ function BrandingFormContent({
                       />
                     </div>
                     <FieldDescription>
-                      {t('settings.primaryColorDescription') ||
-                        'Main brand color used throughout the interface'}
+                      {t('settings.primaryColorDescription', { defaultValue: 'Main brand color used throughout the interface' })}
                     </FieldDescription>
                     <FieldError errors={field.state.meta.errors} />
                   </FieldContent>
@@ -301,8 +295,8 @@ function BrandingFormContent({
           <div className="mt-6 flex justify-end">
             <Button disabled={updateMutation.isPending} type="submit">
               {updateMutation.isPending
-                ? t('common.saving') || 'Saving...'
-                : t('common.save') || 'Save'}
+                ? t('common.saving', { defaultValue: 'Saving...' })
+                : t('common.save', { defaultValue: 'Save' })}
             </Button>
           </div>
         </form>

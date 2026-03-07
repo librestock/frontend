@@ -56,7 +56,7 @@ export function LocationForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('locations.name') || 'Name'}
+                {t('locations.name', { defaultValue: 'Name' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -77,7 +77,7 @@ export function LocationForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('locations.type') || 'Type'}
+                {t('locations.type', { defaultValue: 'Type' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -85,7 +85,7 @@ export function LocationForm({
                   onValueChange={(value) => field.handleChange(value as typeof field.state.value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={t('locations.selectType') || 'Select type'} />
+                    <SelectValue placeholder={t('locations.selectType', { defaultValue: 'Select type' })} />
                   </SelectTrigger>
                   <SelectContent>
                     {LOCATION_TYPES.map((type) => (
@@ -105,7 +105,7 @@ export function LocationForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('locations.address') || 'Address'}
+                {t('locations.address', { defaultValue: 'Address' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -126,7 +126,7 @@ export function LocationForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('locations.contactPerson') || 'Contact Person'}
+                {t('locations.contactPerson', { defaultValue: 'Contact Person' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -147,7 +147,7 @@ export function LocationForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('locations.phone') || 'Phone'}
+                {t('locations.phone', { defaultValue: 'Phone' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -168,12 +168,12 @@ export function LocationForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('locations.status') || 'Status'}
+                {t('locations.status', { defaultValue: 'Status' })}
               </FieldLabel>
               <FieldContent>
                 <BooleanSelect
-                  falseLabel={t('form.inactive') || 'Inactive'}
-                  trueLabel={t('form.active') || 'Active'}
+                  falseLabel={t('form.inactive', { defaultValue: 'Inactive' })}
+                  trueLabel={t('form.active', { defaultValue: 'Active' })}
                   value={field.state.value}
                   onValueChange={field.handleChange}
                 />

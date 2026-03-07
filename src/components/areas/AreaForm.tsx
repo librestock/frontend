@@ -81,7 +81,7 @@ export function AreaForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('areas.name') || 'Name'}
+                {t('areas.name', { defaultValue: 'Name' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -102,7 +102,7 @@ export function AreaForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('areas.code') || 'Code'}
+                {t('areas.code', { defaultValue: 'Code' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -124,7 +124,7 @@ export function AreaForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('areas.description') || 'Description'}
+                {t('areas.description', { defaultValue: 'Description' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -145,7 +145,7 @@ export function AreaForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('areas.parentArea') || 'Parent Area'}
+                {t('areas.parentArea', { defaultValue: 'Parent Area' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -156,12 +156,12 @@ export function AreaForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('areas.noParent') || 'No Parent (Root)'}
+                      placeholder={t('areas.noParent', { defaultValue: 'No Parent (Root)' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('areas.noParent') || 'No Parent (Root)'}
+                      {t('areas.noParent', { defaultValue: 'No Parent (Root)' })}
                     </SelectItem>
                     {availableParents.map((parentArea) => (
                       <SelectItem key={parentArea.id} value={parentArea.id}>
@@ -181,12 +181,12 @@ export function AreaForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('areas.status') || 'Status'}
+                {t('areas.status', { defaultValue: 'Status' })}
               </FieldLabel>
               <FieldContent>
                 <BooleanSelect
-                  falseLabel={t('form.inactive') || 'Inactive'}
-                  trueLabel={t('form.active') || 'Active'}
+                  falseLabel={t('form.inactive', { defaultValue: 'Inactive' })}
+                  trueLabel={t('form.active', { defaultValue: 'Active' })}
                   value={field.state.value}
                   onValueChange={field.handleChange}
                 />

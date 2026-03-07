@@ -32,7 +32,7 @@ export function AreaTree({ locationId }: AreaTreeProps): React.JSX.Element {
 
   if (error !== null) {
     return (
-      <ErrorState message={t('areas.errorLoading') || 'Error loading areas'} />
+      <ErrorState message={t('areas.errorLoading', { defaultValue: 'Error loading areas' })} />
     )
   }
 
@@ -44,16 +44,16 @@ export function AreaTree({ locationId }: AreaTreeProps): React.JSX.Element {
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <FolderTree className="size-5" />
-          {t('areas.title') || 'Areas'}
+          {t('areas.title', { defaultValue: 'Areas' })}
         </h2>
         <CreateArea locationId={locationId} />
       </div>
 
       {rootAreas.length === 0 ? (
         <EmptyState
-          description={t('areas.createDescription') || 'Add a new area within this location.'}
+          description={t('areas.createDescription', { defaultValue: 'Add a new area within this location.' })}
           icon={FolderTree}
-          message={t('areas.noAreas') || 'No areas found'}
+          message={t('areas.noAreas', { defaultValue: 'No areas found' })}
           variant="bordered"
         />
       ) : (

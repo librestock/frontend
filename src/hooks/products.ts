@@ -225,7 +225,7 @@ export function useBulkCsvImport(
 
         if (result.failure_count > 0 && result.success_count > 0) {
           toast.warning(
-            t('bulk.importPartial') || 'Import partially completed',
+            t('bulk.importPartial', { defaultValue: 'Import partially completed' }),
             {
               description:
                 t('bulk.importResult', {
@@ -236,14 +236,14 @@ export function useBulkCsvImport(
             },
           )
         } else if (result.failure_count > 0) {
-          toast.error(t('bulk.importError') || 'Import failed', {
+          toast.error(t('bulk.importError', { defaultValue: 'Import failed' }), {
             description:
               result.failures
                 .map((f) => `${f.sku ?? f.id ?? 'Unknown'}: ${f.error}`)
                 .join('; ') || `${result.failure_count} failed`,
           })
         } else {
-          toast.success(t('bulk.importSuccess') || 'Products imported', {
+          toast.success(t('bulk.importSuccess', { defaultValue: 'Products imported' }), {
             description:
               t('bulk.importSuccessCount', {
                 count: result.success_count,
@@ -254,7 +254,7 @@ export function useBulkCsvImport(
         onSuccess()
       },
       onError: () => {
-        toast.error(t('bulk.importError') || 'Failed to import products')
+        toast.error(t('bulk.importError', { defaultValue: 'Failed to import products' }))
       },
     },
   })

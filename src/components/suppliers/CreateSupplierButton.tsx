@@ -34,19 +34,19 @@ export function CreateSupplierButton({
   const defaultTrigger = (
     <Button>
       <Plus className="size-4" />
-      {t('suppliers.create') || 'Create Supplier'}
+      {t('suppliers.create', { defaultValue: 'Create Supplier' })}
     </Button>
   )
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
       contentClassName="sm:max-w-[550px]"
-      description={t('suppliers.createDescription') || 'Add a new supplier to your system.'}
+      description={t('suppliers.createDescription', { defaultValue: 'Add a new supplier to your system.' })}
       formId="create-supplier-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('suppliers.createTitle') || 'Create Supplier'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('suppliers.createTitle', { defaultValue: 'Create Supplier' })}
       trigger={trigger ?? defaultTrigger}
       onOpenChange={handleOpenChange}
     >

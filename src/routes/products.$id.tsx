@@ -88,26 +88,26 @@ function useProductDetailFields(product: ProductResponseDto): { label: string; v
 
   return React.useMemo(() => {
     const fields: { label: string; value: string; fullWidth?: boolean }[] = [
-      { label: t('form.productSku') || 'SKU', value: product.sku },
+      { label: t('form.productSku', { defaultValue: 'SKU' }), value: product.sku },
     ]
 
     if (product.category?.name) {
-      fields.push({ label: t('category') || 'Category', value: product.category.name })
+      fields.push({ label: t('category', { defaultValue: 'Category' }), value: product.category.name })
     }
 
     fields.push({
-      label: t('form.reorderPoint') || 'Reorder Point',
+      label: t('form.reorderPoint', { defaultValue: 'Reorder Point' }),
       value: String(product.reorder_point),
     })
 
     const optionalFields: [string | null | undefined | number, string][] = [
-      [product.barcode, t('products.barcode') || 'Barcode'],
-      [product.unit, t('products.unit') || 'Unit'],
-      [product.standard_cost, t('products.standardCost') || 'Standard Cost'],
-      [product.standard_price, t('products.standardPrice') || 'Standard Price'],
-      [product.weight_kg, t('products.weight') || 'Weight (kg)'],
-      [product.volume_ml, t('products.volume') || 'Volume (ml)'],
-      [product.dimensions_cm, t('products.dimensions') || 'Dimensions (cm)'],
+      [product.barcode, t('products.barcode', { defaultValue: 'Barcode' })],
+      [product.unit, t('products.unit', { defaultValue: 'Unit' })],
+      [product.standard_cost, t('products.standardCost', { defaultValue: 'Standard Cost' })],
+      [product.standard_price, t('products.standardPrice', { defaultValue: 'Standard Price' })],
+      [product.weight_kg, t('products.weight', { defaultValue: 'Weight (kg)' })],
+      [product.volume_ml, t('products.volume', { defaultValue: 'Volume (ml)' })],
+      [product.dimensions_cm, t('products.dimensions', { defaultValue: 'Dimensions (cm)' })],
     ]
 
     for (const [val, label] of optionalFields) {
@@ -117,10 +117,10 @@ function useProductDetailFields(product: ProductResponseDto): { label: string; v
     }
 
     if (product.description) {
-      fields.push({ label: t('form.description') || 'Description', value: product.description, fullWidth: true })
+      fields.push({ label: t('form.description', { defaultValue: 'Description' }), value: product.description, fullWidth: true })
     }
     if (product.notes) {
-      fields.push({ label: t('products.notes') || 'Notes', value: product.notes, fullWidth: true })
+      fields.push({ label: t('products.notes', { defaultValue: 'Notes' }), value: product.notes, fullWidth: true })
     }
 
     return fields
@@ -135,10 +135,10 @@ function ProductDetailsCard({ product }: ProductDetailsCardProps): React.JSX.Ele
     <Card>
       <CardHeader>
         <CardTitle className="text-base">
-          {t('products.details') || 'Product Details'}
+          {t('products.details', { defaultValue: 'Product Details' })}
         </CardTitle>
         <CardDescription>
-          {t('products.detailsSubtitle') || 'Product specifications and attributes'}
+          {t('products.detailsSubtitle', { defaultValue: 'Product specifications and attributes' })}
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -188,10 +188,10 @@ function ProductPhotosCard({ productId }: ProductPhotosCardProps): React.JSX.Ele
     <Card>
       <CardHeader>
         <CardTitle className="text-base">
-          {t('products.photos') || 'Photos'}
+          {t('products.photos', { defaultValue: 'Photos' })}
         </CardTitle>
         <CardDescription>
-          {t('products.photosSubtitle') || 'Product images'}
+          {t('products.photosSubtitle', { defaultValue: 'Product images' })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -233,7 +233,7 @@ function ProductHeader({
     <div className="border-b px-6 py-4">
       <Button className="mb-4" size="sm" variant="ghost" onClick={onBack}>
         <ArrowLeft className="mr-2 size-4" />
-        {t('navigation.products') || 'Back to Products'}
+        {t('navigation.products', { defaultValue: 'Back to Products' })}
       </Button>
 
       <div className="flex items-start justify-between">
@@ -246,15 +246,15 @@ function ProductHeader({
             <div className="mt-1 flex items-center gap-2">
               <Badge variant={product.is_active ? 'default' : 'secondary'}>
                 {product.is_active
-                  ? (t('form.active') || 'Active')
-                  : (t('form.inactive') || 'Inactive')}
+                  ? (t('form.active', { defaultValue: 'Active' }))
+                  : (t('form.inactive', { defaultValue: 'Inactive' }))}
               </Badge>
               <span className="text-muted-foreground text-sm">
                 {product.sku}
               </span>
               {product.is_perishable && (
                 <Badge variant="outline">
-                  {t('form.perishable') || 'Perishable'}
+                  {t('form.perishable', { defaultValue: 'Perishable' })}
                 </Badge>
               )}
             </div>
@@ -264,7 +264,7 @@ function ProductHeader({
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={onEdit}>
             <Pencil className="mr-2 size-4" />
-            {t('actions.edit') || 'Edit'}
+            {t('actions.edit', { defaultValue: 'Edit' })}
           </Button>
           <Button
             className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
@@ -272,7 +272,7 @@ function ProductHeader({
             onClick={onDelete}
           >
             <Trash2 className="mr-2 size-4" />
-            {t('actions.delete') || 'Delete'}
+            {t('actions.delete', { defaultValue: 'Delete' })}
           </Button>
         </div>
       </div>
@@ -320,7 +320,7 @@ function ProductDetailPage(): React.JSX.Element {
         ])
       },
       onError: (err) => {
-        toast.error(t('products.deleteError') || 'Failed to delete product')
+        toast.error(t('products.deleteError', { defaultValue: 'Failed to delete product' }))
         console.error('Product deletion error:', err)
       },
     },
@@ -365,9 +365,9 @@ function ProductDetailPage(): React.JSX.Element {
       })
     }, 5000)
 
-    toast(t('products.deleted') || 'Product deleted successfully', {
+    toast(t('products.deleted', { defaultValue: 'Product deleted successfully' }), {
       action: {
-        label: t('actions.undo') || 'Undo',
+        label: t('actions.undo', { defaultValue: 'Undo' }),
         onClick: () => {
           didUndo = true
           window.clearTimeout(timeoutId)
@@ -390,10 +390,10 @@ function ProductDetailPage(): React.JSX.Element {
     <Dialog open onOpenChange={(open) => { if (!open) handleBack() }}>
       <DialogContent className="sm:max-w-[900px] max-h-[85vh] overflow-hidden flex flex-col p-0" showCloseButton={false}>
         <DialogTitle className="sr-only">
-          {product?.name ?? (t('products.details') || 'Product Details')}
+          {product?.name ?? (t('products.details', { defaultValue: 'Product Details' }))}
         </DialogTitle>
         <DialogDescription className="sr-only">
-          {t('products.detailsSubtitle') || 'Product specifications and attributes'}
+          {t('products.detailsSubtitle', { defaultValue: 'Product specifications and attributes' })}
         </DialogDescription>
         {isLoading ? (
           <div className="flex min-h-[200px] items-center justify-center">
@@ -402,11 +402,11 @@ function ProductDetailPage(): React.JSX.Element {
         ) : error || !product ? (
           <div className="flex min-h-[200px] flex-col items-center justify-center gap-4">
             <p className="text-destructive">
-              {t('products.errorLoadingDetail') || 'Error loading product'}
+              {t('products.errorLoadingDetail', { defaultValue: 'Error loading product' })}
             </p>
             <Button variant="outline" onClick={handleBack}>
               <ArrowLeft className="mr-2 size-4" />
-              {t('navigation.products') || 'Back to Products'}
+              {t('navigation.products', { defaultValue: 'Back to Products' })}
             </Button>
           </div>
         ) : (
@@ -424,13 +424,13 @@ function ProductDetailPage(): React.JSX.Element {
             </div>
 
             <FormDialog
-              cancelLabel={t('form.cancel') || 'Cancel'}
+              cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
               contentClassName="sm:max-w-[900px]"
-              description={t('products.editDescription') || 'Update product details.'}
+              description={t('products.editDescription', { defaultValue: 'Update product details.' })}
               formId={editFormId}
               open={editOpen}
-              submitLabel={t('actions.save') || 'Save'}
-              title={t('products.editTitle') || 'Edit Product'}
+              submitLabel={t('actions.save', { defaultValue: 'Save' })}
+              title={t('products.editTitle', { defaultValue: 'Edit Product' })}
               onOpenChange={setEditOpen}
             >
               {categoriesLoading === true && (
@@ -441,7 +441,7 @@ function ProductDetailPage(): React.JSX.Element {
 
               {categoriesError != null && (
                 <p className="text-destructive text-sm">
-                  {t('form.loadCategoriesError') || 'Failed to load categories'}
+                  {t('form.loadCategoriesError', { defaultValue: 'Failed to load categories' })}
                 </p>
               )}
 
@@ -458,10 +458,9 @@ function ProductDetailPage(): React.JSX.Element {
             <DeleteConfirmationDialog
               isLoading={deleteMutation.isPending}
               open={deleteOpen}
-              title={t('products.deleteTitle') || 'Delete Product'}
+              title={t('products.deleteTitle', { defaultValue: 'Delete Product' })}
               description={
-                t('products.deleteDescription') ||
-                'Are you sure you want to delete this product? This action cannot be undone.'
+                t('products.deleteDescription', { defaultValue: 'Are you sure you want to delete this product? This action cannot be undone.' })
               }
               onConfirm={handleDelete}
               onOpenChange={setDeleteOpen}

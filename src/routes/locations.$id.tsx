@@ -87,31 +87,31 @@ function LocationDetailsCard({ location }: LocationDetailsCardProps): React.JSX.
     <Card>
       <CardHeader>
         <CardTitle className="text-base">
-          {t(NAV_LOCATIONS_KEY) || 'Location Details'}
+          {t(NAV_LOCATIONS_KEY, { defaultValue: 'Location Details' })}
         </CardTitle>
         <CardDescription>
-          {t('locations.subtitle') || 'Contact and address information'}
+          {t('locations.subtitle', { defaultValue: 'Contact and address information' })}
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {location.address && (
           <DetailField
             icon={MapPin}
-            label={t('locations.address') || 'Address'}
+            label={t('locations.address', { defaultValue: 'Address' })}
             value={String(location.address)}
           />
         )}
         {location.contact_person && (
           <DetailField
             icon={User}
-            label={t('locations.contactPerson') || 'Contact Person'}
+            label={t('locations.contactPerson', { defaultValue: 'Contact Person' })}
             value={String(location.contact_person)}
           />
         )}
         {location.phone && (
           <DetailField
             icon={Phone}
-            label={t('locations.phone') || 'Phone'}
+            label={t('locations.phone', { defaultValue: 'Phone' })}
             value={String(location.phone)}
           />
         )}
@@ -146,7 +146,7 @@ function LocationHeader({
     <div className="border-b px-6 py-4">
       <Button className="mb-4" size="sm" variant="ghost" onClick={onBack}>
         <ArrowLeft className="mr-2 size-4" />
-        {t(NAV_LOCATIONS_KEY) || 'Back to Locations'}
+        {t(NAV_LOCATIONS_KEY, { defaultValue: 'Back to Locations' })}
       </Button>
 
       <div className="flex items-start justify-between">
@@ -158,7 +158,7 @@ function LocationHeader({
             <h1 className="text-2xl font-semibold">{location.name}</h1>
             <div className="flex items-center gap-2 mt-1">
               <Badge variant={location.is_active ? 'default' : 'secondary'}>
-                {location.is_active ? (t('form.active') || 'Active') : (t('form.inactive') || 'Inactive')}
+                {location.is_active ? (t('form.active', { defaultValue: 'Active' })) : (t('form.inactive', { defaultValue: 'Inactive' }))}
               </Badge>
               <span className="text-muted-foreground text-sm">
                 {t(`locations.types.${location.type}`) || location.type}
@@ -170,7 +170,7 @@ function LocationHeader({
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={onEdit}>
             <Pencil className="mr-2 size-4" />
-            {t('actions.edit') || 'Edit'}
+            {t('actions.edit', { defaultValue: 'Edit' })}
           </Button>
           <Button
             className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
@@ -178,7 +178,7 @@ function LocationHeader({
             onClick={onDelete}
           >
             <Trash2 className="mr-2 size-4" />
-            {t('actions.delete') || 'Delete'}
+            {t('actions.delete', { defaultValue: 'Delete' })}
           </Button>
         </div>
       </div>
@@ -208,7 +208,7 @@ function LocationDetailPage(): React.JSX.Element {
         ])
       },
       onError: (err) => {
-        toast.error(t('locations.deleteError') || 'Failed to delete location')
+        toast.error(t('locations.deleteError', { defaultValue: 'Failed to delete location' }))
         console.error('Location deletion error:', err)
       },
     },
@@ -246,9 +246,9 @@ function LocationDetailPage(): React.JSX.Element {
       })
     }, 5000)
 
-    toast(t('locations.deleted') || 'Location deleted successfully', {
+    toast(t('locations.deleted', { defaultValue: 'Location deleted successfully' }), {
       action: {
-        label: t('actions.undo') || 'Undo',
+        label: t('actions.undo', { defaultValue: 'Undo' }),
         onClick: () => {
           didUndo = true
           window.clearTimeout(timeoutId)
@@ -277,11 +277,11 @@ function LocationDetailPage(): React.JSX.Element {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4">
         <p className="text-destructive">
-          {t('locations.errorLoading') || 'Error loading location'}
+          {t('locations.errorLoading', { defaultValue: 'Error loading location' })}
         </p>
         <Button variant="outline" onClick={handleBack}>
           <ArrowLeft className="mr-2 size-4" />
-          {t(NAV_LOCATIONS_KEY) || 'Back to Locations'}
+          {t(NAV_LOCATIONS_KEY, { defaultValue: 'Back to Locations' })}
         </Button>
       </div>
     )
@@ -302,12 +302,12 @@ function LocationDetailPage(): React.JSX.Element {
       </div>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
-        description={t('locations.editDescription') || 'Update location details.'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+        description={t('locations.editDescription', { defaultValue: 'Update location details.' })}
         formId="edit-location-form"
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('locations.editTitle') || 'Edit Location'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('locations.editTitle', { defaultValue: 'Edit Location' })}
         onOpenChange={setEditOpen}
       >
         <LocationForm
@@ -318,10 +318,10 @@ function LocationDetailPage(): React.JSX.Element {
       </FormDialog>
 
       <DeleteConfirmationDialog
-        description={t('locations.deleteDescription') || 'Are you sure you want to delete this location? This action cannot be undone.'}
+        description={t('locations.deleteDescription', { defaultValue: 'Are you sure you want to delete this location? This action cannot be undone.' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('locations.deleteTitle') || 'Delete Location'}
+        title={t('locations.deleteTitle', { defaultValue: 'Delete Location' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

@@ -63,7 +63,7 @@ export function LocationList({
 
   if (error) {
     return (
-      <ErrorState message={t('locations.errorLoading') || 'Error loading locations'} />
+      <ErrorState message={t('locations.errorLoading', { defaultValue: 'Error loading locations' })} />
     )
   }
 
@@ -75,8 +75,8 @@ export function LocationList({
       <EmptyState
         message={
           hasActiveFilters
-            ? (t('locations.noLocationsFiltered') || 'No results for these filters')
-            : (t('locations.noLocations') || 'No locations found')
+            ? (t('locations.noLocationsFiltered', { defaultValue: 'No results for these filters' }))
+            : (t('locations.noLocations', { defaultValue: 'No locations found' }))
         }
       />
     )

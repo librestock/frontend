@@ -27,7 +27,7 @@ export function useDeleteOrderOptimistic() {
         })
       },
       onError: (error) => {
-        toast.error(t('orders.deleteError') || 'Failed to delete order')
+        toast.error(t('orders.deleteError', { defaultValue: 'Failed to delete order' }))
         console.error('Order deletion error:', error)
       },
     },
@@ -53,9 +53,9 @@ export function useDeleteOrderOptimistic() {
         })
       }, 5000)
 
-      toast(t('orders.deleted') || 'Order deleted successfully', {
+      toast(t('orders.deleted', { defaultValue: 'Order deleted successfully' }), {
         action: {
-          label: t('actions.undo') || 'Undo',
+          label: t('actions.undo', { defaultValue: 'Undo' }),
           onClick: () => {
             didUndo = true
             window.clearTimeout(timeoutId)
@@ -77,7 +77,7 @@ export function useOrderStatusTransition(orderId: string) {
   return useUpdateOrderStatus({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('orders.statusUpdated') || 'Order status updated')
+        toast.success(t('orders.statusUpdated', { defaultValue: 'Order status updated' }))
         await queryClient.invalidateQueries({
           queryKey: getListOrdersQueryKey(),
         })
@@ -87,7 +87,7 @@ export function useOrderStatusTransition(orderId: string) {
       },
       onError: (error) => {
         toast.error(
-          t('orders.statusUpdateError') || 'Failed to update order status',
+          t('orders.statusUpdateError', { defaultValue: 'Failed to update order status' }),
         )
         console.error('Order status update error:', error)
       },

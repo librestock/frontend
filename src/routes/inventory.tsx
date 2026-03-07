@@ -96,12 +96,12 @@ function InventoryPage(): React.JSX.Element {
 
   const currentTitle = React.useMemo(() => {
     if (selectedAreaId) {
-      return t('inventory.areaInventory') || 'Area Inventory'
+      return t('inventory.areaInventory', { defaultValue: 'Area Inventory' })
     }
     if (selectedLocationId) {
-      return t('inventory.locationInventory') || 'Location Inventory'
+      return t('inventory.locationInventory', { defaultValue: 'Location Inventory' })
     }
-    return t('inventory.allInventory') || 'All Inventory'
+    return t('inventory.allInventory', { defaultValue: 'All Inventory' })
   }, [selectedLocationId, selectedAreaId, t])
 
   const selectedLocationName = React.useMemo(() => {
@@ -124,20 +124,20 @@ function InventoryPage(): React.JSX.Element {
     if (selectedAreaId && selectedAreaName) {
       chips.push({
         key: 'area',
-        label: `${t('inventory.area') || 'Area'}: ${selectedAreaName}`,
+        label: `${t('inventory.area', { defaultValue: 'Area' })}: ${selectedAreaName}`,
         onRemove: () => handleSelect(selectedLocationId, null),
       })
     } else if (selectedLocationId && selectedLocationName) {
       chips.push({
         key: 'location',
-        label: `${t('inventory.location') || 'Location'}: ${selectedLocationName}`,
+        label: `${t('inventory.location', { defaultValue: 'Location' })}: ${selectedLocationName}`,
         onRemove: () => handleSelect(null, null),
       })
     }
     if (searchQuery) {
       chips.push({
         key: 'search',
-        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
             search: (prev: InventorySearch) => ({
@@ -153,7 +153,7 @@ function InventoryPage(): React.JSX.Element {
     if (showLowStock) {
       chips.push({
         key: 'low-stock',
-        label: t('inventory.lowStock') || 'Low Stock',
+        label: t('inventory.lowStock', { defaultValue: 'Low Stock' }),
         onRemove: () => {
           void navigate({
             search: (prev: InventorySearch) => ({
@@ -169,7 +169,7 @@ function InventoryPage(): React.JSX.Element {
     if (showExpiringSoon) {
       chips.push({
         key: 'expiring',
-        label: t('inventory.expiringSoon') || 'Expiring Soon',
+        label: t('inventory.expiringSoon', { defaultValue: 'Expiring Soon' }),
         onRemove: () => {
           void navigate({
             search: (prev: InventorySearch) => ({
@@ -214,7 +214,7 @@ function InventoryPage(): React.JSX.Element {
           <div>
             <h1 className="text-xl font-semibold">{currentTitle}</h1>
             <p className="text-muted-foreground text-sm">
-              {t('inventory.subtitle') || 'Track product quantities across locations'}
+              {t('inventory.subtitle', { defaultValue: 'Track product quantities across locations' })}
             </p>
           </div>
           <CreateInventory
@@ -226,7 +226,7 @@ function InventoryPage(): React.JSX.Element {
         <div className="flex items-center gap-4 border-b px-6 py-3">
           <SearchBar
             className="max-w-xs"
-            placeholder={t('inventory.searchPlaceholder') || 'Search batch...'}
+            placeholder={t('inventory.searchPlaceholder', { defaultValue: 'Search batch...' })}
             value={searchQuery}
             onChange={(value) => {
               void navigate({
@@ -265,7 +265,7 @@ function InventoryPage(): React.JSX.Element {
             }}
           >
             <AlertTriangle className="mr-1.5 size-4" />
-            {t('inventory.lowStock') || 'Low Stock'}
+            {t('inventory.lowStock', { defaultValue: 'Low Stock' })}
           </Toggle>
           <Toggle
             aria-label="Show expiring soon"
@@ -283,7 +283,7 @@ function InventoryPage(): React.JSX.Element {
             }}
           >
             <Clock className="mr-1.5 size-4" />
-            {t('inventory.expiringSoon') || 'Expiring Soon'}
+            {t('inventory.expiringSoon', { defaultValue: 'Expiring Soon' })}
           </Toggle>
         </div>
 
@@ -302,7 +302,7 @@ function InventoryPage(): React.JSX.Element {
               </Button>
             ))}
             <Button size="sm" variant="ghost" onClick={clearAll}>
-              {t('actions.clearAll') || 'Clear all'}
+              {t('actions.clearAll', { defaultValue: 'Clear all' })}
             </Button>
           </div>
         )}

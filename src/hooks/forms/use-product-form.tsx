@@ -66,7 +66,7 @@ export function useProductForm({
   const createMutation = useCreateProduct({
     mutation: {
       onSuccess: async (data, variables) => {
-        toast.success(t('form.productCreated') || 'Product created successfully')
+        toast.success(t('form.productCreated', { defaultValue: 'Product created successfully' }))
 
         // Upload pending photo for the newly created product
         if (pendingFile) {
@@ -75,9 +75,9 @@ export function useProductForm({
               productId: data.id,
               file: pendingFile,
             })
-            toast.success(t('form.photoUploaded') || 'Photo uploaded')
+            toast.success(t('form.photoUploaded', { defaultValue: 'Photo uploaded' }))
           } catch {
-            toast.error(t('form.uploadError') || 'Failed to upload image')
+            toast.error(t('form.uploadError', { defaultValue: 'Failed to upload image' }))
           }
         }
 
@@ -89,7 +89,7 @@ export function useProductForm({
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('form.productError') || 'Failed to create product')
+        toast.error(t('form.productError', { defaultValue: 'Failed to create product' }))
         console.error('Product creation error:', error)
       },
     },
@@ -98,7 +98,7 @@ export function useProductForm({
   const updateMutation = useUpdateProduct({
     mutation: {
       onSuccess: async (_data, variables) => {
-        toast.success(t('products.updated') || 'Product updated successfully')
+        toast.success(t('products.updated', { defaultValue: 'Product updated successfully' }))
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() }),
           queryClient.invalidateQueries({ queryKey: getGetProductQueryKey(variables.id) }),
@@ -107,7 +107,7 @@ export function useProductForm({
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('products.updateError') || 'Failed to update product')
+        toast.error(t('products.updateError', { defaultValue: 'Failed to update product' }))
         console.error('Product update error:', error)
       },
     },
@@ -132,7 +132,7 @@ export function useProductForm({
         if (categories) {
           if (!isValidCategoryId(categories, value.category_id)) {
             return {
-              category_id: t('form.invalidCategory') || 'Invalid category',
+              category_id: t('form.invalidCategory', { defaultValue: 'Invalid category' }),
             }
           }
         }

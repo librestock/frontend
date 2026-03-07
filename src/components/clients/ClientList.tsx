@@ -59,7 +59,7 @@ export function ClientList({
 
   if (error) {
     return (
-      <ErrorState message={t('clients.errorLoading') || 'Error loading clients'} />
+      <ErrorState message={t('clients.errorLoading', { defaultValue: 'Error loading clients' })} />
     )
   }
 
@@ -71,8 +71,8 @@ export function ClientList({
       <EmptyState
         message={
           hasActiveFilters
-            ? (t('clients.noClientsFiltered') || 'No results for these filters')
-            : (t('clients.noClients') || 'No clients found')
+            ? (t('clients.noClientsFiltered', { defaultValue: 'No results for these filters' }))
+            : (t('clients.noClients', { defaultValue: 'No clients found' }))
         }
       />
     )

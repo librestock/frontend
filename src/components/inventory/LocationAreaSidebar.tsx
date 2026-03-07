@@ -256,7 +256,7 @@ export function LocationAreaSidebar({
     <aside className="flex h-full w-64 flex-col border-r bg-background">
       <div className="border-b p-4">
         <h2 className="text-sm font-semibold">
-          {t('navigation.locations') || 'Locations'}
+          {t('navigation.locations', { defaultValue: 'Locations' })}
         </h2>
       </div>
       <nav className="flex-1 overflow-y-auto p-2">
@@ -269,7 +269,7 @@ export function LocationAreaSidebar({
         )}
         {locations?.length === 0 && (
           <div className="p-4 text-center text-sm text-muted-foreground">
-            {t('locations.noLocations') || 'No locations found'}
+            {t('locations.noLocations', { defaultValue: 'No locations found' })}
           </div>
         )}
         {locations?.map((location) => (
@@ -296,7 +296,7 @@ export function LocationAreaSidebar({
           onClick={() => onSelect(null, null)}
         >
           <span className="w-5" />
-          {t('inventory.allInventory') || 'All Inventory'}
+          {t('inventory.allInventory', { defaultValue: 'All Inventory' })}
         </button>
       </div>
     </aside>

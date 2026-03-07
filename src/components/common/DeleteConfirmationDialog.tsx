@@ -40,15 +40,15 @@ export function DeleteConfirmationDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {title ?? (t('common.deleteTitle') || 'Delete')}
+            {title ?? (t('common.deleteTitle', { defaultValue: 'Delete' }))}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {description ?? (t('common.deleteDescription') || 'Are you sure you want to delete this item? This action cannot be undone.')}
+            {description ?? (t('common.deleteDescription', { defaultValue: 'Are you sure you want to delete this item? This action cannot be undone.' }))}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isBusy}>
-            {cancelLabel ?? (t('form.cancel') || 'Cancel')}
+            {cancelLabel ?? (t('form.cancel', { defaultValue: 'Cancel' }))}
           </AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -58,10 +58,10 @@ export function DeleteConfirmationDialog({
             {isBusy ? (
               <span className="flex items-center gap-2">
                 <Spinner className="size-3" />
-                {t('actions.deleting') || 'Deleting...'}
+                {t('actions.deleting', { defaultValue: 'Deleting...' })}
               </span>
             ) : (
-              confirmLabel ?? (t('actions.delete') || 'Delete')
+              confirmLabel ?? (t('actions.delete', { defaultValue: 'Delete' }))
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

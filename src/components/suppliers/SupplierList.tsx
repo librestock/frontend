@@ -58,7 +58,7 @@ export function SupplierList({
 
   if (error) {
     return (
-      <ErrorState message={t('suppliers.errorLoading') || 'Error loading suppliers'} />
+      <ErrorState message={t('suppliers.errorLoading', { defaultValue: 'Error loading suppliers' })} />
     )
   }
 
@@ -70,8 +70,8 @@ export function SupplierList({
       <EmptyState
         message={
           hasActiveFilters
-            ? (t('suppliers.noSuppliersFiltered') || 'No results for these filters')
-            : (t('suppliers.noSuppliers') || 'No suppliers found')
+            ? (t('suppliers.noSuppliersFiltered', { defaultValue: 'No results for these filters' }))
+            : (t('suppliers.noSuppliers', { defaultValue: 'No suppliers found' }))
         }
       />
     )

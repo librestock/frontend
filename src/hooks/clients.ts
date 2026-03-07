@@ -28,7 +28,7 @@ export function useDeleteClientOptimistic() {
         })
       },
       onError: (error) => {
-        toast.error(t('clients.deleteError') || 'Failed to delete client')
+        toast.error(t('clients.deleteError', { defaultValue: 'Failed to delete client' }))
         console.error('Client deletion error:', error)
       },
     },
@@ -54,9 +54,9 @@ export function useDeleteClientOptimistic() {
         })
       }, 5000)
 
-      toast(t('clients.deleted') || 'Client deleted successfully', {
+      toast(t('clients.deleted', { defaultValue: 'Client deleted successfully' }), {
         action: {
-          label: t('actions.undo') || 'Undo',
+          label: t('actions.undo', { defaultValue: 'Undo' }),
           onClick: () => {
             didUndo = true
             window.clearTimeout(timeoutId)
@@ -83,7 +83,7 @@ export function useToggleClientStatus() {
         })
       },
       onError: (error) => {
-        toast.error(t('clients.updateError') || 'Failed to update client')
+        toast.error(t('clients.updateError', { defaultValue: 'Failed to update client' }))
         console.error('Client status update error:', error)
       },
     },
@@ -101,7 +101,7 @@ export function useToggleClientStatus() {
         data: { account_status: nextStatus },
       })
 
-      toast.success(t('clients.statusUpdated') || 'Client status updated')
+      toast.success(t('clients.statusUpdated', { defaultValue: 'Client status updated' }))
     },
     [updateMutation, t],
   )

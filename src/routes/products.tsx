@@ -149,12 +149,12 @@ function ProductPage(): React.JSX.Element {
                 {selectMode ? (
                   <>
                     <X className="size-4" data-icon="inline-start" />
-                    {t('bulk.exitSelect') || 'Exit Select'}
+                    {t('bulk.exitSelect', { defaultValue: 'Exit Select' })}
                   </>
                 ) : (
                   <>
                     <CheckSquare className="size-4" data-icon="inline-start" />
-                    {t('bulk.select') || 'Select'}
+                    {t('bulk.select', { defaultValue: 'Select' })}
                   </>
                 )}
               </Button>
@@ -171,8 +171,8 @@ function ProductPage(): React.JSX.Element {
                     />
                     <span>
                       {allSelected
-                        ? (t('bulk.deselectAll') || 'Deselect All')
-                        : (t('bulk.selectAll') || 'Select All')}
+                        ? (t('bulk.deselectAll', { defaultValue: 'Deselect All' }))
+                        : (t('bulk.selectAll', { defaultValue: 'Select All' }))}
                     </span>
                   </button>
                   {selectedIds.size > 0 && (

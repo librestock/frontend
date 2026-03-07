@@ -86,7 +86,7 @@ function StockMovementsPage(): React.JSX.Element {
     if (reasonFilter) {
       chips.push({
         key: 'reason',
-        label: `${t('stockMovements.reason') || 'Reason'}: ${t(`stockMovements.reasons.${reasonFilter}`) || reasonFilter}`,
+        label: `${t('stockMovements.reason', { defaultValue: 'Reason' })}: ${t(`stockMovements.reasons.${reasonFilter}`) || reasonFilter}`,
         onRemove: () => {
           void navigate({
             search: (prev: StockMovementsSearch) => ({
@@ -102,7 +102,7 @@ function StockMovementsPage(): React.JSX.Element {
     if (productFilter && selectedProductName) {
       chips.push({
         key: 'product',
-        label: `${t('stockMovements.product') || 'Product'}: ${selectedProductName}`,
+        label: `${t('stockMovements.product', { defaultValue: 'Product' })}: ${selectedProductName}`,
         onRemove: () => {
           void navigate({
             search: (prev: StockMovementsSearch) => ({
@@ -118,7 +118,7 @@ function StockMovementsPage(): React.JSX.Element {
     if (locationFilter && selectedLocationName) {
       chips.push({
         key: 'location',
-        label: `${t('stockMovements.location') || 'Location'}: ${selectedLocationName}`,
+        label: `${t('stockMovements.location', { defaultValue: 'Location' })}: ${selectedLocationName}`,
         onRemove: () => {
           void navigate({
             search: (prev: StockMovementsSearch) => ({
@@ -154,10 +154,10 @@ function StockMovementsPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.stockMovements') || 'Stock Movements'}
+              {t('navigation.stockMovements', { defaultValue: 'Stock Movements' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('stockMovements.subtitle') || 'Track all stock movements across locations'}
+              {t('stockMovements.subtitle', { defaultValue: 'Track all stock movements across locations' })}
             </p>
           </div>
           <CreateStockMovementButton />
@@ -181,13 +181,13 @@ function StockMovementsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[200px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('stockMovements.filterByReason') || 'Filter by reason'} />
+              <SelectValue placeholder={t('stockMovements.filterByReason', { defaultValue: 'Filter by reason' })} />
             </SelectTrigger>
             <SelectContent>
               {STOCK_MOVEMENT_REASONS.map((reason) => (
                 <SelectItem key={reason.value} value={reason.value}>
                   {reason.value === 'ALL'
-                    ? (t('stockMovements.allReasons') || 'All Reasons')
+                    ? (t('stockMovements.allReasons', { defaultValue: 'All Reasons' }))
                     : (t(`stockMovements.reasons.${reason.value}`) || reason.label)}
                 </SelectItem>
               ))}
@@ -209,11 +209,11 @@ function StockMovementsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[200px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('stockMovements.filterByProduct') || 'Filter by product'} />
+              <SelectValue placeholder={t('stockMovements.filterByProduct', { defaultValue: 'Filter by product' })} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">
-                {t('stockMovements.allProducts') || 'All Products'}
+                {t('stockMovements.allProducts', { defaultValue: 'All Products' })}
               </SelectItem>
               {(products ?? []).map((product) => (
                 <SelectItem key={product.id} value={product.id}>
@@ -238,11 +238,11 @@ function StockMovementsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[200px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('stockMovements.filterByLocation') || 'Filter by location'} />
+              <SelectValue placeholder={t('stockMovements.filterByLocation', { defaultValue: 'Filter by location' })} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">
-                {t('stockMovements.allLocations') || 'All Locations'}
+                {t('stockMovements.allLocations', { defaultValue: 'All Locations' })}
               </SelectItem>
               {(locations ?? []).map((location) => (
                 <SelectItem key={location.id} value={location.id}>
@@ -269,7 +269,7 @@ function StockMovementsPage(): React.JSX.Element {
             </Button>
           ))}
           <Button size="sm" variant="ghost" onClick={clearAll}>
-            {t('actions.clearAll') || 'Clear all'}
+            {t('actions.clearAll', { defaultValue: 'Clear all' })}
           </Button>
         </div>
       )}

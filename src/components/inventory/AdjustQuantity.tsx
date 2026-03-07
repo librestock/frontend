@@ -67,7 +67,7 @@ export function AdjustQuantity({
 
   const defaultTrigger = (
     <Button size="sm" variant="outline">
-      {t('inventory.adjust') || 'Adjust'}
+      {t('inventory.adjust', { defaultValue: 'Adjust' })}
     </Button>
   )
 
@@ -77,22 +77,22 @@ export function AdjustQuantity({
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
           <DialogTitle>
-            {t('inventory.adjustTitle') || 'Adjust Quantity'}
+            {t('inventory.adjustTitle', { defaultValue: 'Adjust Quantity' })}
           </DialogTitle>
           <DialogDescription>
-            {t('inventory.adjustDescription') || 'Increase or decrease the quantity.'}
+            {t('inventory.adjustDescription', { defaultValue: 'Increase or decrease the quantity.' })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="flex items-center justify-between">
-            <Label>{t('inventory.quantity') || 'Current Quantity'}</Label>
+            <Label>{t('inventory.quantity', { defaultValue: 'Current Quantity' })}</Label>
             <span className="text-lg font-semibold">{inventory.quantity}</span>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="adjustment">
-              {t('inventory.adjustment') || 'Adjustment'}
+              {t('inventory.adjustment', { defaultValue: 'Adjustment' })}
             </Label>
             <div className="flex items-center gap-2">
               <Button
@@ -122,7 +122,7 @@ export function AdjustQuantity({
           </div>
 
           <div className="flex items-center justify-between border-t pt-4">
-            <Label>{t('inventory.quantity') || 'New Quantity'}</Label>
+            <Label>{t('inventory.quantity', { defaultValue: 'New Quantity' })}</Label>
             <span
               className={`text-lg font-semibold ${!isValid ? 'text-destructive' : ''}`}
             >
@@ -139,7 +139,7 @@ export function AdjustQuantity({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => handleOpenChange(false)}>
-            {t('form.cancel') || 'Cancel'}
+            {t('form.cancel', { defaultValue: 'Cancel' })}
           </Button>
           <Button
             disabled={!isValid || adjustMutation.isPending}
@@ -147,7 +147,7 @@ export function AdjustQuantity({
           >
             {adjustMutation.isPending
               ? 'Saving...'
-              : t('actions.save') || 'Save'}
+              : t('actions.save', { defaultValue: 'Save' })}
           </Button>
         </DialogFooter>
       </DialogContent>

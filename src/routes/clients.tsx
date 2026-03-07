@@ -56,7 +56,7 @@ function ClientsPage(): React.JSX.Element {
     if (statusFilter !== 'ALL') {
       chips.push({
         key: 'status',
-        label: `${t('clients.status') || 'Status'}: ${
+        label: `${t('clients.status', { defaultValue: 'Status' })}: ${
           t(`clients.statuses.${statusFilter}`) || statusFilter
         }`,
         onRemove: () => {
@@ -74,7 +74,7 @@ function ClientsPage(): React.JSX.Element {
     if (searchQuery) {
       chips.push({
         key: 'search',
-        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
             search: (prev: ClientsSearch) => ({
@@ -102,10 +102,10 @@ function ClientsPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.clients') || 'Clients'}
+              {t('navigation.clients', { defaultValue: 'Clients' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('clients.subtitle') || 'Manage your client accounts and contacts'}
+              {t('clients.subtitle', { defaultValue: 'Manage your client accounts and contacts' })}
             </p>
           </div>
           <CreateClientButton />
@@ -116,7 +116,7 @@ function ClientsPage(): React.JSX.Element {
         <div className="flex items-center gap-4">
           <SearchBar
             className="max-w-sm"
-            placeholder={t('clients.searchPlaceholder') || 'Search clients...'}
+            placeholder={t('clients.searchPlaceholder', { defaultValue: 'Search clients...' })}
             value={searchQuery}
             onChange={(value) => {
               void navigate({
@@ -154,7 +154,7 @@ function ClientsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[180px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('clients.filterByStatus') || 'Filter by status'} />
+              <SelectValue placeholder={t('clients.filterByStatus', { defaultValue: 'Filter by status' })} />
             </SelectTrigger>
             <SelectContent>
               {CLIENT_STATUSES.map((status) => (
@@ -182,7 +182,7 @@ function ClientsPage(): React.JSX.Element {
             </Button>
           ))}
           <Button size="sm" variant="ghost" onClick={clearAll}>
-            {t('actions.clearAll') || 'Clear all'}
+            {t('actions.clearAll', { defaultValue: 'Clear all' })}
           </Button>
         </div>
       )}

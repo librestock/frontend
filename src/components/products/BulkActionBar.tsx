@@ -65,7 +65,7 @@ export function BulkActionBar({
               onClick={() => setStatusOpen(true)}
             >
               <ToggleLeft className="size-4" data-icon="inline-start" />
-              {t('bulk.changeStatus') || 'Change Status'}
+              {t('bulk.changeStatus', { defaultValue: 'Change Status' })}
             </Button>
             <Button
               disabled={isAnyPending}
@@ -74,7 +74,7 @@ export function BulkActionBar({
               onClick={handleRestore}
             >
               <RotateCcw className="size-4" data-icon="inline-start" />
-              {t('bulk.restore') || 'Restore'}
+              {t('bulk.restore', { defaultValue: 'Restore' })}
             </Button>
             <Button
               disabled={isAnyPending}
@@ -83,7 +83,7 @@ export function BulkActionBar({
               onClick={() => setDeleteOpen(true)}
             >
               <Trash2 className="size-4" data-icon="inline-start" />
-              {t('bulk.delete') || 'Delete'}
+              {t('bulk.delete', { defaultValue: 'Delete' })}
             </Button>
             <Button
               disabled={isAnyPending}
@@ -91,7 +91,7 @@ export function BulkActionBar({
               variant="ghost"
               onClick={onClearSelection}
             >
-              {t('bulk.cancel') || 'Cancel'}
+              {t('bulk.cancel', { defaultValue: 'Cancel' })}
             </Button>
           </div>
         </div>
@@ -100,7 +100,7 @@ export function BulkActionBar({
       <DeleteConfirmationDialog
         isLoading={bulkDeleteMutation.isPending}
         open={deleteOpen}
-        title={t('bulk.deleteTitle') || 'Delete Selected Products'}
+        title={t('bulk.deleteTitle', { defaultValue: 'Delete Selected Products' })}
         description={
           t('bulk.deleteDescription', { count: selectedIds.length }) ||
           `Are you sure you want to delete ${selectedIds.length} products? This action cannot be undone.`

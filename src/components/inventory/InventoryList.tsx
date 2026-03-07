@@ -28,7 +28,7 @@ export function InventoryList({ filters }: InventoryListProps): React.JSX.Elemen
 
   if (error) {
     return (
-      <ErrorState message={t('inventory.errorLoading') || 'Error loading inventory'} />
+      <ErrorState message={t('inventory.errorLoading', { defaultValue: 'Error loading inventory' })} />
     )
   }
 
@@ -36,7 +36,7 @@ export function InventoryList({ filters }: InventoryListProps): React.JSX.Elemen
 
   if (inventoryItems.length === 0) {
     return (
-      <EmptyState message={t('inventory.noInventory') || 'No inventory found'} />
+      <EmptyState message={t('inventory.noInventory', { defaultValue: 'No inventory found' })} />
     )
   }
 
