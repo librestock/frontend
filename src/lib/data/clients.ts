@@ -1,11 +1,4 @@
-import {
-  ClientStatus,
-  type ClientQueryDto,
-  type ClientResponseDto,
-  type CreateClientDto,
-  type PaginatedClientsResponseDto,
-  type UpdateClientDto,
-} from '@librestock/types'
+import { ClientStatus, type ClientQueryDto, type ClientResponseDto, type CreateClientDto, type PaginatedClientsResponseDto, type UpdateClientDto } from '@librestock/types/clients'
 import { makeCrudHooks } from './make-crud-hooks'
 
 export type {

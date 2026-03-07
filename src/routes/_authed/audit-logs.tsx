@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { z } from 'zod'
 
-import { Permission, Resource } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types/auth'
 
 import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'

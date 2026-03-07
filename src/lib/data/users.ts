@@ -1,10 +1,4 @@
-import {
-  type BanUserDto,
-  type PaginatedUsersResponseDto,
-  type UpdateUserRolesDto,
-  type UserQueryDto,
-  type UserResponseDto,
-} from '@librestock/types'
+import type { BanUserDto, PaginatedUsersResponseDto, UpdateUserRolesDto, UserQueryDto, UserResponseDto } from '@librestock/types/users'
 import { makeCrudHooks, makeMutationHook } from './make-crud-hooks'
 import { apiPatch, apiPost, apiPut, apiDelete } from './axios-client'
 

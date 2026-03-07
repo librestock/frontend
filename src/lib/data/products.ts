@@ -1,17 +1,5 @@
-import {
-  ProductSortField,
-  SortOrder,
-  type BulkCreateProductsDto,
-  type BulkDeleteDto,
-  type BulkOperationResultDto,
-  type BulkRestoreDto,
-  type BulkUpdateStatusDto,
-  type CreateProductDto,
-  type PaginatedProductsResponseDto,
-  type ProductQueryDto,
-  type ProductResponseDto,
-  type UpdateProductDto,
-} from '@librestock/types'
+import { SortOrder } from '@librestock/types/common'
+import { ProductSortField, type BulkCreateProductsDto, type BulkDeleteDto, type BulkOperationResultDto, type BulkRestoreDto, type BulkUpdateStatusDto, type CreateProductDto, type PaginatedProductsResponseDto, type ProductQueryDto, type ProductResponseDto, type UpdateProductDto } from '@librestock/types/products'
 import { apiDelete, apiGet, apiPatch, apiPost } from './axios-client'
 import {
   makeCrudHooks,

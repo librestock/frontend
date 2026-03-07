@@ -1,10 +1,4 @@
-import {
-  AuditAction,
-  AuditEntityType,
-  type AuditLogQueryDto,
-  type AuditLogResponseDto,
-  type PaginatedAuditLogsResponseDto,
-} from '@librestock/types'
+import { AuditAction, AuditEntityType, type AuditLogQueryDto, type AuditLogResponseDto, type PaginatedAuditLogsResponseDto } from '@librestock/types/audit-logs'
 import { makeCrudHooks } from './make-crud-hooks'
 
 export type {

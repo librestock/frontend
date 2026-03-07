@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { Permission, Resource, type RolePermissionDto } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types/auth'
+import type { RolePermissionDto } from '@librestock/types/roles'
 
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'

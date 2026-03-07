@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StockMovementReason } from '@librestock/types'
+import { StockMovementReason } from '@librestock/types/stock-movements'
 import {
   Field,
   FieldContent,

@@ -1,10 +1,4 @@
-import {
-  type SupplierQueryDto,
-  type SupplierResponseDto,
-  type CreateSupplierDto,
-  type PaginatedSuppliersResponseDto,
-  type UpdateSupplierDto,
-} from '@librestock/types'
+import type { SupplierQueryDto, SupplierResponseDto, CreateSupplierDto, PaginatedSuppliersResponseDto, UpdateSupplierDto } from '@librestock/types/suppliers'
 import { makeCrudHooks } from './make-crud-hooks'
 
 export type {

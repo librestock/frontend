@@ -5,7 +5,7 @@ import {
   Pencil,
   Trash2,
 } from 'lucide-react'
-import { OrderStatus } from '@librestock/types'
+import { OrderStatus } from '@librestock/types/orders'
 
 import { OrderStatusBadge } from './OrderStatusBadge'
 import { StatusTransitionDropdown } from './StatusTransitionDropdown'

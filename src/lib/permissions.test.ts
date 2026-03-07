@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Permission, Resource } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types/auth'
 import { canAccess } from './permissions'
 
 describe('canAccess', () => {

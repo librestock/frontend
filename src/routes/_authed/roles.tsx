@@ -3,7 +3,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
 
-import { Permission, Resource } from '@librestock/types'
+import { Permission, Resource } from '@librestock/types/auth'
 
 import { canAccess } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'

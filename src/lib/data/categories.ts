@@ -1,9 +1,4 @@
-import type {
-  CategoryResponseDto,
-  CategoryWithChildrenResponseDto,
-  CreateCategoryDto,
-  UpdateCategoryDto,
-} from '@librestock/types'
+import type { CategoryResponseDto, CategoryWithChildrenResponseDto, CreateCategoryDto, UpdateCategoryDto } from '@librestock/types/categories'
 import type { QueryClient } from '@tanstack/react-query'
 import {
   type QueryHookResult,

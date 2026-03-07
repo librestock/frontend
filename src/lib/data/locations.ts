@@ -1,13 +1,5 @@
-import {
-  LocationSortField,
-  LocationType,
-  SortOrder,
-  type CreateLocationDto,
-  type LocationQueryDto,
-  type LocationResponseDto,
-  type PaginatedLocationsResponseDto,
-  type UpdateLocationDto,
-} from '@librestock/types'
+import { SortOrder } from '@librestock/types/common'
+import { LocationSortField, LocationType, type CreateLocationDto, type LocationQueryDto, type LocationResponseDto, type PaginatedLocationsResponseDto, type UpdateLocationDto } from '@librestock/types/locations'
 import { apiGet } from './axios-client'
 import { makeCrudHooks, makeQueryHook } from './make-crud-hooks'
 
