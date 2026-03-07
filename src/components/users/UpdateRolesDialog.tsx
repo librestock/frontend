@@ -28,6 +28,13 @@ interface UpdateRolesDialogContentProps {
   onOpenChange: (open: boolean) => void
 }
 
+function toRoleNames(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return []
+  }
+  return value.filter((item): item is string => typeof item === 'string')
+}
+
 function getInitialSelectedRoleIds(
   user: UserResponseDto | null,
   availableRoles: NonNullable<ReturnType<typeof useListRoles>['data']>,
@@ -35,9 +42,10 @@ function getInitialSelectedRoleIds(
   if (!user) {
     return []
   }
+  const userRoleNames = toRoleNames(user.roles as unknown)
 
   return availableRoles
-    .filter((role) => user.roles.includes(role.name))
+    .filter((role) => userRoleNames.includes(role.name))
     .map((role) => role.id)
 }
 
@@ -48,10 +56,11 @@ export function UpdateRolesDialog({
 }: UpdateRolesDialogProps): React.JSX.Element {
   const { data: availableRoles } = useListRoles()
   const roles = availableRoles ?? []
+  const userRoleNames = toRoleNames(user?.roles as unknown)
   const resetKey = [
     open ? 'open' : 'closed',
     user?.id ?? 'none',
-    user?.roles.join(',') ?? '',
+    userRoleNames.join(','),
     roles.map((role) => `${role.id}:${role.name}`).join(','),
   ].join('|')
 

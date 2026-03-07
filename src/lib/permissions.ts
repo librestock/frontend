@@ -7,11 +7,12 @@ const DEFAULT_PERMISSIONS: Partial<Record<Resource, Permission[]>> = {
 }
 
 export function canAccess(
-  permissions: Partial<Record<Resource, Permission[]>>,
+  permissions: Partial<Record<Resource, Permission[]>> | null | undefined,
   permission: Permission,
   resource: Resource,
 ): boolean {
-  return permissions[resource]?.includes(permission) ?? false
+  const resourcePermissions = permissions?.[resource]
+  return Array.isArray(resourcePermissions) && resourcePermissions.includes(permission)
 }
 
 export interface UsePermissionsReturn {
