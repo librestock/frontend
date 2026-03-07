@@ -39,7 +39,7 @@ const stockSearchSchema = z.object({
 
 const STOCK_PAGE_SIZE = 24
 
-export const Route = createFileRoute('/stock')({
+export const Route = createFileRoute('/_authed/stock')({
   validateSearch: (search) => stockSearchSchema.parse(search),
   component: ItemsPage,
 })

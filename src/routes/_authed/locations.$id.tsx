@@ -47,7 +47,7 @@ import {
   LOCATION_TYPE_COLORS,
 } from '@/lib/location-type.utils'
 
-export const Route = createFileRoute('/locations/$id')({
+export const Route = createFileRoute('/_authed/locations/$id')({
   loader: async ({ context: { queryClient }, params }) => {
     await queryClient.ensureQueryData(getGetLocationQueryOptions(params.id))
   },

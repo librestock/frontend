@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Filter, X } from 'lucide-react'
 import { z } from 'zod'
+import { OrderStatus } from '@librestock/types'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -12,64 +13,79 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { CreateLocation } from '@/components/locations/CreateLocation'
-import { LocationList } from '@/components/locations/LocationList'
+import { CreateOrderButton } from '@/components/orders/CreateOrderButton'
+import { OrderTable } from '@/components/orders/OrderTable'
 import { SearchBar } from '@/components/items/SearchBar'
-import { LocationType } from '@/lib/enums/location-type.enum'
 import {
   parseNumberParam,
   parseStringParam,
 } from '@/lib/router/search'
-import { prefetchLocationsData } from '@/lib/router/loaders'
 
-const locationsSearchSchema = z.object({
+const ordersSearchSchema = z.object({
   q: z.preprocess(parseStringParam, z.string().optional()),
-  type: z.preprocess(parseStringParam, z.nativeEnum(LocationType).optional()),
+  status: z.preprocess(
+    parseStringParam,
+    z.nativeEnum(OrderStatus).optional(),
+  ),
   page: z.preprocess(parseNumberParam, z.number().int().min(1).optional()),
 })
 
-const LOCATIONS_PAGE_SIZE = 12
+const ORDERS_PAGE_SIZE = 20
 
-export const Route = createFileRoute('/locations')({
-  validateSearch: (search) => locationsSearchSchema.parse(search),
-  loader: async ({ context: { queryClient }, location }) => {
-    const search = locationsSearchSchema.parse(location.search)
-    await prefetchLocationsData(queryClient, search, LOCATIONS_PAGE_SIZE)
-  },
-  component: LocationsPage,
+export const Route = createFileRoute('/_authed/orders')({
+  validateSearch: (search) => ordersSearchSchema.parse(search),
+  component: OrdersPage,
 })
 
-type LocationsSearch = ReturnType<typeof Route.useSearch>
+type OrdersSearch = ReturnType<typeof Route.useSearch>
 
-const LOCATION_TYPES = [
-  { value: 'ALL', label: 'All Types' },
-  { value: LocationType.WAREHOUSE, label: 'Warehouse' },
-  { value: LocationType.SUPPLIER, label: 'Supplier' },
-  { value: LocationType.IN_TRANSIT, label: 'In Transit' },
-  { value: LocationType.CLIENT, label: 'Client' },
+const ORDER_STATUSES = [
+  { value: 'ALL', labelKey: 'orders.allStatuses', fallback: 'All Statuses' },
+  { value: OrderStatus.DRAFT, labelKey: 'orders.statuses.DRAFT', fallback: 'Draft' },
+  { value: OrderStatus.CONFIRMED, labelKey: 'orders.statuses.CONFIRMED', fallback: 'Confirmed' },
+  { value: OrderStatus.SOURCING, labelKey: 'orders.statuses.SOURCING', fallback: 'Sourcing' },
+  { value: OrderStatus.PICKING, labelKey: 'orders.statuses.PICKING', fallback: 'Picking' },
+  { value: OrderStatus.PACKED, labelKey: 'orders.statuses.PACKED', fallback: 'Packed' },
+  { value: OrderStatus.SHIPPED, labelKey: 'orders.statuses.SHIPPED', fallback: 'Shipped' },
+  { value: OrderStatus.DELIVERED, labelKey: 'orders.statuses.DELIVERED', fallback: 'Delivered' },
+  { value: OrderStatus.CANCELLED, labelKey: 'orders.statuses.CANCELLED', fallback: 'Cancelled' },
+  { value: OrderStatus.ON_HOLD, labelKey: 'orders.statuses.ON_HOLD', fallback: 'On Hold' },
 ]
 
-function LocationsPage(): React.JSX.Element {
+function OrdersPage(): React.JSX.Element {
   const { t } = useTranslation()
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
   const searchQuery = search.q ?? ''
-  const typeFilter = search.type ?? 'ALL'
+  const statusFilter = search.status ?? 'ALL'
   const page = search.page ?? 1
+  const deferredSearchQuery = React.useDeferredValue(searchQuery)
+
+  const filters = React.useMemo(() => {
+    const f: Record<string, unknown> = {}
+    const query = deferredSearchQuery.trim()
+    if (query) {
+      f.q = query
+    }
+    if (statusFilter !== 'ALL') {
+      f.status = statusFilter
+    }
+    return f
+  }, [deferredSearchQuery, statusFilter])
 
   const filterChips = React.useMemo(() => {
     const chips: { key: string; label: string; onRemove: () => void }[] = []
-    if (typeFilter !== 'ALL') {
+    if (statusFilter !== 'ALL') {
       chips.push({
-        key: 'type',
-        label: `${t('locations.filterByType', { defaultValue: 'Type' })}: ${
-          t(`locations.types.${typeFilter}`) || typeFilter
+        key: 'status',
+        label: `${t('orders.status', { defaultValue: 'Status' })}: ${
+          t(`orders.statuses.${statusFilter}`) || statusFilter
         }`,
         onRemove: () => {
           void navigate({
-            search: (prev: LocationsSearch) => ({
+            search: (prev: OrdersSearch) => ({
               ...prev,
-              type: undefined,
+              status: undefined,
               page: 1,
             }),
             replace: true,
@@ -83,7 +99,7 @@ function LocationsPage(): React.JSX.Element {
         label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
-            search: (prev: LocationsSearch) => ({
+            search: (prev: OrdersSearch) => ({
               ...prev,
               q: undefined,
               page: 1,
@@ -94,7 +110,7 @@ function LocationsPage(): React.JSX.Element {
       })
     }
     return chips
-  }, [navigate, searchQuery, t, typeFilter])
+  }, [navigate, searchQuery, statusFilter, t])
 
   const hasActiveFilters = filterChips.length > 0
 
@@ -108,13 +124,13 @@ function LocationsPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.locations', { defaultValue: 'Locations' })}
+              {t('navigation.orders', { defaultValue: 'Orders' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('locations.subtitle', { defaultValue: 'Manage your storage locations and areas' })}
+              {t('orders.subtitle', { defaultValue: 'Manage orders, track fulfillment, and update statuses' })}
             </p>
           </div>
-          <CreateLocation />
+          <CreateOrderButton />
         </div>
       </div>
 
@@ -122,11 +138,13 @@ function LocationsPage(): React.JSX.Element {
         <div className="flex items-center gap-4">
           <SearchBar
             className="max-w-sm"
-            placeholder={t('locations.searchPlaceholder', { defaultValue: 'Search locations...' })}
             value={searchQuery}
+            placeholder={
+              t('orders.searchPlaceholder', { defaultValue: 'Search orders...' })
+            }
             onChange={(value) => {
               void navigate({
-                search: (prev: LocationsSearch) => ({
+                search: (prev: OrdersSearch) => ({
                   ...prev,
                   q: value || undefined,
                   page: 1,
@@ -136,7 +154,7 @@ function LocationsPage(): React.JSX.Element {
             }}
             onClear={() => {
               void navigate({
-                search: (prev: LocationsSearch) => ({
+                search: (prev: OrdersSearch) => ({
                   ...prev,
                   q: undefined,
                   page: 1,
@@ -146,12 +164,13 @@ function LocationsPage(): React.JSX.Element {
             }}
           />
           <Select
-            value={typeFilter}
+            value={statusFilter}
             onValueChange={(value) => {
               void navigate({
-                search: (prev: LocationsSearch) => ({
+                search: (prev: OrdersSearch) => ({
                   ...prev,
-                  type: value === 'ALL' ? undefined : (value as LocationType),
+                  status:
+                    value === 'ALL' ? undefined : (value as OrderStatus),
                   page: 1,
                 }),
                 replace: true,
@@ -160,14 +179,16 @@ function LocationsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[180px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('locations.filterByType', { defaultValue: 'Filter by type' })} />
+              <SelectValue
+                placeholder={
+                  t('orders.filterByStatus', { defaultValue: 'Filter by status' })
+                }
+              />
             </SelectTrigger>
             <SelectContent>
-              {LOCATION_TYPES.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.value === 'ALL'
-                    ? (t('locations.allTypes') || type.label)
-                    : (t(`locations.types.${type.value}`) || type.label)}
+              {ORDER_STATUSES.map((status) => (
+                <SelectItem key={status.value} value={status.value}>
+                  {t(status.labelKey) || status.fallback}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -196,15 +217,14 @@ function LocationsPage(): React.JSX.Element {
       )}
 
       <div className="flex-1 overflow-auto p-6">
-        <LocationList
+        <OrderTable
+          filters={filters}
           hasActiveFilters={hasActiveFilters}
-          limit={LOCATIONS_PAGE_SIZE}
+          limit={ORDERS_PAGE_SIZE}
           page={page}
-          searchQuery={searchQuery}
-          typeFilter={typeFilter === 'ALL' ? null : typeFilter}
           onPageChange={(nextPage) => {
             void navigate({
-              search: (prev: LocationsSearch) => ({
+              search: (prev: OrdersSearch) => ({
                 ...prev,
                 page: nextPage,
               }),

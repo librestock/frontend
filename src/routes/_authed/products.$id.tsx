@@ -52,7 +52,7 @@ import {
   snapshotQueryData,
 } from '@/lib/data/query-cache'
 
-export const Route = createFileRoute('/products/$id')({
+export const Route = createFileRoute('/_authed/products/$id')({
   loader: async ({ context: { queryClient }, params }) => {
     await queryClient.ensureQueryData(getGetProductQueryOptions(params.id))
   },
