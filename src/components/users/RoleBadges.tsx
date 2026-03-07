@@ -21,13 +21,14 @@ function hashString(str: string): number {
 }
 
 interface RoleBadgesProps {
-  roles: string[]
+  roles?: string[] | null
 }
 
 export function RoleBadges({ roles }: RoleBadgesProps): React.JSX.Element {
   const { t } = useTranslation()
+  const safeRoles = Array.isArray(roles) ? roles : []
 
-  if (roles.length === 0) {
+  if (safeRoles.length === 0) {
     return (
       <span className="text-muted-foreground text-sm">
         {t('users.noRoles', { defaultValue: 'No roles' })}
@@ -37,7 +38,7 @@ export function RoleBadges({ roles }: RoleBadgesProps): React.JSX.Element {
 
   return (
     <div className="flex flex-wrap gap-1">
-      {roles.map((role) => (
+      {safeRoles.map((role) => (
         <Badge
           key={role}
           className={cn('border-transparent', BADGE_COLORS[hashString(role) % BADGE_COLORS.length])}

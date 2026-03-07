@@ -27,6 +27,7 @@ const usersSearchSchema = z.object({
 })
 
 const USERS_PAGE_SIZE = 20
+const ALL_ROLES_VALUE = '__all__'
 
 export const Route = createFileRoute('/_authed/users')({
   validateSearch: (search) => usersSearchSchema.parse(search),
@@ -126,12 +127,12 @@ function UsersPage(): React.JSX.Element {
         />
 
         <Select
-          value={role ?? ''}
+          value={role ?? ALL_ROLES_VALUE}
           onValueChange={(value) => {
             void navigate({
               search: (prev: UsersSearch) => ({
                 ...prev,
-                role: value || undefined,
+                role: value === ALL_ROLES_VALUE ? undefined : value,
                 page: 1,
               }),
               replace: true,
@@ -142,6 +143,9 @@ function UsersPage(): React.JSX.Element {
             <SelectValue placeholder={t('users.allRoles', { defaultValue: 'All Roles' })} />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value={ALL_ROLES_VALUE}>
+              {t('users.allRoles', { defaultValue: 'All Roles' })}
+            </SelectItem>
             {(roles ?? []).map((r) => (
               <SelectItem key={r.id} value={r.name}>
                 {r.name}

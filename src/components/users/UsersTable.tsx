@@ -37,6 +37,21 @@ interface UsersTableProps {
   onPageChange: (page: number) => void
 }
 
+function toRoleNames(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return []
+  }
+  return value.filter((item): item is string => typeof item === 'string')
+}
+
+function formatDate(value: unknown): string {
+  if (value == null) {
+    return '—'
+  }
+  const date = new Date(value as string | Date)
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString()
+}
+
 function TableSkeleton(): React.JSX.Element {
   return (
     <TableBody>
@@ -70,12 +85,14 @@ function UserRow({
   onRevokeSessions: (user: UserResponseDto) => void
 }): React.JSX.Element {
   const { t } = useTranslation()
+  const roles = toRoleNames(user.roles as unknown)
+  const createdAtLabel = formatDate(user.createdAt as unknown)
 
   return (
     <TableRow>
       <TableCell className="font-medium">{user.name}</TableCell>
       <TableCell className="text-muted-foreground text-sm">{user.email}</TableCell>
-      <TableCell><RoleBadges roles={user.roles} /></TableCell>
+      <TableCell><RoleBadges roles={roles} /></TableCell>
       <TableCell>
         {user.banned ? (
           <Badge variant="destructive">
@@ -88,7 +105,7 @@ function UserRow({
         )}
       </TableCell>
       <TableCell className="text-muted-foreground text-sm">
-        {new Date(user.createdAt).toLocaleDateString()}
+        {createdAtLabel}
       </TableCell>
       <TableCell>
         <DropdownMenu>
