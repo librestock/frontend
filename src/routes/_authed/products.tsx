@@ -20,7 +20,7 @@ import {
   useGetProductsByCategory,
 } from '@/lib/data/products'
 
-export const Route = createFileRoute('/products')({
+export const Route = createFileRoute('/_authed/products')({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(getListCategoriesQueryOptions())
   },

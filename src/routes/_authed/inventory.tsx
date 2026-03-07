@@ -31,7 +31,7 @@ const inventorySearchSchema = z.object({
 
 const INVENTORY_PAGE_SIZE = 50
 
-export const Route = createFileRoute('/inventory')({
+export const Route = createFileRoute('/_authed/inventory')({
   validateSearch: (search) => inventorySearchSchema.parse(search),
   loader: async ({ context: { queryClient }, location }) => {
     const search = inventorySearchSchema.parse(location.search)

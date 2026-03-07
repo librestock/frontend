@@ -46,7 +46,7 @@ import { useListInventory } from '@/lib/data/inventory'
 
 import type { InventoryResponseDto } from '@/lib/data/inventory'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authed/')({
   component: DashboardPage,
 })
 

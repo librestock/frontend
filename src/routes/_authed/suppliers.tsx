@@ -12,58 +12,63 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { CreateClientButton } from '@/components/clients/CreateClientButton'
-import { ClientList } from '@/components/clients/ClientList'
+import { CreateSupplierButton } from '@/components/suppliers/CreateSupplierButton'
+import { SupplierList } from '@/components/suppliers/SupplierList'
 import { SearchBar } from '@/components/items/SearchBar'
-import { ClientStatus } from '@/lib/data/clients'
 import {
   parseNumberParam,
   parseStringParam,
+  parseBooleanParam,
 } from '@/lib/router/search'
 
-const clientsSearchSchema = z.object({
+const suppliersSearchSchema = z.object({
   q: z.preprocess(parseStringParam, z.string().optional()),
-  status: z.preprocess(parseStringParam, z.nativeEnum(ClientStatus).optional()),
+  is_active: z.preprocess(parseBooleanParam, z.boolean().optional()),
   page: z.preprocess(parseNumberParam, z.number().int().min(1).optional()),
 })
 
-const CLIENTS_PAGE_SIZE = 12
+const SUPPLIERS_PAGE_SIZE = 12
 
-export const Route = createFileRoute('/clients')({
-  validateSearch: (search) => clientsSearchSchema.parse(search),
-  component: ClientsPage,
+export const Route = createFileRoute('/_authed/suppliers')({
+  validateSearch: (search) => suppliersSearchSchema.parse(search),
+  component: SuppliersPage,
 })
 
-type ClientsSearch = ReturnType<typeof Route.useSearch>
+type SuppliersSearch = ReturnType<typeof Route.useSearch>
 
-const CLIENT_STATUSES = [
-  { value: 'ALL', labelKey: 'clients.allStatuses', fallback: 'All Statuses' },
-  { value: ClientStatus.ACTIVE, labelKey: 'clients.statuses.ACTIVE', fallback: 'Active' },
-  { value: ClientStatus.SUSPENDED, labelKey: 'clients.statuses.SUSPENDED', fallback: 'Suspended' },
-  { value: ClientStatus.INACTIVE, labelKey: 'clients.statuses.INACTIVE', fallback: 'Inactive' },
+const ACTIVE_STATUSES = [
+  { value: 'ALL', labelKey: 'suppliers.allStatuses', fallback: 'All Statuses' },
+  { value: 'true', labelKey: 'form.active', fallback: 'Active' },
+  { value: 'false', labelKey: 'form.inactive', fallback: 'Inactive' },
 ]
 
-function ClientsPage(): React.JSX.Element {
+function SuppliersPage(): React.JSX.Element {
   const { t } = useTranslation()
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
   const searchQuery = search.q ?? ''
-  const statusFilter = search.status ?? 'ALL'
+  const isActiveFilter = search.is_active
   const page = search.page ?? 1
+
+  const activeFilterValue = isActiveFilter === undefined
+    ? 'ALL'
+    : String(isActiveFilter)
 
   const filterChips = React.useMemo(() => {
     const chips: { key: string; label: string; onRemove: () => void }[] = []
-    if (statusFilter !== 'ALL') {
+    if (isActiveFilter !== undefined) {
       chips.push({
-        key: 'status',
-        label: `${t('clients.status', { defaultValue: 'Status' })}: ${
-          t(`clients.statuses.${statusFilter}`) || statusFilter
+        key: 'is_active',
+        label: `${t('suppliers.status', { defaultValue: 'Status' })}: ${
+          isActiveFilter
+            ? (t('form.active', { defaultValue: 'Active' }))
+            : (t('form.inactive', { defaultValue: 'Inactive' }))
         }`,
         onRemove: () => {
           void navigate({
-            search: (prev: ClientsSearch) => ({
+            search: (prev: SuppliersSearch) => ({
               ...prev,
-              status: undefined,
+              is_active: undefined,
               page: 1,
             }),
             replace: true,
@@ -77,7 +82,7 @@ function ClientsPage(): React.JSX.Element {
         label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
-            search: (prev: ClientsSearch) => ({
+            search: (prev: SuppliersSearch) => ({
               ...prev,
               q: undefined,
               page: 1,
@@ -88,7 +93,7 @@ function ClientsPage(): React.JSX.Element {
       })
     }
     return chips
-  }, [navigate, searchQuery, statusFilter, t])
+  }, [navigate, searchQuery, isActiveFilter, t])
 
   const hasActiveFilters = filterChips.length > 0
 
@@ -102,13 +107,13 @@ function ClientsPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.clients', { defaultValue: 'Clients' })}
+              {t('navigation.suppliers', { defaultValue: 'Suppliers' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('clients.subtitle', { defaultValue: 'Manage your client accounts and contacts' })}
+              {t('suppliers.subtitle', { defaultValue: 'Manage your supplier contacts and information' })}
             </p>
           </div>
-          <CreateClientButton />
+          <CreateSupplierButton />
         </div>
       </div>
 
@@ -116,11 +121,11 @@ function ClientsPage(): React.JSX.Element {
         <div className="flex items-center gap-4">
           <SearchBar
             className="max-w-sm"
-            placeholder={t('clients.searchPlaceholder', { defaultValue: 'Search clients...' })}
+            placeholder={t('suppliers.searchPlaceholder', { defaultValue: 'Search suppliers...' })}
             value={searchQuery}
             onChange={(value) => {
               void navigate({
-                search: (prev: ClientsSearch) => ({
+                search: (prev: SuppliersSearch) => ({
                   ...prev,
                   q: value || undefined,
                   page: 1,
@@ -130,7 +135,7 @@ function ClientsPage(): React.JSX.Element {
             }}
             onClear={() => {
               void navigate({
-                search: (prev: ClientsSearch) => ({
+                search: (prev: SuppliersSearch) => ({
                   ...prev,
                   q: undefined,
                   page: 1,
@@ -140,12 +145,12 @@ function ClientsPage(): React.JSX.Element {
             }}
           />
           <Select
-            value={statusFilter}
+            value={activeFilterValue}
             onValueChange={(value) => {
               void navigate({
-                search: (prev: ClientsSearch) => ({
+                search: (prev: SuppliersSearch) => ({
                   ...prev,
-                  status: value === 'ALL' ? undefined : (value as ClientStatus),
+                  is_active: value === 'ALL' ? undefined : value === 'true',
                   page: 1,
                 }),
                 replace: true,
@@ -154,10 +159,10 @@ function ClientsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[180px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('clients.filterByStatus', { defaultValue: 'Filter by status' })} />
+              <SelectValue placeholder={t('suppliers.filterByStatus', { defaultValue: 'Filter by status' })} />
             </SelectTrigger>
             <SelectContent>
-              {CLIENT_STATUSES.map((status) => (
+              {ACTIVE_STATUSES.map((status) => (
                 <SelectItem key={status.value} value={status.value}>
                   {t(status.labelKey) || status.fallback}
                 </SelectItem>
@@ -188,15 +193,15 @@ function ClientsPage(): React.JSX.Element {
       )}
 
       <div className="flex-1 overflow-auto p-6">
-        <ClientList
+        <SupplierList
           hasActiveFilters={hasActiveFilters}
-          limit={CLIENTS_PAGE_SIZE}
+          isActiveFilter={isActiveFilter === undefined ? null : isActiveFilter}
+          limit={SUPPLIERS_PAGE_SIZE}
           page={page}
           searchQuery={searchQuery}
-          statusFilter={statusFilter === 'ALL' ? null : statusFilter}
           onPageChange={(nextPage) => {
             void navigate({
-              search: (prev: ClientsSearch) => ({
+              search: (prev: SuppliersSearch) => ({
                 ...prev,
                 page: nextPage,
               }),
