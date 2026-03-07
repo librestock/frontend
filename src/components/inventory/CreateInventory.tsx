@@ -38,18 +38,18 @@ export function CreateInventory({
   const defaultTrigger = (
     <Button>
       <Plus className="size-4" />
-      {t('inventory.create') || 'Add Inventory'}
+      {t('inventory.create', { defaultValue: 'Add Inventory' })}
     </Button>
   )
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
-      description={t('inventory.createDescription') || 'Add inventory for a product at a location.'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+      description={t('inventory.createDescription', { defaultValue: 'Add inventory for a product at a location.' })}
       formId="create-inventory-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('inventory.createTitle') || 'Add Inventory'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('inventory.createTitle', { defaultValue: 'Add Inventory' })}
       trigger={trigger ?? defaultTrigger}
       onOpenChange={handleOpenChange}
     >

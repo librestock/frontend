@@ -110,8 +110,8 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
           <div className="ml-2 flex shrink-0 items-center gap-2">
             <Badge variant={product.is_active ? 'default' : 'secondary'}>
               {product.is_active
-                ? (t('form.active') || 'Active')
-                : (t('form.inactive') || 'Inactive')}
+                ? (t('form.active', { defaultValue: 'Active' }))
+                : (t('form.inactive', { defaultValue: 'Inactive' }))}
             </Badge>
             {selectMode !== true && (
               <CrudDropdownMenu
@@ -135,24 +135,24 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
               product.reorder_point > 0 && 'font-medium',
             )}
           >
-            {t('form.reorderPoint') || 'Reorder Point'}: {product.reorder_point}
+            {t('form.reorderPoint', { defaultValue: 'Reorder Point' })}: {product.reorder_point}
           </span>
           {product.is_perishable && (
             <Badge className="text-xs" variant="outline">
-              {t('form.perishable') || 'Perishable'}
+              {t('form.perishable', { defaultValue: 'Perishable' })}
             </Badge>
           )}
         </div>
       </div>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
         contentClassName="sm:max-w-[900px]"
-        description={t('products.editDescription') || 'Update product details.'}
+        description={t('products.editDescription', { defaultValue: 'Update product details.' })}
         formId={formId}
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('products.editTitle') || 'Edit Product'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('products.editTitle', { defaultValue: 'Edit Product' })}
         onOpenChange={setEditOpen}
       >
         {categoriesLoading === true && (
@@ -163,7 +163,7 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
 
         {categoriesError != null && (
           <p className="text-destructive text-sm">
-            {t('form.loadCategoriesError') || 'Failed to load categories'}
+            {t('form.loadCategoriesError', { defaultValue: 'Failed to load categories' })}
           </p>
         )}
 
@@ -180,10 +180,9 @@ function ProductCard({ product, onClick, selectMode, isSelected, onToggleSelect 
       <DeleteConfirmationDialog
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('products.deleteTitle') || 'Delete Product'}
+        title={t('products.deleteTitle', { defaultValue: 'Delete Product' })}
         description={
-          t('products.deleteDescription') ||
-          'Are you sure you want to delete this product? This action cannot be undone.'
+          t('products.deleteDescription', { defaultValue: 'Are you sure you want to delete this product? This action cannot be undone.' })
         }
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}

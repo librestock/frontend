@@ -60,7 +60,7 @@ export function OrderForm({
             {(field) => (
               <Field>
                 <FieldLabel htmlFor={field.name}>
-                  {t('orders.client') || 'Client'}
+                  {t('orders.client', { defaultValue: 'Client' })}
                 </FieldLabel>
                 <FieldContent>
                   <Select
@@ -70,7 +70,7 @@ export function OrderForm({
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          t('orders.selectClient') || 'Select client'
+                          t('orders.selectClient', { defaultValue: 'Select client' })
                         }
                       />
                     </SelectTrigger>
@@ -93,7 +93,7 @@ export function OrderForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('orders.deliveryAddress') || 'Delivery Address'}
+                {t('orders.deliveryAddress', { defaultValue: 'Delivery Address' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -114,7 +114,7 @@ export function OrderForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('orders.deliveryDeadline') || 'Delivery Deadline'}
+                {t('orders.deliveryDeadline', { defaultValue: 'Delivery Deadline' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -135,7 +135,7 @@ export function OrderForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('orders.yachtName') || 'Yacht Name'}
+                {t('orders.yachtName', { defaultValue: 'Yacht Name' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -156,7 +156,7 @@ export function OrderForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('orders.specialInstructions') || 'Special Instructions'}
+                {t('orders.specialInstructions', { defaultValue: 'Special Instructions' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -177,7 +177,7 @@ export function OrderForm({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <FieldLabel>
-                {t('orders.items') || 'Order Items'}
+                {t('orders.items', { defaultValue: 'Order Items' })}
               </FieldLabel>
               <Button
                 size="sm"
@@ -193,7 +193,7 @@ export function OrderForm({
                 }}
               >
                 <Plus className="mr-1 size-3" />
-                {t('orders.addItem') || 'Add Item'}
+                {t('orders.addItem', { defaultValue: 'Add Item' })}
               </Button>
             </div>
 
@@ -267,7 +267,7 @@ function OrderItemFields({
         {(field: { state: { value: string; meta: { errors: { message?: string }[] } }; handleChange: (value: string) => void }) => (
           <Field>
             <FieldLabel htmlFor={`item-product-${index}`}>
-              {t('orders.product') || 'Product'}
+              {t('orders.product', { defaultValue: 'Product' })}
             </FieldLabel>
             <FieldContent>
               <Select
@@ -286,7 +286,7 @@ function OrderItemFields({
                 <SelectTrigger id={`item-product-${index}`}>
                   <SelectValue
                     placeholder={
-                      t('orders.selectProduct') || 'Select product'
+                      t('orders.selectProduct', { defaultValue: 'Select product' })
                     }
                   />
                 </SelectTrigger>
@@ -310,7 +310,7 @@ function OrderItemFields({
           {(field: { state: { value: number; meta: { errors: { message?: string }[] } }; handleBlur: () => void; handleChange: (value: number) => void }) => (
             <Field>
               <FieldLabel htmlFor={`item-qty-${index}`}>
-                {t('orders.quantity') || 'Quantity'}
+                {t('orders.quantity', { defaultValue: 'Quantity' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -335,7 +335,7 @@ function OrderItemFields({
           {(field: { state: { value: number; meta: { errors: { message?: string }[] } }; handleBlur: () => void; handleChange: (value: number) => void }) => (
             <Field>
               <FieldLabel htmlFor={`item-price-${index}`}>
-                {t('orders.unitPrice') || 'Unit Price'}
+                {t('orders.unitPrice', { defaultValue: 'Unit Price' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -362,7 +362,7 @@ function OrderItemFields({
         {(field: { state: { value: string; meta: { errors: { message?: string }[] } }; handleBlur: () => void; handleChange: (value: string) => void }) => (
           <Field>
             <FieldLabel htmlFor={`item-notes-${index}`}>
-              {t('orders.itemNotes') || 'Notes'}
+              {t('orders.itemNotes', { defaultValue: 'Notes' })}
             </FieldLabel>
             <FieldContent>
               <Input

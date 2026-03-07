@@ -53,7 +53,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.product') || 'Product'}
+                {t('stockMovements.product', { defaultValue: 'Product' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -64,12 +64,12 @@ export function StockMovementForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('stockMovements.selectProduct') || 'Select product'}
+                      placeholder={t('stockMovements.selectProduct', { defaultValue: 'Select product' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('stockMovements.selectProduct') || 'Select product'}
+                      {t('stockMovements.selectProduct', { defaultValue: 'Select product' })}
                     </SelectItem>
                     {(products ?? []).map((product) => (
                       <SelectItem key={product.id} value={product.id}>
@@ -88,7 +88,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.reason') || 'Reason'}
+                {t('stockMovements.reason', { defaultValue: 'Reason' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -99,12 +99,12 @@ export function StockMovementForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('stockMovements.selectReason') || 'Select reason'}
+                      placeholder={t('stockMovements.selectReason', { defaultValue: 'Select reason' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('stockMovements.selectReason') || 'Select reason'}
+                      {t('stockMovements.selectReason', { defaultValue: 'Select reason' })}
                     </SelectItem>
                     {STOCK_MOVEMENT_REASONS.map((reason) => (
                       <SelectItem key={reason} value={reason}>
@@ -123,7 +123,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.fromLocation') || 'From Location'}
+                {t('stockMovements.fromLocation', { defaultValue: 'From Location' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -134,12 +134,12 @@ export function StockMovementForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('stockMovements.selectLocation') || 'Select location'}
+                      placeholder={t('stockMovements.selectLocation', { defaultValue: 'Select location' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('stockMovements.noLocation') || 'None'}
+                      {t('stockMovements.noLocation', { defaultValue: 'None' })}
                     </SelectItem>
                     {(locations ?? []).map((location) => (
                       <SelectItem key={location.id} value={location.id}>
@@ -158,7 +158,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.toLocation') || 'To Location'}
+                {t('stockMovements.toLocation', { defaultValue: 'To Location' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -169,12 +169,12 @@ export function StockMovementForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('stockMovements.selectLocation') || 'Select location'}
+                      placeholder={t('stockMovements.selectLocation', { defaultValue: 'Select location' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('stockMovements.noLocation') || 'None'}
+                      {t('stockMovements.noLocation', { defaultValue: 'None' })}
                     </SelectItem>
                     {(locations ?? []).map((location) => (
                       <SelectItem key={location.id} value={location.id}>
@@ -193,7 +193,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.quantity') || 'Quantity'}
+                {t('stockMovements.quantity', { defaultValue: 'Quantity' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -216,7 +216,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.referenceNumber') || 'Reference Number'}
+                {t('stockMovements.referenceNumber', { defaultValue: 'Reference Number' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -238,7 +238,7 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.costPerUnit') || 'Cost per Unit'}
+                {t('stockMovements.costPerUnit', { defaultValue: 'Cost per Unit' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -266,14 +266,14 @@ export function StockMovementForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('stockMovements.notes') || 'Notes'}
+                {t('stockMovements.notes', { defaultValue: 'Notes' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
                   aria-invalid={field.state.meta.errors.length > 0}
                   id={field.name}
                   name={field.name}
-                  placeholder={t('stockMovements.notesPlaceholder') || 'Optional notes...'}
+                  placeholder={t('stockMovements.notesPlaceholder', { defaultValue: 'Optional notes...' })}
                   rows={3}
                   value={field.state.value}
                   onBlur={field.handleBlur}

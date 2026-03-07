@@ -26,7 +26,7 @@ export function useDeleteSupplierOptimistic() {
       },
       onError: (error) => {
         toast.error(
-          t('suppliers.deleteError') || 'Failed to delete supplier',
+          t('suppliers.deleteError', { defaultValue: 'Failed to delete supplier' }),
         )
         console.error('Supplier deletion error:', error)
       },
@@ -53,9 +53,9 @@ export function useDeleteSupplierOptimistic() {
         })
       }, 5000)
 
-      toast(t('suppliers.deleted') || 'Supplier deleted successfully', {
+      toast(t('suppliers.deleted', { defaultValue: 'Supplier deleted successfully' }), {
         action: {
-          label: t('actions.undo') || 'Undo',
+          label: t('actions.undo', { defaultValue: 'Undo' }),
           onClick: () => {
             didUndo = true
             window.clearTimeout(timeoutId)

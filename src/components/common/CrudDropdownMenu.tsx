@@ -56,13 +56,13 @@ export function CrudDropdownMenu({
         {onEdit && (
           <DropdownMenuItem onClick={handleEditClick}>
             <Pencil className="mr-2 size-4" />
-            {editLabel ?? (t('actions.edit') || 'Edit')}
+            {editLabel ?? (t('actions.edit', { defaultValue: 'Edit' }))}
           </DropdownMenuItem>
         )}
         {onDelete && (
           <DropdownMenuItem className="text-destructive" onClick={handleDeleteClick}>
             <Trash2 className="mr-2 size-4" />
-            {deleteLabel ?? (t('actions.delete') || 'Delete')}
+            {deleteLabel ?? (t('actions.delete', { defaultValue: 'Delete' }))}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

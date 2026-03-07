@@ -118,7 +118,7 @@ export function OrderTable({
 
   return (
     <TableFactory
-      errorMessage={t('orders.errorLoading') || 'Error loading orders'}
+      errorMessage={t('orders.errorLoading', { defaultValue: 'Error loading orders' })}
       hasError={!!error}
       isEmpty={orders.length === 0}
       isLoading={isLoading}
@@ -128,8 +128,8 @@ export function OrderTable({
       totalPages={meta?.total_pages ?? 1}
       emptyMessage={
         hasActiveFilters
-          ? (t('orders.noOrdersFiltered') || 'No results for these filters')
-          : (t('orders.noOrders') || 'No orders found')
+          ? (t('orders.noOrdersFiltered', { defaultValue: 'No results for these filters' }))
+          : (t('orders.noOrders', { defaultValue: 'No orders found' }))
       }
       renderBody={() => (
         <TableBody>
@@ -140,12 +140,12 @@ export function OrderTable({
       )}
       renderHeader={() => (
         <TableRow>
-          <TableHead>{t('orders.orderNumber') || 'Order #'}</TableHead>
-          <TableHead>{t('orders.client') || 'Client'}</TableHead>
-          <TableHead>{t('orders.status') || 'Status'}</TableHead>
-          <TableHead>{t('orders.itemCount') || 'Items'}</TableHead>
-          <TableHead>{t('orders.totalAmount') || 'Total'}</TableHead>
-          <TableHead>{t('orders.createdAt') || 'Created'}</TableHead>
+          <TableHead>{t('orders.orderNumber', { defaultValue: 'Order #' })}</TableHead>
+          <TableHead>{t('orders.client', { defaultValue: 'Client' })}</TableHead>
+          <TableHead>{t('orders.status', { defaultValue: 'Status' })}</TableHead>
+          <TableHead>{t('orders.itemCount', { defaultValue: 'Items' })}</TableHead>
+          <TableHead>{t('orders.totalAmount', { defaultValue: 'Total' })}</TableHead>
+          <TableHead>{t('orders.createdAt', { defaultValue: 'Created' })}</TableHead>
           <TableHead className="w-[100px]" />
         </TableRow>
       )}
@@ -184,7 +184,7 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
         <TableCell>
           {order.client_name ?? (
             <span className="text-muted-foreground">
-              {t('orders.unknownClient') || 'Unknown'}
+              {t('orders.unknownClient', { defaultValue: 'Unknown' })}
             </span>
           )}
         </TableCell>
@@ -211,7 +211,7 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
                   {canEdit && (
                     <DropdownMenuItem onClick={() => setEditOpen(true)}>
                       <Pencil className="mr-2 size-4" />
-                      {t('actions.edit') || 'Edit'}
+                      {t('actions.edit', { defaultValue: 'Edit' })}
                     </DropdownMenuItem>
                   )}
                   {canDelete && (
@@ -222,7 +222,7 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
                         onClick={() => setDeleteOpen(true)}
                       >
                         <Trash2 className="mr-2 size-4" />
-                        {t('actions.delete') || 'Delete'}
+                        {t('actions.delete', { defaultValue: 'Delete' })}
                       </DropdownMenuItem>
                     </>
                   )}
@@ -234,14 +234,14 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
       </TableRow>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
         contentClassName="sm:max-w-[600px] max-h-[90vh] overflow-y-auto"
         formId="edit-order-form"
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('orders.editTitle') || 'Edit Order'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('orders.editTitle', { defaultValue: 'Edit Order' })}
         description={
-          t('orders.editDescription') || 'Update order details.'
+          t('orders.editDescription', { defaultValue: 'Update order details.' })
         }
         onOpenChange={setEditOpen}
       >
@@ -255,10 +255,9 @@ function OrderRow({ order }: OrderRowProps): React.JSX.Element {
       <DeleteConfirmationDialog
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('orders.deleteTitle') || 'Delete Order'}
+        title={t('orders.deleteTitle', { defaultValue: 'Delete Order' })}
         description={
-          t('orders.deleteDescription') ||
-          'Are you sure you want to delete this order? This action cannot be undone.'
+          t('orders.deleteDescription', { defaultValue: 'Are you sure you want to delete this order? This action cannot be undone.' })
         }
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}

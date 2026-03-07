@@ -41,7 +41,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.name') || 'Name'}
+                {t('suppliers.name', { defaultValue: 'Name' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -62,7 +62,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.contactPerson') || 'Contact Person'}
+                {t('suppliers.contactPerson', { defaultValue: 'Contact Person' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -83,7 +83,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.email') || 'Email'}
+                {t('suppliers.email', { defaultValue: 'Email' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -105,7 +105,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.phone') || 'Phone'}
+                {t('suppliers.phone', { defaultValue: 'Phone' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -126,7 +126,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.address') || 'Address'}
+                {t('suppliers.address', { defaultValue: 'Address' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -147,7 +147,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.website') || 'Website'}
+                {t('suppliers.website', { defaultValue: 'Website' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -169,7 +169,7 @@ export function SupplierForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('suppliers.notes') || 'Notes'}
+                {t('suppliers.notes', { defaultValue: 'Notes' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -191,7 +191,7 @@ export function SupplierForm({
             <Field>
               <div className="flex items-center justify-between">
                 <FieldLabel htmlFor={field.name}>
-                  {t('form.isActive') || 'Active'}
+                  {t('form.isActive', { defaultValue: 'Active' })}
                 </FieldLabel>
                 <Switch
                   checked={field.state.value}

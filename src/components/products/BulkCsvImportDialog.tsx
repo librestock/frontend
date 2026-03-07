@@ -151,16 +151,16 @@ function CsvPreviewTable({
     <>
       <div className="flex items-center gap-4 text-sm">
         <span>
-          {t('bulk.totalRows') || 'Total rows'}:{' '}
+          {t('bulk.totalRows', { defaultValue: 'Total rows' })}:{' '}
           <strong>{parseResult.totalRows}</strong>
         </span>
         <span className="text-green-600">
-          {t('bulk.validRows') || 'Valid'}:{' '}
+          {t('bulk.validRows', { defaultValue: 'Valid' })}:{' '}
           <strong>{validCount}</strong>
         </span>
         {errorCount > 0 && (
           <span className="text-destructive">
-            {t('bulk.errorRows') || 'Errors'}:{' '}
+            {t('bulk.errorRows', { defaultValue: 'Errors' })}:{' '}
             <strong>{errorCount}</strong>
           </span>
         )}
@@ -171,11 +171,11 @@ function CsvPreviewTable({
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">#</TableHead>
-              <TableHead>{t('form.productSku') || 'SKU'}</TableHead>
-              <TableHead>{t('form.productName') || 'Name'}</TableHead>
-              <TableHead>{t('form.reorderPoint') || 'Reorder Pt.'}</TableHead>
-              <TableHead>{t('form.isActive') || 'Active'}</TableHead>
-              <TableHead>{t('bulk.status') || 'Status'}</TableHead>
+              <TableHead>{t('form.productSku', { defaultValue: 'SKU' })}</TableHead>
+              <TableHead>{t('form.productName', { defaultValue: 'Name' })}</TableHead>
+              <TableHead>{t('form.reorderPoint', { defaultValue: 'Reorder Pt.' })}</TableHead>
+              <TableHead>{t('form.isActive', { defaultValue: 'Active' })}</TableHead>
+              <TableHead>{t('bulk.status', { defaultValue: 'Status' })}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -204,7 +204,7 @@ function CsvPreviewTable({
                     </span>
                   ) : (
                     <span className="text-xs text-green-600">
-                      {t('bulk.valid') || 'Valid'}
+                      {t('bulk.valid', { defaultValue: 'Valid' })}
                     </span>
                   )}
                 </TableCell>
@@ -214,7 +214,10 @@ function CsvPreviewTable({
         </Table>
         {parseResult.rows.length > 50 && (
           <p className="text-muted-foreground p-2 text-center text-xs">
-            {t('bulk.showingFirst', { count: 50 }) || 'Showing first 50 rows'}
+            {t('bulk.showingFirst', {
+              count: 50,
+              defaultValue: 'Showing first 50 rows',
+            })}
           </p>
         )}
       </div>
@@ -256,7 +259,7 @@ export function BulkCsvImportDialog(): React.JSX.Element {
     if (!parseResult) return
     const validRows = parseResult.rows.filter((row) => row.errors.length === 0)
     if (validRows.length === 0) {
-      toast.error(t('bulk.noValidRows') || 'No valid rows to import')
+      toast.error(t('bulk.noValidRows', { defaultValue: 'No valid rows to import' }))
       return
     }
     bulkCreateMutation.mutate({
@@ -285,17 +288,16 @@ export function BulkCsvImportDialog(): React.JSX.Element {
       <DialogTrigger asChild>
         <Button variant="outline">
           <Upload className="size-4" data-icon="inline-start" />
-          {t('bulk.csvImport') || 'CSV Import'}
+          {t('bulk.csvImport', { defaultValue: 'CSV Import' })}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>
-            {t('bulk.csvImportTitle') || 'Import Products from CSV'}
+            {t('bulk.csvImportTitle', { defaultValue: 'Import Products from CSV' })}
           </DialogTitle>
           <DialogDescription>
-            {t('bulk.csvImportDescription') ||
-              'Upload a CSV file with product data. Required columns: sku, name, category_id, reorder_point.'}
+            {t('bulk.csvImportDescription', { defaultValue: 'Upload a CSV file with product data. Required columns: sku, name, category_id, reorder_point.' })}
           </DialogDescription>
         </DialogHeader>
 
@@ -306,11 +308,10 @@ export function BulkCsvImportDialog(): React.JSX.Element {
           >
             <Upload className="text-muted-foreground size-8" />
             <span className="text-sm font-medium">
-              {fileName || t('bulk.dropCsv') || 'Click to select a CSV file'}
+              {fileName || t('bulk.dropCsv', { defaultValue: 'Click to select a CSV file' })}
             </span>
             <span className="text-muted-foreground text-xs">
-              {t('bulk.csvFormat') ||
-                'Columns: sku, name, category_id, reorder_point, is_active, is_perishable, ...'}
+              {t('bulk.csvFormat', { defaultValue: 'Columns: sku, name, category_id, reorder_point, is_active, is_perishable, ...' })}
             </span>
           </label>
           <input
@@ -333,7 +334,7 @@ export function BulkCsvImportDialog(): React.JSX.Element {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{t('form.cancel') || 'Cancel'}</Button>
+            <Button variant="outline">{t('form.cancel', { defaultValue: 'Cancel' })}</Button>
           </DialogClose>
           <Button
             disabled={
@@ -344,7 +345,7 @@ export function BulkCsvImportDialog(): React.JSX.Element {
             {bulkCreateMutation.isPending ? (
               <span className="flex items-center gap-2">
                 <Spinner className="size-3" />
-                {t('bulk.importing') || 'Importing...'}
+                {t('bulk.importing', { defaultValue: 'Importing...' })}
               </span>
             ) : (
               t('bulk.importButton', { count: validCount }) ||

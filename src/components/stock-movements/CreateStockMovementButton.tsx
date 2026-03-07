@@ -34,19 +34,19 @@ export function CreateStockMovementButton({
   const defaultTrigger = (
     <Button>
       <Plus className="size-4" />
-      {t('stockMovements.create') || 'Record Movement'}
+      {t('stockMovements.create', { defaultValue: 'Record Movement' })}
     </Button>
   )
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
       contentClassName="sm:max-w-[500px]"
-      description={t('stockMovements.createDescription') || 'Record a new stock movement.'}
+      description={t('stockMovements.createDescription', { defaultValue: 'Record a new stock movement.' })}
       formId="create-stock-movement-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('stockMovements.createTitle') || 'Record Stock Movement'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('stockMovements.createTitle', { defaultValue: 'Record Stock Movement' })}
       trigger={trigger ?? defaultTrigger}
       onOpenChange={handleOpenChange}
     >

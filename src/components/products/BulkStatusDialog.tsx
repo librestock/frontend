@@ -36,7 +36,7 @@ export function BulkStatusDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('bulk.statusTitle') || 'Change Product Status'}
+            {t('bulk.statusTitle', { defaultValue: 'Change Product Status' })}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {t('bulk.statusDescription', { count }) ||
@@ -53,7 +53,7 @@ export function BulkStatusDialog({
             {isBusy ? (
               <Spinner className="size-3" />
             ) : (
-              t('form.active') || 'Active'
+              t('form.active', { defaultValue: 'Active' })
             )}
           </Button>
           <Button
@@ -65,13 +65,13 @@ export function BulkStatusDialog({
             {isBusy ? (
               <Spinner className="size-3" />
             ) : (
-              t('form.inactive') || 'Inactive'
+              t('form.inactive', { defaultValue: 'Inactive' })
             )}
           </Button>
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isBusy}>
-            {t('form.cancel') || 'Cancel'}
+            {t('form.cancel', { defaultValue: 'Cancel' })}
           </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

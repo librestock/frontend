@@ -34,7 +34,7 @@ export function useCategoryForm(
     mutation: {
       onSuccess: async () => {
         toast.success(
-          t('form.categoryCreated') || 'Category created successfully',
+          t('form.categoryCreated', { defaultValue: 'Category created successfully' }),
         )
         await queryClient.invalidateQueries({
           queryKey: getListCategoriesQueryKey(),
@@ -42,7 +42,7 @@ export function useCategoryForm(
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('form.categoryError') || 'Failed to create category')
+        toast.error(t('form.categoryError', { defaultValue: 'Failed to create category' }))
         console.error('Category creation error:', error)
       },
     },
@@ -97,8 +97,7 @@ export function useCategoryForm(
         if (isDuplicateCategory(value.name, value.parent_id || '')) {
           return {
             form:
-              t('form.categoryDuplicateError') ||
-              'A category with this name already exists under the selected parent',
+              t('form.categoryDuplicateError', { defaultValue: 'A category with this name already exists under the selected parent' }),
           }
         }
 

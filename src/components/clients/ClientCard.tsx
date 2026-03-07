@@ -103,18 +103,18 @@ export function ClientCard({ client }: ClientCardProps): React.JSX.Element {
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setEditOpen(true)}>
                 <Pencil className="mr-2 size-4" />
-                {t('actions.edit') || 'Edit'}
+                {t('actions.edit', { defaultValue: 'Edit' })}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleStatusToggle}>
                 <ToggleRight className="mr-2 size-4" />
                 {client.account_status === ClientStatus.ACTIVE
-                  ? (t('clients.statuses.SUSPENDED') || 'Suspend')
-                  : (t('clients.statuses.ACTIVE') || 'Activate')}
+                  ? (t('clients.statuses.SUSPENDED', { defaultValue: 'Suspend' }))
+                  : (t('clients.statuses.ACTIVE', { defaultValue: 'Activate' }))}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={() => setDeleteOpen(true)}>
                 <Trash2 className="mr-2 size-4" />
-                {t('actions.delete') || 'Delete'}
+                {t('actions.delete', { defaultValue: 'Delete' })}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -148,13 +148,13 @@ export function ClientCard({ client }: ClientCardProps): React.JSX.Element {
       </Card>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
         contentClassName="sm:max-w-[550px]"
-        description={t('clients.editDescription') || 'Update client details.'}
+        description={t('clients.editDescription', { defaultValue: 'Update client details.' })}
         formId="edit-client-form"
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('clients.editTitle') || 'Edit Client'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('clients.editTitle', { defaultValue: 'Edit Client' })}
         onOpenChange={setEditOpen}
       >
         <ClientForm
@@ -165,10 +165,10 @@ export function ClientCard({ client }: ClientCardProps): React.JSX.Element {
       </FormDialog>
 
       <DeleteConfirmationDialog
-        description={t('clients.deleteDescription') || 'Are you sure you want to delete this client? This action cannot be undone.'}
+        description={t('clients.deleteDescription', { defaultValue: 'Are you sure you want to delete this client? This action cannot be undone.' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('clients.deleteTitle') || 'Delete Client'}
+        title={t('clients.deleteTitle', { defaultValue: 'Delete Client' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

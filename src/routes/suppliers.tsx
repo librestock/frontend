@@ -59,10 +59,10 @@ function SuppliersPage(): React.JSX.Element {
     if (isActiveFilter !== undefined) {
       chips.push({
         key: 'is_active',
-        label: `${t('suppliers.status') || 'Status'}: ${
+        label: `${t('suppliers.status', { defaultValue: 'Status' })}: ${
           isActiveFilter
-            ? (t('form.active') || 'Active')
-            : (t('form.inactive') || 'Inactive')
+            ? (t('form.active', { defaultValue: 'Active' }))
+            : (t('form.inactive', { defaultValue: 'Inactive' }))
         }`,
         onRemove: () => {
           void navigate({
@@ -79,7 +79,7 @@ function SuppliersPage(): React.JSX.Element {
     if (searchQuery) {
       chips.push({
         key: 'search',
-        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
             search: (prev: SuppliersSearch) => ({
@@ -107,10 +107,10 @@ function SuppliersPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.suppliers') || 'Suppliers'}
+              {t('navigation.suppliers', { defaultValue: 'Suppliers' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('suppliers.subtitle') || 'Manage your supplier contacts and information'}
+              {t('suppliers.subtitle', { defaultValue: 'Manage your supplier contacts and information' })}
             </p>
           </div>
           <CreateSupplierButton />
@@ -121,7 +121,7 @@ function SuppliersPage(): React.JSX.Element {
         <div className="flex items-center gap-4">
           <SearchBar
             className="max-w-sm"
-            placeholder={t('suppliers.searchPlaceholder') || 'Search suppliers...'}
+            placeholder={t('suppliers.searchPlaceholder', { defaultValue: 'Search suppliers...' })}
             value={searchQuery}
             onChange={(value) => {
               void navigate({
@@ -159,7 +159,7 @@ function SuppliersPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[180px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('suppliers.filterByStatus') || 'Filter by status'} />
+              <SelectValue placeholder={t('suppliers.filterByStatus', { defaultValue: 'Filter by status' })} />
             </SelectTrigger>
             <SelectContent>
               {ACTIVE_STATUSES.map((status) => (
@@ -187,7 +187,7 @@ function SuppliersPage(): React.JSX.Element {
             </Button>
           ))}
           <Button size="sm" variant="ghost" onClick={clearAll}>
-            {t('actions.clearAll') || 'Clear all'}
+            {t('actions.clearAll', { defaultValue: 'Clear all' })}
           </Button>
         </div>
       )}

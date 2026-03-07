@@ -72,7 +72,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.product') || 'Product'}
+                {t('inventory.product', { defaultValue: 'Product' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -83,12 +83,12 @@ export function InventoryForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('inventory.selectProduct') || 'Select product'}
+                      placeholder={t('inventory.selectProduct', { defaultValue: 'Select product' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('inventory.selectProduct') || 'Select product'}
+                      {t('inventory.selectProduct', { defaultValue: 'Select product' })}
                     </SelectItem>
                     {(products ?? []).map((product) => (
                       <SelectItem key={product.id} value={product.id}>
@@ -107,7 +107,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.location') || 'Location'}
+                {t('inventory.location', { defaultValue: 'Location' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -122,12 +122,12 @@ export function InventoryForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('inventory.selectLocation') || 'Select location'}
+                      placeholder={t('inventory.selectLocation', { defaultValue: 'Select location' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('inventory.selectLocation') || 'Select location'}
+                      {t('inventory.selectLocation', { defaultValue: 'Select location' })}
                     </SelectItem>
                     {(locations ?? []).map((location) => (
                       <SelectItem key={location.id} value={location.id}>
@@ -146,7 +146,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.area') || 'Area'}
+                {t('inventory.area', { defaultValue: 'Area' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -158,12 +158,12 @@ export function InventoryForm({
                 >
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={t('inventory.selectArea') || 'Select area'}
+                      placeholder={t('inventory.selectArea', { defaultValue: 'Select area' })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      {t('inventory.noArea') || 'No specific area'}
+                      {t('inventory.noArea', { defaultValue: 'No specific area' })}
                     </SelectItem>
                     {(areas ?? []).map((area) => (
                       <SelectItem key={area.id} value={area.id}>
@@ -183,7 +183,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.quantity') || 'Quantity'}
+                {t('inventory.quantity', { defaultValue: 'Quantity' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -206,7 +206,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.batchNumber') || 'Batch Number'}
+                {t('inventory.batchNumber', { defaultValue: 'Batch Number' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -228,7 +228,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.expiryDate') || 'Expiry Date'}
+                {t('inventory.expiryDate', { defaultValue: 'Expiry Date' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -250,7 +250,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.costPerUnit') || 'Cost per Unit'}
+                {t('inventory.costPerUnit', { defaultValue: 'Cost per Unit' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -278,7 +278,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.receivedDate') || 'Received Date'}
+                {t('inventory.receivedDate', { defaultValue: 'Received Date' })}
               </FieldLabel>
               <FieldContent>
                 <Input

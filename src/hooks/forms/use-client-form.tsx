@@ -53,14 +53,14 @@ export function useClientForm({ client, onSuccess }: UseClientFormOptions = {}) 
   const createMutation = useCreateClient({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('clients.created') || 'Client created successfully')
+        toast.success(t('clients.created', { defaultValue: 'Client created successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListClientsQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('clients.createError') || 'Failed to create client')
+        toast.error(t('clients.createError', { defaultValue: 'Failed to create client' }))
         console.error('Client creation error:', error)
       },
     },
@@ -69,14 +69,14 @@ export function useClientForm({ client, onSuccess }: UseClientFormOptions = {}) 
   const updateMutation = useUpdateClient({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('clients.updated') || 'Client updated successfully')
+        toast.success(t('clients.updated', { defaultValue: 'Client updated successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListClientsQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('clients.updateError') || 'Failed to update client')
+        toast.error(t('clients.updateError', { defaultValue: 'Failed to update client' }))
         console.error('Client update error:', error)
       },
     },

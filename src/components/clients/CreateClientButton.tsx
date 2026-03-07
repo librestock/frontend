@@ -34,19 +34,19 @@ export function CreateClientButton({
   const defaultTrigger = (
     <Button>
       <Plus className="size-4" />
-      {t('clients.create') || 'Create Client'}
+      {t('clients.create', { defaultValue: 'Create Client' })}
     </Button>
   )
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
       contentClassName="sm:max-w-[550px]"
-      description={t('clients.createDescription') || 'Add a new client to your system.'}
+      description={t('clients.createDescription', { defaultValue: 'Add a new client to your system.' })}
       formId="create-client-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('clients.createTitle') || 'Create Client'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('clients.createTitle', { defaultValue: 'Create Client' })}
       trigger={trigger ?? defaultTrigger}
       onOpenChange={handleOpenChange}
     >

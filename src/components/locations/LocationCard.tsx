@@ -59,7 +59,7 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
               </CardTitle>
               <CardDescription className="flex items-center gap-2">
                 <Badge variant={location.is_active ? 'default' : 'secondary'}>
-                  {!!location.is_active && (t('form.active') || 'Active')}
+                  {!!location.is_active && (t('form.active', { defaultValue: 'Active' }))}
                 </Badge>
                 <span className="text-muted-foreground text-xs">
                   {t(`locations.types.${location.type}`) || location.type}
@@ -96,12 +96,12 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
       </Card>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
-        description={t('locations.editDescription') || 'Update location details.'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+        description={t('locations.editDescription', { defaultValue: 'Update location details.' })}
         formId="edit-location-form"
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('locations.editTitle') || 'Edit Location'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('locations.editTitle', { defaultValue: 'Edit Location' })}
         onOpenChange={setEditOpen}
       >
         <LocationForm
@@ -112,10 +112,10 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
       </FormDialog>
 
       <DeleteConfirmationDialog
-        description={t('locations.deleteDescription') || 'Are you sure you want to delete this location? This action cannot be undone.'}
+        description={t('locations.deleteDescription', { defaultValue: 'Are you sure you want to delete this location? This action cannot be undone.' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('locations.deleteTitle') || 'Delete Location'}
+        title={t('locations.deleteTitle', { defaultValue: 'Delete Location' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

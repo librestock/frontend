@@ -46,7 +46,7 @@ export function CreateProductButton({
 
       {error != null && (
         <p className="text-destructive text-sm">
-          {t('form.loadCategoriesError') || 'Failed to load categories'}
+          {t('form.loadCategoriesError', { defaultValue: 'Failed to load categories' })}
         </p>
       )}
 

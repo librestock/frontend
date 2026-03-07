@@ -27,9 +27,9 @@ function getExpiryClassName(isExpired: boolean, isExpiringSoon: boolean): string
 }
 
 function getExpiryLabel(isExpired: boolean, isExpiringSoon: boolean, t: TFunction): string {
-  if (isExpired) return `${t('inventory.expired') || 'Expired'}: `
-  if (isExpiringSoon) return `${t('inventory.expiringSoon') || 'Expiring Soon'}: `
-  return `${t('inventory.expiryDate') || 'Expires'}: `
+  if (isExpired) return `${t('inventory.expired', { defaultValue: 'Expired' })}: `
+  if (isExpiringSoon) return `${t('inventory.expiringSoon', { defaultValue: 'Expiring Soon' })}: `
+  return `${t('inventory.expiryDate', { defaultValue: 'Expires' })}: `
 }
 
 interface InventoryCardProps {
@@ -97,7 +97,7 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
               {isLowStock ? (
                 <Badge className="gap-1" variant="destructive">
                   <AlertTriangle className="size-3" />
-                  {t('inventory.lowStock') || 'Low Stock'}
+                  {t('inventory.lowStock', { defaultValue: 'Low Stock' })}
                 </Badge>
               ) : null}
             </div>
@@ -120,7 +120,7 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
           {/* Batch Number */}
           {batchNumber ? (
             <div className="text-muted-foreground text-sm">
-              {t('inventory.batchNumber') || 'Batch'}: {batchNumber}
+              {t('inventory.batchNumber', { defaultValue: 'Batch' })}: {batchNumber}
             </div>
           ) : null}
         </CardContent>
@@ -128,12 +128,12 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
 
       {/* Edit Dialog */}
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
-        description={t('inventory.editDescription') || 'Update inventory details.'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+        description={t('inventory.editDescription', { defaultValue: 'Update inventory details.' })}
         formId={formId}
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('inventory.editTitle') || 'Edit Inventory'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('inventory.editTitle', { defaultValue: 'Edit Inventory' })}
         onOpenChange={setEditOpen}
       >
         <InventoryForm
@@ -145,10 +145,10 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
 
       {/* Delete Confirmation */}
       <DeleteConfirmationDialog
-        description={t('inventory.deleteDescription') || 'Are you sure you want to delete this inventory record?'}
+        description={t('inventory.deleteDescription', { defaultValue: 'Are you sure you want to delete this inventory record?' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('inventory.deleteTitle') || 'Delete Inventory'}
+        title={t('inventory.deleteTitle', { defaultValue: 'Delete Inventory' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />

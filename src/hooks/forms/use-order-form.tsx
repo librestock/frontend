@@ -47,14 +47,14 @@ export function useOrderForm({ order, onSuccess }: UseOrderFormOptions = {}) {
   const createMutation = useCreateOrder({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('orders.created') || 'Order created successfully')
+        toast.success(t('orders.created', { defaultValue: 'Order created successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListOrdersQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('orders.createError') || 'Failed to create order')
+        toast.error(t('orders.createError', { defaultValue: 'Failed to create order' }))
         console.error('Order creation error:', error)
       },
     },
@@ -63,14 +63,14 @@ export function useOrderForm({ order, onSuccess }: UseOrderFormOptions = {}) {
   const updateMutation = useUpdateOrder({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('orders.updated') || 'Order updated successfully')
+        toast.success(t('orders.updated', { defaultValue: 'Order updated successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListOrdersQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('orders.updateError') || 'Failed to update order')
+        toast.error(t('orders.updateError', { defaultValue: 'Failed to update order' }))
         console.error('Order update error:', error)
       },
     },

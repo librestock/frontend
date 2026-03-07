@@ -53,14 +53,14 @@ export function useInventoryForm({
   const createMutation = useCreateInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.created') || 'Inventory added successfully')
+        toast.success(t('inventory.created', { defaultValue: 'Inventory added successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('inventory.createError') || 'Failed to add inventory')
+        toast.error(t('inventory.createError', { defaultValue: 'Failed to add inventory' }))
         console.error('Inventory creation error:', error)
       },
     },
@@ -69,14 +69,14 @@ export function useInventoryForm({
   const updateMutation = useUpdateInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.updated') || 'Inventory updated successfully')
+        toast.success(t('inventory.updated', { defaultValue: 'Inventory updated successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('inventory.updateError') || 'Failed to update inventory')
+        toast.error(t('inventory.updateError', { defaultValue: 'Failed to update inventory' }))
         console.error('Inventory update error:', error)
       },
     },

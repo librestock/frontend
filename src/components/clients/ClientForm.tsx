@@ -53,7 +53,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.companyName') || 'Company Name'}
+                {t('clients.companyName', { defaultValue: 'Company Name' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -74,7 +74,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.contactPerson') || 'Contact Person'}
+                {t('clients.contactPerson', { defaultValue: 'Contact Person' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -95,7 +95,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.email') || 'Email'}
+                {t('clients.email', { defaultValue: 'Email' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -117,7 +117,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.yachtName') || 'Yacht Name'}
+                {t('clients.yachtName', { defaultValue: 'Yacht Name' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -138,7 +138,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.phone') || 'Phone'}
+                {t('clients.phone', { defaultValue: 'Phone' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -159,7 +159,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.billingAddress') || 'Billing Address'}
+                {t('clients.billingAddress', { defaultValue: 'Billing Address' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -180,7 +180,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.deliveryAddress') || 'Delivery Address'}
+                {t('clients.deliveryAddress', { defaultValue: 'Delivery Address' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea
@@ -201,7 +201,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.status') || 'Status'}
+                {t('clients.status', { defaultValue: 'Status' })}
               </FieldLabel>
               <FieldContent>
                 <Select
@@ -209,7 +209,7 @@ export function ClientForm({
                   onValueChange={(value) => field.handleChange(value as ClientStatus)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={t('clients.selectStatus') || 'Select status'} />
+                    <SelectValue placeholder={t('clients.selectStatus', { defaultValue: 'Select status' })} />
                   </SelectTrigger>
                   <SelectContent>
                     {CLIENT_STATUSES.map((status) => (
@@ -229,7 +229,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.paymentTerms') || 'Payment Terms'}
+                {t('clients.paymentTerms', { defaultValue: 'Payment Terms' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -250,7 +250,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.creditLimit') || 'Credit Limit'}
+                {t('clients.creditLimit', { defaultValue: 'Credit Limit' })}
               </FieldLabel>
               <FieldContent>
                 <Input
@@ -277,7 +277,7 @@ export function ClientForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('clients.notes') || 'Notes'}
+                {t('clients.notes', { defaultValue: 'Notes' })}
               </FieldLabel>
               <FieldContent>
                 <Textarea

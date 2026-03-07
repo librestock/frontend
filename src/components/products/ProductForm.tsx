@@ -82,10 +82,10 @@ export function ProductForm({
             queryKey: getListProductPhotosQueryKey(product.id),
           })
         }
-        toast.success(t('form.photoUploaded') || 'Photo uploaded')
+        toast.success(t('form.photoUploaded', { defaultValue: 'Photo uploaded' }))
       },
       onError: () => {
-        toast.error(t('form.uploadError') || 'Failed to upload image')
+        toast.error(t('form.uploadError', { defaultValue: 'Failed to upload image' }))
       },
     },
   })
@@ -98,10 +98,10 @@ export function ProductForm({
             queryKey: getListProductPhotosQueryKey(product.id),
           })
         }
-        toast.success(t('form.photoDeleted') || 'Photo deleted')
+        toast.success(t('form.photoDeleted', { defaultValue: 'Photo deleted' }))
       },
       onError: () => {
-        toast.error(t('form.photoDeleteError') || 'Failed to delete photo')
+        toast.error(t('form.photoDeleteError', { defaultValue: 'Failed to delete photo' }))
       },
     },
   })
@@ -184,7 +184,7 @@ export function ProductForm({
                         variant="ghost"
                         onClick={() => setScanOpen(true)}
                       >
-                        {t('form.scanQrCode') || 'Scan QR code'}
+                        {t('form.scanQrCode', { defaultValue: 'Scan QR code' })}
                       </InputGroupButton>
                     </InputGroupAddon>
                   </InputGroup>
@@ -232,8 +232,7 @@ export function ProductForm({
                       categories={categories}
                       value={field.state.value}
                       emptyOptionLabel={
-                        t('form.selectCategoryPlaceholder') ||
-                        'Select a category'
+                        t('form.selectCategoryPlaceholder', { defaultValue: 'Select a category' })
                       }
                       onValueChange={field.handleChange}
                     />
@@ -304,7 +303,7 @@ export function ProductForm({
 
         <div className="space-y-3">
           <div className="text-sm font-medium">
-            {t('form.productImage') || 'Product image'}
+            {t('form.productImage', { defaultValue: 'Product image' })}
           </div>
 
           {/* Main image preview */}
@@ -316,7 +315,7 @@ export function ProductForm({
             )}
             {displayUrl ? (
               <img
-                alt={t('form.productImage') || 'Product image'}
+                alt={t('form.productImage', { defaultValue: 'Product image' })}
                 className="h-full w-full object-cover"
                 src={displayUrl}
               />
@@ -340,7 +339,7 @@ export function ProductForm({
               variant="outline"
               onClick={() => fileInputRef.current?.click()}
             >
-              {t('form.uploadImage') || 'Upload image'}
+              {t('form.uploadImage', { defaultValue: 'Upload image' })}
             </Button>
             {!isEditMode && pendingPreview && (
               <Button
@@ -348,7 +347,7 @@ export function ProductForm({
                 variant="ghost"
                 onClick={clearPendingFile}
               >
-                {t('form.removeImage') || 'Remove'}
+                {t('form.removeImage', { defaultValue: 'Remove' })}
               </Button>
             )}
           </div>

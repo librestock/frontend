@@ -62,7 +62,7 @@ function LocationsPage(): React.JSX.Element {
     if (typeFilter !== 'ALL') {
       chips.push({
         key: 'type',
-        label: `${t('locations.filterByType') || 'Type'}: ${
+        label: `${t('locations.filterByType', { defaultValue: 'Type' })}: ${
           t(`locations.types.${typeFilter}`) || typeFilter
         }`,
         onRemove: () => {
@@ -80,7 +80,7 @@ function LocationsPage(): React.JSX.Element {
     if (searchQuery) {
       chips.push({
         key: 'search',
-        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
             search: (prev: LocationsSearch) => ({
@@ -108,10 +108,10 @@ function LocationsPage(): React.JSX.Element {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">
-              {t('navigation.locations') || 'Locations'}
+              {t('navigation.locations', { defaultValue: 'Locations' })}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {t('locations.subtitle') || 'Manage your storage locations and areas'}
+              {t('locations.subtitle', { defaultValue: 'Manage your storage locations and areas' })}
             </p>
           </div>
           <CreateLocation />
@@ -122,7 +122,7 @@ function LocationsPage(): React.JSX.Element {
         <div className="flex items-center gap-4">
           <SearchBar
             className="max-w-sm"
-            placeholder={t('locations.searchPlaceholder') || 'Search locations...'}
+            placeholder={t('locations.searchPlaceholder', { defaultValue: 'Search locations...' })}
             value={searchQuery}
             onChange={(value) => {
               void navigate({
@@ -160,7 +160,7 @@ function LocationsPage(): React.JSX.Element {
           >
             <SelectTrigger className="w-[180px]">
               <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('locations.filterByType') || 'Filter by type'} />
+              <SelectValue placeholder={t('locations.filterByType', { defaultValue: 'Filter by type' })} />
             </SelectTrigger>
             <SelectContent>
               {LOCATION_TYPES.map((type) => (
@@ -190,7 +190,7 @@ function LocationsPage(): React.JSX.Element {
             </Button>
           ))}
           <Button size="sm" variant="ghost" onClick={clearAll}>
-            {t('actions.clearAll') || 'Clear all'}
+            {t('actions.clearAll', { defaultValue: 'Clear all' })}
           </Button>
         </div>
       )}

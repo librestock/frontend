@@ -85,8 +85,8 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
 
   const isLowStock = useLowStockStatus(product, quantity)
   const { expiryDate, isExpired, isExpiringSoon } = useExpiryDateStatus(expiryDateRaw)
-  const expiredLabel = t('inventory.expired') || 'Expired'
-  const expiringLabel = t('inventory.expiringSoon') || 'Expiring Soon'
+  const expiredLabel = t('inventory.expired', { defaultValue: 'Expired' })
+  const expiringLabel = t('inventory.expiringSoon', { defaultValue: 'Expiring Soon' })
 
   const formId = `edit-inventory-form-${id}`
 
@@ -160,12 +160,12 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
       </TableRow>
 
       <FormDialog
-        cancelLabel={t('form.cancel') || 'Cancel'}
-        description={t('inventory.editDescription') || 'Update inventory details.'}
+        cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+        description={t('inventory.editDescription', { defaultValue: 'Update inventory details.' })}
         formId={formId}
         open={editOpen}
-        submitLabel={t('actions.save') || 'Save'}
-        title={t('inventory.editTitle') || 'Edit Inventory'}
+        submitLabel={t('actions.save', { defaultValue: 'Save' })}
+        title={t('inventory.editTitle', { defaultValue: 'Edit Inventory' })}
         onOpenChange={setEditOpen}
       >
         <InventoryForm
@@ -176,10 +176,10 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
       </FormDialog>
 
       <DeleteConfirmationDialog
-        description={t('inventory.deleteDescription') || 'Are you sure you want to delete this inventory record?'}
+        description={t('inventory.deleteDescription', { defaultValue: 'Are you sure you want to delete this inventory record?' })}
         isLoading={deleteMutation.isPending}
         open={deleteOpen}
-        title={t('inventory.deleteTitle') || 'Delete Inventory'}
+        title={t('inventory.deleteTitle', { defaultValue: 'Delete Inventory' })}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />
@@ -213,7 +213,7 @@ export function InventoryTable({
 
   return (
     <TableFactory
-      errorMessage={t('inventory.errorLoading') || 'Error loading inventory'}
+      errorMessage={t('inventory.errorLoading', { defaultValue: 'Error loading inventory' })}
       hasError={Boolean(error)}
       isEmpty={inventoryItems.length === 0}
       isLoading={isLoading}
@@ -223,8 +223,8 @@ export function InventoryTable({
       totalPages={meta?.total_pages ?? 1}
       emptyMessage={
         hasActiveFilters
-          ? (t('inventory.noInventoryFiltered') || 'No results for these filters')
-          : (t('inventory.noInventory') || 'No inventory found')
+          ? (t('inventory.noInventoryFiltered', { defaultValue: 'No results for these filters' }))
+          : (t('inventory.noInventory', { defaultValue: 'No inventory found' }))
       }
       renderBody={() => (
         <TableBody>
@@ -239,13 +239,13 @@ export function InventoryTable({
       )}
       renderHeader={() => (
         <TableRow>
-          <TableHead>{t('inventory.product') || 'Product'}</TableHead>
+          <TableHead>{t('inventory.product', { defaultValue: 'Product' })}</TableHead>
           {showLocation && (
-            <TableHead>{t('inventory.location') || 'Location'}</TableHead>
+            <TableHead>{t('inventory.location', { defaultValue: 'Location' })}</TableHead>
           )}
-          <TableHead>{t('inventory.quantity') || 'Qty'}</TableHead>
-          <TableHead>{t('inventory.batchNumber') || 'Batch Number'}</TableHead>
-          <TableHead>{t('inventory.expiryDate') || 'Expiry Date'}</TableHead>
+          <TableHead>{t('inventory.quantity', { defaultValue: 'Qty' })}</TableHead>
+          <TableHead>{t('inventory.batchNumber', { defaultValue: 'Batch Number' })}</TableHead>
+          <TableHead>{t('inventory.expiryDate', { defaultValue: 'Expiry Date' })}</TableHead>
           <TableHead className="w-24" />
         </TableRow>
       )}

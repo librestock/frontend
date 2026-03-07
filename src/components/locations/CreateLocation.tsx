@@ -34,18 +34,18 @@ export function CreateLocation({
   const defaultTrigger = (
     <Button>
       <Plus className="size-4" />
-      {t('locations.create') || 'Create Location'}
+      {t('locations.create', { defaultValue: 'Create Location' })}
     </Button>
   )
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
-      description={t('locations.createDescription') || 'Add a new storage location.'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
+      description={t('locations.createDescription', { defaultValue: 'Add a new storage location.' })}
       formId="create-location-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('locations.createTitle') || 'Create Location'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('locations.createTitle', { defaultValue: 'Create Location' })}
       trigger={trigger ?? defaultTrigger}
       onOpenChange={handleOpenChange}
     >

@@ -49,7 +49,7 @@ export function useAdjustInventoryMutation(
     mutation: {
       onSuccess: async () => {
         toast.success(
-          t('inventory.adjusted') || 'Quantity adjusted successfully',
+          t('inventory.adjusted', { defaultValue: 'Quantity adjusted successfully' }),
         )
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
@@ -58,7 +58,7 @@ export function useAdjustInventoryMutation(
       },
       onError: (error) => {
         toast.error(
-          t('inventory.adjustError') || 'Failed to adjust quantity',
+          t('inventory.adjustError', { defaultValue: 'Failed to adjust quantity' }),
         )
         console.error('Quantity adjustment error:', error)
       },

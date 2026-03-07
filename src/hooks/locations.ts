@@ -34,7 +34,7 @@ export function useDeleteLocationOptimistic() {
       },
       onError: (error) => {
         toast.error(
-          t('locations.deleteError') || 'Failed to delete location',
+          t('locations.deleteError', { defaultValue: 'Failed to delete location' }),
         )
         console.error('Location deletion error:', error)
       },
@@ -71,9 +71,9 @@ export function useDeleteLocationOptimistic() {
         })
       }, 5000)
 
-      toast(t('locations.deleted') || 'Location deleted successfully', {
+      toast(t('locations.deleted', { defaultValue: 'Location deleted successfully' }), {
         action: {
-          label: t('actions.undo') || 'Undo',
+          label: t('actions.undo', { defaultValue: 'Undo' }),
           onClick: () => {
             didUndo = true
             window.clearTimeout(timeoutId)

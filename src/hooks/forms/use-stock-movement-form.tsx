@@ -37,14 +37,14 @@ export function useStockMovementForm({
   const createMutation = useCreateStockMovement({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('stockMovements.created') || 'Stock movement created successfully')
+        toast.success(t('stockMovements.created', { defaultValue: 'Stock movement created successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListStockMovementsQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('stockMovements.createError') || 'Failed to create stock movement')
+        toast.error(t('stockMovements.createError', { defaultValue: 'Failed to create stock movement' }))
         console.error('Stock movement creation error:', error)
       },
     },

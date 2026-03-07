@@ -35,21 +35,21 @@ export function CreateOrderButton({
   const defaultTrigger = (
     <Button>
       <Plus className="size-4" />
-      {t('orders.create') || 'Create Order'}
+      {t('orders.create', { defaultValue: 'Create Order' })}
     </Button>
   )
 
   return (
     <FormDialog
-      cancelLabel={t('form.cancel') || 'Cancel'}
+      cancelLabel={t('form.cancel', { defaultValue: 'Cancel' })}
       contentClassName="sm:max-w-[600px] max-h-[90vh] overflow-y-auto"
       formId="create-order-form"
       open={open}
-      submitLabel={t('form.create') || 'Create'}
-      title={t('orders.createTitle') || 'Create Order'}
+      submitLabel={t('form.create', { defaultValue: 'Create' })}
+      title={t('orders.createTitle', { defaultValue: 'Create Order' })}
       trigger={trigger ?? defaultTrigger}
       description={
-        t('orders.createDescription') || 'Create a new order with items.'
+        t('orders.createDescription', { defaultValue: 'Create a new order with items.' })
       }
       onOpenChange={handleOpenChange}
     >

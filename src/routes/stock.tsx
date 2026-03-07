@@ -97,7 +97,7 @@ function ItemsPage(): React.JSX.Element {
     if (searchQuery) {
       chips.push({
         key: 'search',
-        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        label: `${t('common.search', { defaultValue: 'Search' })}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
             search: (prev: StockSearch) => ({
@@ -115,7 +115,7 @@ function ItemsPage(): React.JSX.Element {
         ?.label ?? sortBy
       chips.push({
         key: 'sort',
-        label: `${t('common.sort') || 'Sort'}: ${sortLabel}`,
+        label: `${t('common.sort', { defaultValue: 'Sort' })}: ${sortLabel}`,
         onRemove: () => {
           void navigate({
             search: (prev: StockSearch) => ({
@@ -131,7 +131,7 @@ function ItemsPage(): React.JSX.Element {
     if (displayType !== DisplayType.GRID) {
       chips.push({
         key: 'view',
-        label: `${t('common.view') || 'View'}: ${displayType}`,
+        label: `${t('common.view', { defaultValue: 'View' })}: ${displayType}`,
         onRemove: () => {
           void navigate({
             search: (prev: StockSearch) => ({
@@ -149,8 +149,8 @@ function ItemsPage(): React.JSX.Element {
 
   const hasActiveFilters = filterChips.length > 0
   const emptyMessage = searchQuery
-    ? (t('items.noSearchResults') || 'No results for this search')
-    : (t('items.noItemsFolder') || 'No items found')
+    ? (t('items.noSearchResults', { defaultValue: 'No results for this search' }))
+    : (t('items.noItemsFolder', { defaultValue: 'No items found' }))
 
   return (
     <div className="flex h-full w-full">
@@ -160,7 +160,7 @@ function ItemsPage(): React.JSX.Element {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  {t('navigation.products') || 'Products'}
+                  {t('navigation.products', { defaultValue: 'Products' })}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -245,20 +245,20 @@ function ItemsPage(): React.JSX.Element {
                   void navigate({ search: {}, replace: true })
                 }}
               >
-                {t('actions.clearAll') || 'Clear all'}
+                {t('actions.clearAll', { defaultValue: 'Clear all' })}
               </Button>
             </div>
           )}
           <div className="flex-1 overflow-auto">
             {error && (
               <ErrorState
-                message={t('items.errorLoading') || 'Error loading items'}
+                message={t('items.errorLoading', { defaultValue: 'Error loading items' })}
                 variant="bordered"
               />
             )}
             {!error && isLoading && (
               <EmptyState
-                message={t('common.loading') || 'Loading...'}
+                message={t('common.loading', { defaultValue: 'Loading...' })}
                 variant="bordered"
               />
             )}

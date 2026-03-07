@@ -27,7 +27,7 @@ export function useDeleteAreaOptimistic(locationId: string) {
         })
       },
       onError: (error) => {
-        toast.error(t('areas.deleteError') || 'Failed to delete area')
+        toast.error(t('areas.deleteError', { defaultValue: 'Failed to delete area' }))
         console.error('Area deletion error:', error)
       },
     },
@@ -54,9 +54,9 @@ export function useDeleteAreaOptimistic(locationId: string) {
         })
       }, 5000)
 
-      toast(t('areas.deleted') || 'Area deleted successfully', {
+      toast(t('areas.deleted', { defaultValue: 'Area deleted successfully' }), {
         action: {
-          label: t('actions.undo') || 'Undo',
+          label: t('actions.undo', { defaultValue: 'Undo' }),
           onClick: () => {
             didUndo = true
             window.clearTimeout(timeoutId)

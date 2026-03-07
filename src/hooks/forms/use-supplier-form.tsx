@@ -50,14 +50,14 @@ export function useSupplierForm(
   const createMutation = useCreateSupplier({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('suppliers.created') || 'Supplier created successfully')
+        toast.success(t('suppliers.created', { defaultValue: 'Supplier created successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListSuppliersQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('suppliers.createError') || 'Failed to create supplier')
+        toast.error(t('suppliers.createError', { defaultValue: 'Failed to create supplier' }))
         console.error('Supplier creation error:', error)
       },
     },
@@ -66,14 +66,14 @@ export function useSupplierForm(
   const updateMutation = useUpdateSupplier({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('suppliers.updated') || 'Supplier updated successfully')
+        toast.success(t('suppliers.updated', { defaultValue: 'Supplier updated successfully' }))
         await queryClient.invalidateQueries({
           queryKey: getListSuppliersQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('suppliers.updateError') || 'Failed to update supplier')
+        toast.error(t('suppliers.updateError', { defaultValue: 'Failed to update supplier' }))
         console.error('Supplier update error:', error)
       },
     },
