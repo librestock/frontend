@@ -55,6 +55,38 @@ function formatBulkResult(
   return parts.join(', ')
 }
 
+interface BulkMutationI18nKeys {
+  partial: string
+  success: string
+  error: string
+}
+
+function makeBulkMutationCallbacks(
+  invalidate: () => Promise<void>,
+  onClearSelection: () => void,
+  t: (key: string, options?: Record<string, unknown>) => string,
+  i18nKeys: BulkMutationI18nKeys,
+): {
+  onSuccess: (result: BulkOperationResultDto) => Promise<void>
+  onError: () => void
+} {
+  return {
+    onSuccess: async (result: BulkOperationResultDto) => {
+      await invalidate()
+      onClearSelection()
+      const message = formatBulkResult(result, t)
+      if (result.failure_count > 0) {
+        toast.warning(t(i18nKeys.partial), { description: message })
+        return
+      }
+      toast.success(t(i18nKeys.success), { description: message })
+    },
+    onError: () => {
+      toast.error(t(i18nKeys.error))
+    },
+  }
+}
+
 const useDeleteProductOptimisticFactory = makeOptimisticDelete<string | undefined>({
   useMutationHook: useDeleteProduct,
   getOptimisticTargets: (productId, categoryId) => [
@@ -104,72 +136,57 @@ export function useBulkProductActions(onClearSelection: () => void): {
   const { t } = useTranslation()
   const invalidateProducts = useInvalidateProducts()
 
+  const bulkDeleteCallbacks = makeBulkMutationCallbacks(
+    invalidateProducts,
+    onClearSelection,
+    t,
+    {
+      partial: 'bulk.deletePartial',
+      success: 'bulk.deleteSuccess',
+      error: 'bulk.deleteError',
+    },
+  )
+
+  const bulkStatusCallbacks = makeBulkMutationCallbacks(
+    invalidateProducts,
+    onClearSelection,
+    t,
+    {
+      partial: 'bulk.statusPartial',
+      success: 'bulk.statusSuccess',
+      error: 'bulk.statusError',
+    },
+  )
+
+  const bulkRestoreCallbacks = makeBulkMutationCallbacks(
+    invalidateProducts,
+    onClearSelection,
+    t,
+    {
+      partial: 'bulk.restorePartial',
+      success: 'bulk.restoreSuccess',
+      error: 'bulk.restoreError',
+    },
+  )
+
   const bulkDeleteMutation = useBulkDeleteProducts({
     mutation: {
-      onSuccess: async (result: BulkOperationResultDto) => {
-        await invalidateProducts()
-        onClearSelection()
-        const message = formatBulkResult(result, t)
-        if (result.failure_count > 0) {
-          toast.warning(
-            t('bulk.deletePartial') || 'Bulk delete partially completed',
-            { description: message },
-          )
-        } else {
-          toast.success(t('bulk.deleteSuccess') || 'Products deleted', {
-            description: message,
-          })
-        }
-      },
-      onError: () => {
-        toast.error(t('bulk.deleteError') || 'Failed to delete products')
-      },
+      onSuccess: bulkDeleteCallbacks.onSuccess,
+      onError: bulkDeleteCallbacks.onError,
     },
   })
 
   const bulkStatusMutation = useBulkUpdateProductStatus({
     mutation: {
-      onSuccess: async (result: BulkOperationResultDto) => {
-        await invalidateProducts()
-        onClearSelection()
-        const message = formatBulkResult(result, t)
-        if (result.failure_count > 0) {
-          toast.warning(
-            t('bulk.statusPartial') || 'Status update partially completed',
-            { description: message },
-          )
-        } else {
-          toast.success(t('bulk.statusSuccess') || 'Status updated', {
-            description: message,
-          })
-        }
-      },
-      onError: () => {
-        toast.error(t('bulk.statusError') || 'Failed to update status')
-      },
+      onSuccess: bulkStatusCallbacks.onSuccess,
+      onError: bulkStatusCallbacks.onError,
     },
   })
 
   const bulkRestoreMutation = useBulkRestoreProducts({
     mutation: {
-      onSuccess: async (result: BulkOperationResultDto) => {
-        await invalidateProducts()
-        onClearSelection()
-        const message = formatBulkResult(result, t)
-        if (result.failure_count > 0) {
-          toast.warning(
-            t('bulk.restorePartial') || 'Restore partially completed',
-            { description: message },
-          )
-        } else {
-          toast.success(t('bulk.restoreSuccess') || 'Products restored', {
-            description: message,
-          })
-        }
-      },
-      onError: () => {
-        toast.error(t('bulk.restoreError') || 'Failed to restore products')
-      },
+      onSuccess: bulkRestoreCallbacks.onSuccess,
+      onError: bulkRestoreCallbacks.onError,
     },
   })
 
